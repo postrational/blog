@@ -6,7 +6,7 @@ permalink: "/blog/2010/10/28/check-google-analytics-unique-visitors-python/"
 comments: true
 categories: tech
 published: true
-tags: 
+tags: python google-analytics geektool
 ---
 
 You may want to check your Google Analytics data programmatically. This allows you to write some logic around your analytics data, such as sending e-mails in certain situations or just providing a status update for you to inspect without the hassle of logging into your account with a browser.
@@ -57,7 +57,7 @@ You may display all sorts of other data from Google Analytics and other Google s
 ### Connect with Google's gdata API using Python
 This is the script which can collect your unique visitor counts from Analytics. It's faily straight forward, but if you have questions, leave them in the comments.
 
-<pre><code class="python">
+```python
 #!/usr/bin/python
 # (CC-by) 2010 Copyleft Michal Karzynski, GenomikaStudio.com 
 import datetime
@@ -90,9 +90,7 @@ for table_id in table_ids:
     feed = client.GetDataFeed(data_query)
     print "%s : %s" % (feed.data_source[0].table_name.text, feed.entry[0].metric[0].value)
     
-
-</code></pre>
-
+```
 
 
 ### Security disclaimer

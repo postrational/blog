@@ -54,21 +54,21 @@ Next we need to create the two .wsgi files:
 
 Each file should contain the following code with appropriately `subdomain1` or `subdomain2`, and `PROJECT_NAME` should be changed to the name of the directory which holds your Django project files.
 
-<pre><code class="python">
+```python
 import os
 import sys
 from django.core.handlers.wsgi import WSGIHandler
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'PROJECT_NAME.subdomain1_settings' # or PROJECT_NAME.subdomain2_settings
 application = WSGIHandler()
-</code></pre>
+```
 
 ### `settings.py` files
 Next, we need to set up the two `settings.py` files. I would actually recommend setting up 3 of these, one to hold information, which is common to all domains, let's leave it named `settings.py` and the two domain-specific files: `subdomain1_settings.py` and `subdomain2_settings.py`. 
 
 The subdomain specific settings files will inherit all the defaults from the common `settings.py` file, and override only those values which are specific to the domain. For instance, lets create a subdomain specific settings file, which runs a different then default set of apps and uses a different `urls.py` as `ROOT_URLCONF`. Such a file should contain the following code:
 
-<pre><code class="python">
+```python
 from settings import *
 
 SITE_ID = 1
@@ -84,7 +84,7 @@ INSTALLED_APPS = (
     
     # other apps specific to this domain
 )
-</code></pre>
+```
 
 ### `urls.py` files
 Now, we just need to make the two url configuration files, which will handle the routing of requests coming into our domains. These are standard `url.py`, they just have to be named, as specified in the `settings.py` files, so `subdomain1_urls.py` and `subdomain2_urls.py`.
