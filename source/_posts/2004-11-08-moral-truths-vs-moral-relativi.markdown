@@ -1,0 +1,24 @@
+---
+layout: post
+title: "Moral truths vs. moral relativity"
+date: "2004-11-08"
+permalink: "/blog/2004/11/08/moral-truths-vs-moral-relativi/"
+comments: true
+categories: personal
+published: true
+tags: 
+---
+
+There have been times in my life when, whilst trying to argue the case for postmodern, liberal virtue of tolerance I was accused of having no 'moral backbone'. My interlocutors believed that if I have no indissoluble, universal set of moral values, then I'm merely a moral relativist, merrily changing my stance as I see fit. Today, during an inspiring lecture on Bioethics I mentally returned to that discussion with a new set of arguments...
+
+<!--more-->
+
+What is an indissoluble and universal moral value? It is only that which can be called a moral truth, <i>ergo</i> an absolute. I have written on <a href="http://www.karzyn.com/essays/essay06.php">truth</a> many times before and I strongly believe that any kind of truth, even if it exists is unattainable for us. This argument is especially valid for moral truths, because there is no way to <i>prove</i> that something is objectively good or bad. Moral truths are usually derived from religions and they vary from one religion to the next. In my opinion arguing that one must base ethical judgments on a moral truth is an invitation to making ethics arbitrary. Not only that, it is also an excuse for that arbitrariness, because each person can choose his moral truth and then argue that only his stance is valid to the exclusion of all others. This may work in a small group of people, fundamentally believing a holy text, but it is not a solution for a global society.
+
+The other stance is that of moral relativity. I will try to argue, that paradoxically this view is less arbitrary then the former one. What does moral relativity mean? Despite what it's critics try to say it is not a careless attitude, which allows you to make one kind of judgment today and a contradictory one tomorrow. Moral relativity means that your moral judgments are relative to <i>something</i>. What that something might be is another question. In our democratic century it could be, for instance, the common moral stance shared by the majority of people. The majority-stance is not timeless, it may change from generation to generation; it is also not universal and may vary from one society to another; but it is a basis for moral judgment. If all your decisions were in compliance with the views of the majority, you should not be rejected, but rather democratically embraced. Ideally, this is how laws are created in democratic societies.
+
+Ethics would not be ethics however if it only played such a descriptive role, it would then be sociology. Ethics requires a normative component, to be able to deal with unforeseen circumstances. Postmodern ethics of moral relativity, as far as I understand it, tries to employ reason and an almost scientific methodology. The ethicist tires to reconcile the complex innards of the majority-stance by creating a moral model. For instance, "Why is it okay to kill a carrot or a cow and not okay to kill humans?" One model could say that it is only okay to kill beings that do not feel. This works fine for the carrot and humans but fails for cows. Another model could claim that it is only okay to kill non-humans. This form of chauvinism (I heard it called <i>species-ism</i>) seems to work fine in our example, but has <a href="http://localhost/~michal/blog/archives/000005.html">some other drawbacks</a>. A third model, which was described in today's lecture talked about 'moral agents', meaning being which can control their destiny, those who are conscious subjects, not merely biological objects... This could work out fine if only we could tell how conscious a cow actually is... 
+
+Whichever model you choose, you have to test it, like in science against what the majority of people actually believe. Ideally you should find a model, which fits the majority-stance, you could then use it to resolve conflicts, which have not yet been determined by referenda, and also use it as a convincing argument to persuade the remaining, skeptical minority.
+
+I believe that such a model, if we can develop one, would be a great asset to scientists. The public, whose ideas about science and its consequences are often surprisingly different from our own, constantly confronts us. We cannot hope to convince them to our point of view by a chauvinistic ideology, which claims that science is good <i>per se</i>. We will have to use moral relativity, we are after all postmodern.

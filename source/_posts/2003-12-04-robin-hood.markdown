@@ -1,0 +1,12 @@
+---
+layout: post
+title: "Robin Hood"
+date: "2003-12-04"
+permalink: "/blog/2003/12/04/robin-hood/"
+comments: true
+categories: personal
+published: true
+tags: 
+---
+
+On my way to work today, I chanced to pass by two strangers talking. I heard one sentence of their conversation, but it lead me down a strange road of thoughts...<br /><br />The sentence was: "Stealing means taking from someone that which they have a right to have".<br />How interesting... a subjective definition of the crime of theft. By comparison an objective definition would have to be: "Stealing means taking that, which you do not have a right to have."<br /><br />The principle difference between the definitions, other then the fact that one is voiced in the positive, the other in negative terms, is the point of reference. The subjective definition refers to the subject -- the person who is being robbed, while the objective definition refers to the object being stolen.<br /><br />Come to think of it, our laws are based on the subjective definitions of crimes, aren't they? There must always be a victim for a crime to have been committed. If I am to lie it is not a crime, unless I deceive  someone. Murder is not a crime, if I'm only killing time. And stealing is also not a crime until I steal from someone in particular. <br /><br />It is for that reason that we have special bodies appointed, (usually by the state, but not necessarily), which take care of interests of non-humans. The forest authority, will be the victim of your theft if you steal trees, the RIAA (or ZAIKS in Poland) will be the victim if you download an mp3 file from the net. Notice, that the artist who composed the song, may be long dead...<br /><br />This subjective nature of our laws leads to (or perhaps is the consequence of) the subjective nature of out moral values. We do not steal because it is wrong. We refrain from stealing if it may hurt someone, usually if we believe the victim may retaliate by legal action or otherwise. If we believe that "no harm is being done", we don't think our actions to be wrong. Hence the idea of "victim-less crime" and it's harmless nature. <br /><br />Moral questioning is the nature of our postmodern world, but it goes much further back in time. Perhaps to the ideas of the Enlightment period...<br /><br />Lack of absolute values, subjective morality, ethics and laws not referenced to objective definitions of crimes... all this leaves me with one question: Pray tell, what came first subjective laws or a demise in the absolute nature of moral values?<br /><br />
