@@ -22,16 +22,16 @@ The following information is presented at the prompt:
 * <code><span style="color:#6dcd2f">user@host</span></code> : the name of the logged in user and the host machine  
 * <code><span style="color:#d5ca38">~/Desktop</span></code> : the current working directory
 * <code><span style="color:#6dcd2f">+</span></code> or
-<code><span style="color:#bf311a">`-_-`</span></code> : this part presents the exit status of the most recently executed command. If the command executes correctly the prompt shows a green <code><span style="color:#6dcd2f">+</span></code>. If the command returns an error, then the prompt shows an unhappy <code><span style="color:#bf311a">`-_-`</span></code>.
+<span style="color:#bf311a">`-_-`</span> : this part presents the exit status of the most recently executed command. If the command executes correctly the prompt shows a green <code><span style="color:#6dcd2f">+</span></code>. If the command returns an error, then the prompt shows an unhappy <span style="color:#bf311a">`-_-`</span>.
 
 
 
-### Method
+### Bash version
 In order to recreate this prompt, you should add the following code to your `~/.bash_profile` file. On some systems this file may need to be created, or you'll need to edit the `~/.bashrc` file instead.
 
 #### Linux version
 
-<pre><code class="shell">
+```bash
 ##
 # Color codes
 ##
@@ -112,12 +112,12 @@ PS2='> '
 PS4='+ '
 }
 proml
-</code></pre>
+```
 
 
 #### Mac version, which also provides the error code value:
 
-<pre><code class="shell">
+```bash
 function proml {
 local BLUE="\[\033[0;34m\]"
 local RED="\[\033[0;31m\]"
@@ -146,12 +146,24 @@ PS2='> '
 PS4='+ '
 }
 proml
-</code></pre>
+```
+
+### Theme for [Zsh](http://www.zsh.org/)
+
+```sh
+PROMPT=$'%D{[%I:%M:%S]} %{$fg_bold[green]%}%n@%m %{$reset_color%}%{$fg[yellow]%}%~%{$reset_color%} $(git_prompt_info) %{$fg[blue]%}[%?]%{$reset_color%}\
+%{$fg_bold[blue]%}%(!.#.$)%{$reset_color%} '
+
+ZSH_THEME_GIT_PROMPT_PREFIX="("
+ZSH_THEME_GIT_PROMPT_SUFFIX=")%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}*%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_CLEAN=""
+```
 
 
-#### A version for the [Fish](http://fishshell.org/) shell
+### A version for [Fish](http://fishshell.org/)
 
-<pre><code class="shell">
+```sh
 function fish_prompt --description 'Write out the prompt'
     #Save the return status of the previous command
     set stat $status
@@ -200,4 +212,4 @@ function fish_prompt --description 'Write out the prompt'
 
     end
 end
-</code></pre>
+```
