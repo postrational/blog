@@ -22,6 +22,11 @@ article {
     ul, ol {
         margin-left: 2em;
     }
+    
+    > {
+        @import "custom/tables";
+    }
+    
 }
 
 

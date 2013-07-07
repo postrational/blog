@@ -25,15 +25,15 @@ I have been actively following the evolution of web technologies since I started
 
 #### Some of my recent projects
 
-| Project       | Tech              | URL                           | Demo          |
-| ------------- |:-------------:    |:-------------:                | -----:        |
-| BioDoktorat   | Django, AngularJS | http://biodoktorat.pl         | 
-| GNETS         | Django, jQueryUI  | https://gnets.gumed.edu.pl    | [YouTube][1]  |
-| Django Xmin   | Django, ExtJS     |                               |               |
-| Django Xmin   | Django, ExtJS     |                               |               |
-| Django Xmin   | Django, ExtJS     |                               |               |                                                                    
-| Django Xmin   | Django, ExtJS     |                               |               |
-| JTI Portal    |                   | http://jtiportal.pl           |               |
-
+Project       | Tech              | URL                           | Demo
+------------- |:-------------:    |:-------------:                | ----
+BioDoktorat   | Django, AngularJS | http://biodoktorat.pl         | 
+GNETS         | Django, jQueryUI  | https://gnets.gumed.edu.pl    | [YouTube][1]
+Django Xmin   | Django, ExtJS     | [Github][2]                   | [YouTube][3]
+JTI Portal    | Django, ExtJS     | http://jtiportal.pl           |
+NeoRetros     | Django            | http://neoretros.com          |
+Michał Trowski| Drupal            | http://trowski.pl             |
 
 [1]: http://youtu.be/Or1fo7C73ds
+[2]: https://github.com/postrational/django-xmin
+[3]: http://youtu.be/5dxLyt6cfAA
