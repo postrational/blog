@@ -229,3 +229,38 @@ Restart Nginx:
 If you navigate to your site, you should now see your Django welcome-page powered by Nginx and Gunicorn. Go ahead and develop to your heart's content.
 
 If you run into any problems with the above setup, please drop me a line.
+
+#### Final directory structure
+
+If you followed this tutorial, you should have created a directory structure resembling this:
+
+    /webapps/hello_django/
+    ├── bin
+    │   ├── activate
+    │   ├── django-admin.py
+    │   ├── gunicorn
+    │   ├── gunicorn_django
+    │   ├── gunicorn_start
+    │   └── python
+    ├── include
+    │   └── python2.7 -> /usr/include/python2.7
+    ├── lib
+    │   └── python2.7
+    ├── lib64 -> /webapps/proxydemo/lib
+    ├── logs
+    │   ├── gunicorn_supervisor.log
+    │   ├── nginx-access.log
+    │   └── nginx-error.log
+    ├── media
+    ├── hello                        <= Add this to PYTHONPATH
+    │   ├── manage.py
+    │   ├── project_application_1
+    │   ├── project_application_2
+    │   └── hello
+    │       ├── __init__.py
+    │       ├── settings.py
+    │       ├── urls.py
+    │       └── wsgi.py
+    ├── run
+    │   └── gunicorn.sock
+    └── static
