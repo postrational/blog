@@ -132,7 +132,7 @@ Now that you have gunicorn, you can test whether it can server your Django appli
 
     (hello_django) $ gunicorn_django --bind example.com:8001
 
-You should now be able to access the Gunicorn server from htttp://example.com:8001
+You should now be able to access the Gunicorn server from http://example.com:8001
 I intentionally changed port 8000 to 8001 to force your browser to establish a new connection.
 
 Gunicorn is installed and ready to serve your app. Let's set some configuration options to make it more useful. I like to set a number of parameters, so let's put them all into a small BASH script, which I save as `bin/gunicorn_start`
@@ -165,9 +165,9 @@ Now when you list processes, you should see which gunicorn belongs to which appl
     $ ps aux
     USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
     (...)
-    michal   16124  0.0  1.9  56168  9860 ?        S    15:37   0:00 gunicorn: master [hello_app]                               
-    michal   16130  0.0  4.5  73520 23004 ?        S    15:37   0:00 gunicorn: worker [hello_app]                               
-    michal   16131  0.0  4.5  73496 23004 ?        S    15:37   0:00 gunicorn: worker [hello_app]                               
+    michal   16124  0.0  1.9  56168  9860 ?        S    15:37   0:00 gunicorn: master [hello_app]
+    michal   16130  0.0  4.5  73520 23004 ?        S    15:37   0:00 gunicorn: worker [hello_app]
+    michal   16131  0.0  4.5  73496 23004 ?        S    15:37   0:00 gunicorn: worker [hello_app]
     michal   16132  0.0  4.5  73504 23004 ?        S    15:37   0:00 gunicorn: worker [hello_app]
 
 
@@ -230,37 +230,68 @@ If you navigate to your site, you should now see your Django welcome-page powere
 
 If you run into any problems with the above setup, please drop me a line.
 
-#### Final directory structure
+### Final directory structure
 
 If you followed this tutorial, you should have created a directory structure resembling this:
 
     /webapps/hello_django/
-    ├── bin
-    │   ├── activate
+    ├── bin                          <= Directory created by virtualenv
+    │   ├── activate                 <= Environment activation script
     │   ├── django-admin.py
     │   ├── gunicorn
     │   ├── gunicorn_django
-    │   ├── gunicorn_start
+    │   ├── gunicorn_start           <= Script to start application with Gunicorn
     │   └── python
+    ├── hello                        <= Django project directory, add this to PYTHONPATH
+    │   ├── manage.py
+    │   ├── project_application_1
+    │   ├── project_application_2
+    │   └── hello                    <= Project settings directory
+    │       ├── __init__.py
+    │       ├── settings.py          <= hello.setting - settings module Gunicorn will use
+    │       ├── urls.py
+    │       └── wsgi.py
     ├── include
     │   └── python2.7 -> /usr/include/python2.7
     ├── lib
     │   └── python2.7
     ├── lib64 -> /webapps/proxydemo/lib
-    ├── logs
+    ├── logs                         <= Application logs directory
     │   ├── gunicorn_supervisor.log
     │   ├── nginx-access.log
     │   └── nginx-error.log
-    ├── media
-    ├── hello                        <= Add this to PYTHONPATH
-    │   ├── manage.py
-    │   ├── project_application_1
-    │   ├── project_application_2
-    │   └── hello
-    │       ├── __init__.py
-    │       ├── settings.py
-    │       ├── urls.py
-    │       └── wsgi.py
+    ├── media                        <= User uploaded files folder
     ├── run
-    │   └── gunicorn.sock
-    └── static
+    │   └── gunicorn.sock 
+    └── static                       <= Collect and serve static files from here
+
+
+### Uninstalling the Django application
+
+If time comes to remove the application, follow these steps.
+
+Remove the virtual server from Nginx `sites-enabled` folder:
+
+    $ sudo rm /etc/nginx/sites-available/hello_django
+
+Restart Nginx:
+
+    $ sudo service nginx restart 
+
+If you never plan to use this application again, you can remove its config file also from the `sites-available` directory
+
+    $ sudo rm /etc/nginx/sites-available/hello_django
+
+
+Stop the application with Supervisor:
+    
+    $ sudo supervisorctl stop hello
+    
+Remove the application from Supervisor's control scripts directory:
+
+    $ sudo rm /etc/supervisor/conf.d/hello.conf
+    
+If you never plan to use this application again, you can now remove its entire directory from `webapps`:
+
+        $ sudo rm -r /webapps/hello_django
+
