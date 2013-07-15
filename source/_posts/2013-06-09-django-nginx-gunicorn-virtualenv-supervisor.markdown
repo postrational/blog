@@ -6,7 +6,7 @@ permalink: "/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/"
 comments: true
 categories: tech
 published: true
-tags: code
+tags: django nginx gunicorn virtualenv supervisord postgresql
 ---
 
 [Django](http://www.djangoproject.com/) is an efficient, versatile and dynamically evolving web application development framework. When Django initially gained popularity, the recommended setup for running Django applications was based around Apache with mod_wsgi. The art of running Django advanced and these days the recommended configuration is more efficient and resilient, but also more complex and includes such tools as: Nginx, Gunicorn, virtualenv, supervisord and PostgreSQL. 
@@ -106,6 +106,37 @@ You can test it by running the development server:
     Quit the server with CONTROL-C.
 
 You should now be able to access your development server from http://example.com:8000
+
+### Configure PostgreSQL to work with Django
+
+In order to use Django with PostgreSQL you will need to install the `psycopg2` database adapter in your virtual environment. This step requires the compilation of a native extension (written in C). The compilation will fail if it cannot find the header files and static libraries required for linking C programs with `libpq` (library for communication with Postgres) and building Python modules (`python-dev` package). We have to install these two packages first, then we can install `psycopg2` using PIP.
+
+Install dependencies:
+
+    $ sudo apt-get install libpq-dev python-dev
+
+Install `psycopg2` database adapter
+
+    (hello_django) $ pip install psycopg2
+
+You can now configure the databases section in your `settings.py`
+
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'hello',
+        'USER': 'hello_django',
+        'PASSWORD': '1Ak5RTQt7mtw0OREsfPhJYzXIak41gnrm5NWYEosCeIduJck10awIzoys1wvbL8',
+        'HOST': 'localhost',
+        'PORT': '',                      # Set to empty string for default.
+    }
+}
+```
+
+And finally build the initial database for Django:
+
+    (hello_django) $ ./manage.py syncdb
 
 ### Gunicorn
 
