@@ -109,17 +109,17 @@ You should now be able to access your development server from http://example.com
 
 ### Configure PostgreSQL to work with Django
 
-In order to use Django with PostgreSQL you will need to install the `psycopg2` database adapter in your virtual environment. This step requires the compilation of a native extension (written in C). The compilation will fail if it cannot find the header files and static libraries required for linking C programs with `libpq` (library for communication with Postgres) and building Python modules (`python-dev` package). We have to install these two packages first, then we can install `psycopg2` using PIP.
+In order to use Django with PostgreSQL you will need to install the `psycopg2` database adapter in your virtual environment. This step requires the compilation of a native extension (written in C). The compilation will fail if it cannot find header files and static libraries required for linking C programs with `libpq` (library for communication with Postgres) and building Python modules (`python-dev` package). We have to install these two packages first, then we can install `psycopg2` using PIP.
 
 Install dependencies:
 
     $ sudo apt-get install libpq-dev python-dev
 
-Install `psycopg2` database adapter
+Install `psycopg2` database adapter:
 
     (hello_django) $ pip install psycopg2
 
-You can now configure the databases section in your `settings.py`
+You can now configure the databases section in your `settings.py`:
 
 ```python
 DATABASES = {
