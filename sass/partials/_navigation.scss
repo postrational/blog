@@ -57,7 +57,7 @@ body > nav {
     a {
       @include link-colors($nav-color, $nav-color-hover, $visited: $nav-color);
       font-family: $sans;
-      text-shadow: lighten($nav-bg, 12) 0 1px;
+      text-shadow: lighten($nav-bg, 12) 0 1px 1px;
       float: left;
       text-decoration: none;
       font-size: 1.1em;
