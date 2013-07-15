@@ -1,18 +1,41 @@
 body > header {
   background: $header-bg image-url('/images/background_paper.jpg');
   
+  #meditating-gnu {
+    display: inline-block;
+    width: 92px;
+    height: 80px;
+    background-image:url('/images/meditate.png');
+    background-size: 92px 80px;
+
+    @include if-min-resolution(1.5) {
+      // Image for Retina displays
+      background-size: 92px 80px;
+      background-image: url('/images/meditate-retina.png');
+    }
+    
+    @media only screen and (min-width: 450px) {
+      margin-bottom: -16px;
+    }
+  }
+  
   h1 {
-    font-size: 2.8em;
     letter-spacing: -1px;
     line-height: 1;
     margin: 0;
     padding: 20px 0 13px;
     text-shadow: 0 0 5px #56534F;
     text-align:center;
+    font-size: 2.0em;
+    
+    @media only screen and (min-width: 400px) {
+      font-size: 2.8em;
+    }
     
     a, a:visited, a:hover {
       color: $title_color;
       text-decoration: none;
+      word-break: keep-all;
     }
   }
   h2 {
