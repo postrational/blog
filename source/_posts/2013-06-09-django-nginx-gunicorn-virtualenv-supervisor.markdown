@@ -186,10 +186,12 @@ Note the parameters set in `gunicorn_start`. You'll need to set the paths and fi
 
 As a rule-of-thumb set the `--workers` (`NUM_WORKERS`) according to the following formula: 2 * CPUs  + 1. The idea being, that at any given time half of your workers will be busy doing I/O. For a single CPU machine it would give you 3.
 
-The `--name` (`NAME`) argument specifies how your application will identify itself in programs such as `top` or `ps`. It defaults to `gunicorn`, which might make it harder to distinguish from other apps if you have multiple Gunicorn-powered applications running on the same server. In order for the `--name` argument to have an effect you need to install a Python module called `setproctitle`. It's tricky to install `setproctitle` into a virtualenv, but you can install the module system-wide and symlink the binary into your virtual env.
+The `--name` (`NAME`) argument specifies how your application will identify itself in programs such as `top` or `ps`. It defaults to `gunicorn`, which might make it harder to distinguish from other apps if you have multiple Gunicorn-powered applications running on the same server.
 
-    $ sudo apt-get install python-setproctitle
-    $ ln -s /usr/lib/pymodules/python2.7/setproctitle.so /webapps/hello_django/lib/python2.7/setproctitle.so
+In order for the `--name` argument to have an effect you need to install a Python module called `setproctitle`. To build this native extension `pip` needs to have access to C header files for Python. You can add them to your system with the `python-dev` package and then install `setproctitle`.
+
+    $ sudo apt-get install python-dev
+    (hello_django) $ pip install setproctitle
 
 Now when you list processes, you should see which gunicorn belongs to which application.
 
@@ -303,7 +305,7 @@ If time comes to remove the application, follow these steps.
 
 Remove the virtual server from Nginx `sites-enabled` folder:
 
-    $ sudo rm /etc/nginx/sites-available/hello_django
+    $ sudo rm /etc/nginx/sites-enabled/hello_django
 
 Restart Nginx:
 
