@@ -9,13 +9,13 @@ published: true
 tags: django redis
 ---
 
-[Redis](http://redis.io) is an in-memory key-value store, somewhat similar to Memcached. Because Redis keeps its dataset in memory, storage and retrieval of data is very fast. It's a good idea to use such a solution for storing ephemeral application data, such as contents of the cache, or temporary data associated with active user sessions. This unburdens your database system from performing unnecessary read and write operations and can considerably speed up your application. Modules for using Redis together with Django are available and quite easy to set up.
+[Redis](http://redis.io) is an in-memory key-value store, somewhat similar to Memcached. Because Redis keeps its dataset in memory, storage and retrieval is very fast. It's a good idea to use this kind of solution for storing ephemeral application data, such as contents of the cache, or temporary information associated with active user sessions. This unburdens your database system from performing unnecessary read and write operations and can considerably speed up your application. Modules for using Redis together with Django are available and quite easy to set up.
 
 <!-- more -->
 
 ## Prerequisites
 
-I'm going to assume you have a Django application running in a virtual environment, under supervisor on a Debian server. Instructions for creating such a setup can be found in a [previous article](/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/).
+I'm going to assume you have a Django application running in a virtual environment, under supervisord on a Debian server. Instructions for creating such a setup can be found in a [previous article](/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/).
 
 ## Redis
 
@@ -32,7 +32,7 @@ Setting up Redis on Debian is simple using `apt-get`. On a RedHat-based system y
 
 You can connect to a local Redis instance over the network layer (TCP to the loopback interface) or through a unix socket file. 
 
-In order to avoid the small overhead of TCP, we can configure Redis to accept direct socket connections. To do this, edit your `/etc/redis/redis.conf` file and comment out the `bind` and `port` directives and uncomment the two `unixsocket` directives.
+In order to avoid the small overhead of TCP, we can configure Redis to accept direct socket connections. To do this, edit your `/etc/redis/redis.conf` file, comment out the `bind` and `port` directives and uncomment the two `unixsocket` directives.
 
 ```cfg
 # Accept connections on the specified port, default is 6379.
@@ -68,7 +68,7 @@ Default permissions on the Redis socket are very restrictive on Debian and allow
 
     $ sudo chmod 777 /var/run/redis/redis.sock
 
-For security reasons, it may be better to restrict access to the socket to a group of users. You can add the user which your application will run as to the group `redis` and change the permissions on the socket file to allow writes only from the group.
+For security reasons, it may be better to restrict access to the socket to a chosen group of users. You can add the user which your application will run as to the group `redis` and change the permissions on the socket file to allow writes only from the group.
 
     $ sudo usermod -a -G redis django_username
     $ sudo chmod 775 /var/run/redis/redis.sock
@@ -83,7 +83,7 @@ On their site, you will find more information about [getting started with Redis]
 
 ### Python bindings for Redis
 
-In order to use Redis together with a Python application such as Django, you'll need to install the appropriate Python interface. You can install it in your virtualenv with `pip`:
+In order to use Redis with a Python application such as Django, you'll need to install the Redis-Python interface bindings module. You can install it in your virtualenv with `pip`:
 
     $ source bin/activate
     (hello_django) $ pip install redis
@@ -91,7 +91,7 @@ In order to use Redis together with a Python application such as Django, you'll 
 
 ## Redis as backend for Django session data
 
-We can now set up Redis as the store for Django's session data. We can use the [django-redis-sessions](https://github.com/martinrusev/django-redis-sessions) component to do so.
+You can now set up Redis as a store for Django's session data. You can use  [django-redis-sessions](https://github.com/martinrusev/django-redis-sessions) module to do so.
 
 Inside your virtual environment install django-redis-sessions:
 
@@ -106,7 +106,7 @@ SESSION_REDIS_UNIX_DOMAIN_SOCKET_PATH = '/var/run/redis/redis.sock'
 
 That's it. After you restart your application, session data should be stored in Redis instead of the database.
 
-More information about [working with sessions in Django](https://docs.djangoproject.com/en/dev/topics/http/sessions/).
+More information: [working with sessions in Django](https://docs.djangoproject.com/en/dev/topics/http/sessions/).
 
 
 ## Redis as backend for Django's cache
@@ -141,17 +141,11 @@ MIDDLEWARE_CLASSES = (
 
 You can now restart your application and start using Django's Redis-powered cache.
 
-More information about [using Django's cache](https://docs.djangoproject.com/en/dev/topics/cache/).
+More information: [using Django's cache](https://docs.djangoproject.com/en/dev/topics/cache/).
 
 
 ## Redis for multiple applications
 
-Please note that the solution described above can be used by only a single Django application. If you want to use multiple Django applications with Redis, you could try to separate their namespaces, by using key prefixes, or using a different Redis numeric database for each (`1` for one application, `2` for another, etc.). 
+Please note that the solution described above can only be used by a single Django application. If you want to use multiple Django applications with Redis, you could try to separate their namespaces, by using key prefixes, or using a different Redis numeric database for each (`1` for one application, `2` for another, etc). These solutions are not advised however.
 
-These solutions are not advised however and if you want to run multiple applications each with a Redis cache, the recommendation is to run a separate Redis instance for each application. On Chris Laskey's blog you can find instructions for [setting up multiple Redis instances on the same server](http://chrislaskey.com/blog/342/running-multiple-redis-instances-on-the-same-server/).
-
-
-
-
-
-
+If you want to run multiple applications each with a Redis cache, the recommendation is to run a separate Redis instance for each application. On Chris Laskey's blog you can find instructions for [setting up multiple Redis instances on the same server](http://chrislaskey.com/blog/342/running-multiple-redis-instances-on-the-same-server/).
