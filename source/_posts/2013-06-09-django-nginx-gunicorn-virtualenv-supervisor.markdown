@@ -251,7 +251,7 @@ You can navigate to your server (http://example.com) with your browser and Nginx
 
 Each Nginx virtual server should be described in a file in the `/etc/nginx/sites-available` directory. You select which sites you want to enable by making symbolic links to those in the  `/etc/nginx/sites-enabled` directory.
 
-Create a new nginx server configuration file for your Drupal site running on example.com in `/etc/nginx/sites-available/hello`. The file should contain something along the following lines. A more detailed example is available [from the folks who make Gunicorn](https://github.com/benoitc/gunicorn/blob/master/examples/nginx.conf).
+Create a new nginx server configuration file for your Django application running on example.com in `/etc/nginx/sites-available/hello`. The file should contain something along the following lines. A more detailed example is available [from the folks who make Gunicorn](https://github.com/benoitc/gunicorn/blob/master/examples/nginx.conf).
 
 <script src="https://gist.github.com/postrational/5747293.js?file=hello.nginxconf"></script>
 
@@ -281,7 +281,7 @@ If you followed this tutorial, you should have created a directory structure res
     │   ├── project_application_2
     │   └── hello                    <= Project settings directory
     │       ├── __init__.py
-    │       ├── settings.py          <= hello.setting - settings module Gunicorn will use
+    │       ├── settings.py          <= hello.settings - settings module Gunicorn will use
     │       ├── urls.py
     │       └── wsgi.py
     ├── include
