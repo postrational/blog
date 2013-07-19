@@ -17,7 +17,7 @@ In this text I will explain how to combine all of these components into a Django
 
 ### Prerequisites
 
-I assume you have a server available on which you have root privileges. I am using a server running Debian 7, so everything here should work the same on an Ubuntu server or other Debian-based distribution. If you're using an RPM-based distro (such as CentOS), you will need to replace the `apt-get` commands by their `yum` counterparts.
+I assume you have a server available on which you have root privileges. I am using a server running Debian 7, so everything here should also work on an Ubuntu server or other Debian-based distribution. If you're using an RPM-based distro (such as CentOS), you will need to replace the `apt-get` commands by their `yum` counterparts and if you're using FreeBSD you can install the components from ports.
 
 If you don't have a server to play with, I would recommend the inexpensive VPS servers offered by [Digital Ocean](https://www.digitalocean.com/?refcode=053914aba44d). If you click through [this link](https://www.digitalocean.com/?refcode=053914aba44d) when signing up, you'll pay a bit of my server bill :)
 
@@ -32,7 +32,7 @@ Let's get started by making sure our system is up to date.
 
 ### PostgreSQL
 
-Install PostgreSQL on a Debian-based system:
+To install PostgreSQL on a Debian-based system run this command:
 
     $ sudo apt-get install postgresql postgresql-contrib
 
@@ -65,7 +65,7 @@ Create a database and user with privileges.
     
 #### Create and activate an environment for your application
 
-I like to keep all my web apps in the /webapps/ directory. If you prefer /var/www/ or something else, use that instead.
+I like to keep all my web apps in the `/webapps/` directory. If you prefer `/var/www/` or something else, use that instead.
 
     $ cd /webapps/
     $ virtualenv hello_django
@@ -184,7 +184,7 @@ You can test your `gunicorn_start` script by running it:
     
 Note the parameters set in `gunicorn_start`. You'll need to set the paths and filenames to match your setup.
 
-As a rule-of-thumb set the `--workers` (`NUM_WORKERS`) according to the following formula: 2 * CPUs  + 1. The idea being, that at any given time half of your workers will be busy doing I/O. For a single CPU machine it would give you 3.
+As a rule-of-thumb set the `--workers` (`NUM_WORKERS`) according to the following formula: 2&nbsp;*&nbsp;CPUs&nbsp;+&nbsp;1. The idea being, that at any given time half of your workers will be busy doing I/O. For a single CPU machine it would give you 3.
 
 The `--name` (`NAME`) argument specifies how your application will identify itself in programs such as `top` or `ps`. It defaults to `gunicorn`, which might make it harder to distinguish from other apps if you have multiple Gunicorn-powered applications running on the same server.
 
@@ -249,7 +249,7 @@ You can navigate to your server (http://example.com) with your browser and Nginx
 
 #### Create an Nginx virtual server configuration for Django
 
-Each Nginx virtual server should be described in a file in the `/etc/nginx/sites-available` directory. You select which sites you want to enable by making symbolic links to those in the  `/etc/nginx/sites-enabled` directory.
+Each Nginx virtual server should be described by a file in the `/etc/nginx/sites-available` directory. You select which sites you want to enable by making symbolic links to those in the  `/etc/nginx/sites-enabled` directory.
 
 Create a new nginx server configuration file for your Django application running on example.com in `/etc/nginx/sites-available/hello`. The file should contain something along the following lines. A more detailed example is available [from the folks who make Gunicorn](https://github.com/benoitc/gunicorn/blob/master/examples/nginx.conf).
 
