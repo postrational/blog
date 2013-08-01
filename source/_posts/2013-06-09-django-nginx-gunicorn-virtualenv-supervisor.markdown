@@ -170,6 +170,10 @@ Gunicorn is installed and ready to serve your app. Let's set some configuration 
 
 <script src="https://gist.github.com/postrational/5747293.js?file=gunicorn_start.bash"></script>
 
+Set the executable bit on the gunicorn_start script:
+
+    $ chmod u+x bin/gunicorn_start
+
 You can test your `gunicorn_start` script by running it:
 
     $ ./bin/gunicorn_start 
