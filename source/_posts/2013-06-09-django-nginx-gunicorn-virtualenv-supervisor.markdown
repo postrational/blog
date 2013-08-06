@@ -159,18 +159,17 @@ Install gunicorn in your application's virtual environment:
     Cleaning up...
 
 
-Now that you have gunicorn, you can test whether it can server your Django application by running the following command:
+Now that you have gunicorn, you can test whether it can serve your Django application by running the following command:
 
     (hello_django) $ gunicorn_django --bind example.com:8001
 
-You should now be able to access the Gunicorn server from http://example.com:8001
-I intentionally changed port 8000 to 8001 to force your browser to establish a new connection.
+You should now be able to access the Gunicorn server from http://example.com:8001 . I intentionally changed port 8000 to 8001 to force your browser to establish a new connection.
 
 Gunicorn is installed and ready to serve your app. Let's set some configuration options to make it more useful. I like to set a number of parameters, so let's put them all into a small BASH script, which I save as `bin/gunicorn_start`
 
 <script src="https://gist.github.com/postrational/5747293.js?file=gunicorn_start.bash"></script>
 
-Set the executable bit on the gunicorn_start script:
+Set the executable bit on the `gunicorn_start` script:
 
     $ chmod u+x bin/gunicorn_start
 
@@ -239,7 +238,7 @@ You can also check the status of your app or start, stop or restart it using sup
     hello: stopped
     hello: started
 
-Your application should now be automatically started after a system reboot and automatically restarted if it ever crashed for any reason.
+Your application should now be automatically started after a system reboot and automatically restarted if it ever crashed for some reason.
 
 
 ### Nginx
