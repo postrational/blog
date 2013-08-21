@@ -2,61 +2,69 @@
 // Add styles here to make changes without digging in too much
 
 article {
-    
-    .center {
-        text-align: center;
+
+  .center {
+    text-align: center;
+  }
+
+  .figure {
+    margin: 1em 0px;
+    text-align: center;
+  }
+
+  .figure .legend {
+    margin-top:0.5em;
+    color:#666;
+    font-style:italic;
+    text-align: center;
+  }
+
+  ul, ol {
+    margin-left: 2em;
+  }
+
+  > {
+    @import "custom/tables";
+  }
+
+  iframe {
+    width:100%;
+    height: 239px !important;
+
+    @media only screen and (min-width: 480px) {
+      height: 300px !important;
+    }
+    @media only screen and (min-width: 768px) {
+      height: 400px !important;
+    }
+    @media only screen and (min-width: 992px) {
+      height: 500px !important;
+    }
+  }
+
+  .gist {
+    .gist-file .gist-meta {
+      text-shadow: none !important;
+      
+      a[href*="#file"] {
+        right: 0px !important;
+      } 
+      a[href*="raw"]{
+        padding-right:10px;
+      }
     }
 
-    .figure {
-        margin: 1em 0px;
-        text-align: center;
+    div.file-data {
+      background-color: #002B36;
     }
-
-    .figure .legend {
-        margin-top:0.5em;
-        color:#666;
-        font-style:italic;
-        text-align: center;
-    }
-    
-    ul, ol {
-        margin-left: 2em;
-    }
-    
-    > {
-        @import "custom/tables";
-    }
-    
-    .gist-meta {
-        text-shadow: none !important;
-    }
-    
-    iframe {
-      width:100%;
-      height: 239px !important;
-      
-      @media only screen and (min-width: 480px) {
-        height: 300px !important;
-      }
-      @media only screen and (min-width: 768px) {
-        height: 400px !important;
-      }
-      @media only screen and (min-width: 992px) {
-        height: 500px !important;
-      }
-      
-    }
-    
-    .gist div.file-data {
-        background-color: #002B36;
-    }
+  }
 }
 
 
 #portrait {
-    border: none;
-    padding: 5px;
-    float:right;
-    @include box-sizing(content-box);
-    box-shadow: none;
+  border: none;
+  padding: 5px;
+  float:right;
+  @include box-sizing(content-box);
+  box-shadow: none;
 }
