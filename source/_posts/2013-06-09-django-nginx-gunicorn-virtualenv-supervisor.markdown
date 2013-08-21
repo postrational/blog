@@ -286,7 +286,7 @@ If you followed this tutorial, you should have created a directory structure res
     │       ├── __init__.py
     │       ├── settings.py          <= hello.settings - settings module Gunicorn will use
     │       ├── urls.py
-    │       └── wsgi.py
+    │       └── wsgi.py              <= hello.wsgi - WSGI module Gunicorn will use
     ├── include
     │   └── python2.7 -> /usr/include/python2.7
     ├── lib
