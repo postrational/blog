@@ -219,6 +219,11 @@ When Supervisor is installed you can give it programs to start and watch by crea
 
 You can set [many other options](http://supervisord.org/configuration.html#program-x-section-settings), but this basic configuration should suffice. 
 
+Create the file to store your application's log messages:
+
+    $ mkdir -p /webapps/hello_django/logs/
+    $ touch /webapps/hello_django/logs/gunicorn_supervisor.log 
+
 After you save the configuration file for your program you can ask supervisor to reread configuration files and update (which will start your the newly registered app).
 
     $ sudo supervisorctl reread
@@ -263,6 +268,10 @@ Restart Nginx:
     $ sudo service nginx restart 
 
 If you navigate to your site, you should now see your Django welcome-page powered by Nginx and Gunicorn. Go ahead and develop to your heart's content.
+
+<p class='tip' markdown='1'>
+At this stage you may find that instead of the Django welcome-page, you encounter the default "*Welcome to nginx!*" page. This may be caused by the `default` configuration file, which is installed with Nginx and masks your new site's configuration. If you don't plan to use it, delete the symbolic link to this file from `/etc/nginx/sites-enabled`.
+</p>
 
 If you run into any problems with the above setup, please drop me a line.
 

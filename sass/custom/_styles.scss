@@ -18,6 +18,11 @@ article {
     font-style:italic;
     text-align: center;
   }
+  
+  .tip {
+    padding-left: 50px;
+    background:transparent image-url('lightbulb.png') left center no-repeat;
+  }
 
   ul, ol {
     margin-left: 2em;
