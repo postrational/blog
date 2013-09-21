@@ -269,9 +269,8 @@ Restart Nginx:
 
 If you navigate to your site, you should now see your Django welcome-page powered by Nginx and Gunicorn. Go ahead and develop to your heart's content.
 
-<p class='tip' markdown='1'>
-At this stage you may find that instead of the Django welcome-page, you encounter the default "*Welcome to nginx!*" page. This may be caused by the `default` configuration file, which is installed with Nginx and masks your new site's configuration. If you don't plan to use it, delete the symbolic link to this file from `/etc/nginx/sites-enabled`.
-</p>
+> %tip%
+> At this stage you may find that instead of the Django welcome-page, you encounter the default "*Welcome to nginx!*" page. This may be caused by the `default` configuration file, which is installed with Nginx and masks your new site's configuration. If you don't plan to use it, delete the symbolic link to this file from `/etc/nginx/sites-enabled`.
 
 If you run into any problems with the above setup, please drop me a line.
 
