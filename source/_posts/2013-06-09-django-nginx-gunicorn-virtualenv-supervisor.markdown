@@ -263,6 +263,10 @@ Create a new nginx server configuration file for your Django application running
 
 <script src="https://gist.github.com/postrational/5747293.js?file=hello.nginxconf"></script>
 
+Create a symbolic link in the `sites-enabled` folder:
+
+    $ ln -s /etc/nginx/sites-available/hello /etc/nginx/sites-enabled/hello
+
 Restart Nginx:
 
     $ sudo service nginx restart 
