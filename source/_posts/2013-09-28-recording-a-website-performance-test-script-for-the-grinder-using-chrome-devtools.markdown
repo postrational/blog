@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Recording a website performance test script for The Grinder using Chrome DevTools"
+title: "Recording a website performance test for The Grinder using Chrome DevTools"
 date: 2013-09-28
 permalink: "/blog/2013/09/28/website-performance-script-for-the-grinder-using-har2grinder/"
 comments: true
