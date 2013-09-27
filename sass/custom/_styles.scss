@@ -10,6 +10,8 @@ article {
   .figure {
     margin: 1em 0px;
     text-align: center;
+    background-color: white;
+    @include shadow-box;
   }
 
   .figure .legend {

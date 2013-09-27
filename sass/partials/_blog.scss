@@ -45,7 +45,7 @@ article {
   img, video, .flash-video {
     @extend .flex-content;
     @extend .basic-alignment;
-    @include shadow-box;
+//    @include shadow-box;
   }
   video, .flash-video { margin: 0 auto 1.5em; }
   video { display: block; width: 100%; }
