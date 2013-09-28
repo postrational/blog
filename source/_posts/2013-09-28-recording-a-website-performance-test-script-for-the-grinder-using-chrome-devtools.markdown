@@ -17,7 +17,7 @@ I created a simple tool called [har2grinder][har2grinder], which produces Grinde
 
 ### HTTP Archive (HAR) files
 
-The [HTTP Archive (HAR) files][har] format is able to store a history of HTTP transactions. This allows a web browser to export detailed performance data about web pages it loads. This format is currently a work in progress at the W3C.
+The [HTTP Archive (HAR)][har] format is able to store a history of HTTP transactions. This allows a web browser to export detailed performance data about web pages it loads. This format is currently a work in progress at the W3C.
 
 Chrome's DevTools allow you to save a history of your browsing including every HTTP request made by the browser during your session. We can convert this record to a script which The Grinder will run multiple times.
 
@@ -64,7 +64,7 @@ Information about using The Grinder can be found in it's [user guide][grinder_ma
 
         $ java -classpath lib/grinder.jar net.grinder.Console
 
-3. On the same machine, another machine or a set of machines create a file called `grinder.properties` in the Grinder directory. This will contain the [configuration for Grinder's agents][grinder_properties] which will run your tests:
+3. Grinder agents are the programs which will connect to your website during tests. On the same machine, another machine or a set of machines create a file called `grinder.properties`, which will contain the [configuration for Grinder's agents][grinder_properties].
 
 ``` properties grinder.properties
 # Which test do you wish to run
