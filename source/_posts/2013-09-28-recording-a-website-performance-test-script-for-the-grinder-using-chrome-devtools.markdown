@@ -50,6 +50,8 @@ Chrome's DevTools allow you to save a history of your browsing including every H
 
 ### Creating a test script for The Grinder from a HAR file
 
+Download the [har2grinder][har2grinder] script from Github.
+
 To convert your recorded navigation to a Grinder test, simply run the `har2grinder` script and redirect its output to a `.py` file.
 
     $ python har2grinder.py my_website_test.har > my_website_grinder_test.py
