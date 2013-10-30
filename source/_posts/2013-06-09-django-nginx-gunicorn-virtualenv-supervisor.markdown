@@ -303,7 +303,7 @@ If you followed this tutorial, you should have created a directory structure res
     │   └── python2.7 -> /usr/include/python2.7
     ├── lib
     │   └── python2.7
-    ├── lib64 -> /webapps/proxydemo/lib
+    ├── lib64 -> /webapps/hello_django/lib
     ├── logs                         <= Application logs directory
     │   ├── gunicorn_supervisor.log
     │   ├── nginx-access.log
