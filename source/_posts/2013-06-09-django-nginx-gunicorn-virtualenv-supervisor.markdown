@@ -343,3 +343,9 @@ If you never plan to use this application again, you can now remove its entire d
 
         $ sudo rm -r /webapps/hello_django
 
+
+### Running multiple applications
+
+If you would like some help with setting up a Nginx server to run multiple Django applications, check out [my next article][multiple_django].
+
+[multiple_django]: /blog/2013/10/29/serving-multiple-django-applications-with-nginx-gunicorn-supervisor/ "Serving multiple Django applications with Nginx and Gunicorn"
