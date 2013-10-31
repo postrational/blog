@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Serving multiple Django applications with Nginx and Gunicorn"
-date: 2013-10-31
+date: 2013-10-29
 permalink: "/blog/2013/10/29/serving-multiple-django-applications-with-nginx-gunicorn-supervisor/"
 comments: true
 categories: tech
