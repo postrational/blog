@@ -21,7 +21,7 @@ Let's begin by setting up a generic `mod_wsgi` application in your WebFaction co
 * App category: `mod_wsgi `
 * App type : `mod_wsgi 3.4 / Python 2.7`
 
-The new application will be created in your home directory (`$HOME`) directory under: `$HOME/webapps/test_app`. The directory will contain two subdirectories: 
+The new application will be created in your home directory (`$HOME`) under: `$HOME/webapps/test_app`. The directory will contain two subdirectories: 
 
 * `apache2` - contains the Apache configuration files (`apache2/conf`) and scripts which let you control the server (`apache2/bin`)
 * `htdocs` - contains default page files. 
@@ -145,8 +145,10 @@ We are now ready to configure Apache to serve our Django-powered webapp. In orde
 * the port number under which Apache listens to connections. This value is located in the line with the `Listen` directive of the original `httpd.conf`. In the example below we set this to `12345`
 * the name of your application (`test_app`)
 * the domain name which your website uses (`example.com`)
-* the complete path to your application:
-`/home/my_username/webapps/test_app/test_django/test_django/`
+* the complete path to your application's virtualenv and project directory:
+`/home/my_username/webapps/test_app` and `/home/my_username/webapps/test_app/test_django`
+* the complete path to your application's WSGI script:
+`/home/my_username/webapps/test_app/test_django/test_django/wsgi.py`
 
 Use these values to customize the configuration template below and save it as your new `httpd.conf`:
 
