@@ -21,7 +21,9 @@ Let's begin by setting up a generic `mod_wsgi` application in your WebFaction co
 * App category: `mod_wsgi `
 * App type : `mod_wsgi 3.4 / Python 2.7`
 
-The new application will be created in your home directory (`$HOME`) under: `$HOME/webapps/test_app`. The directory will contain two subdirectories: 
+The new application will be created in your home directory (`~`) under: `~/webapps/test_app`. 
+
+The directory will contain two subdirectories: 
 
 * `apache2` - contains the Apache configuration files (`apache2/conf`) and scripts which let you control the server (`apache2/bin`)
 * `htdocs` - contains default page files. 
