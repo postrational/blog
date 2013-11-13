@@ -63,7 +63,7 @@ Let's say that for our `hello` and `goodbye` applications we would create enviro
 
 ### Create system accounts for the webapps
 
-In order to make running multiple applications safer we'll create a separate system user account for each application. The apps will run on our system with the privileges of those special users. Even if one application became compromised, an attacker would only be able to take over the part of your system available to the hacked application.
+Even though Django has a pretty good [security track record][django_security], web applications can become compromised. In order to make running multiple applications safer we'll create a separate system user account for each application. The apps will run on our system with the privileges of those special users. Even if one application became compromised, an attacker would only be able to take over the part of your system available to the hacked application.
 
 Create system users named `hello` and `goodbye` and assign them to a system group called `webapps`.
 
@@ -248,3 +248,4 @@ Good luck!
 [hosts_location]: http://en.wikipedia.org/wiki/Hosts_(file)#Location_in_the_file_system "hosts (file) Location in the file system - Wikipedia"
 [gunicorn_start]: https://gist.github.com/postrational/5747293#file-gunicorn_start-bash "gunicorn_start.bash"
 [nginx_template]: https://gist.github.com/postrational/5747293#file-hello-nginxconf "Nginx virtual server configuration template"
+[django_security]: http://django.readthedocs.org/en/latest/releases/security.html "Archive of Django security issues"

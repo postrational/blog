@@ -138,6 +138,15 @@ And finally build the initial database for Django:
 
     (hello_django) $ ./manage.py syncdb
 
+### System users
+
+Even though Django has a pretty good [security track record](http://django.readthedocs.org/en/latest/releases/security.html), web applications can become compromised. If the application has limited access to resources on your server, the potential damage can also be limited. Your web applications should run as system users with limited privileges.
+
+Create a user for your app, named `hello` and assigned to a system group called `webapps`.
+
+    $ sudo groupadd --system webapps
+    $ sudo useradd --system --gid webapps --home /webapps/hello_django hello 
+
 ### Gunicorn
 
 In production we won't be using Django's single-threaded development server, but a dedicated application server called [gunicorn](http://gunicorn.org/).
