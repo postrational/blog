@@ -19,7 +19,7 @@ In this text I will explain how to combine all of these components into a Django
 
 I assume you have a server available on which you have root privileges. I am using a server running Debian 7, so everything here should also work on an Ubuntu server or other Debian-based distribution. If you're using an RPM-based distro (such as CentOS), you will need to replace the `apt-get` commands by their `yum` counterparts and if you're using FreeBSD you can install the components from ports.
 
-If you don't have a server to play with, I would recommend the inexpensive VPS servers offered by [Digital Ocean](https://www.digitalocean.com/?refcode=053914aba44d). If you click through [this link](https://www.digitalocean.com/?refcode=053914aba44d) when signing up, you'll pay a bit of my server bill :)
+If you don't have a server to play with, I would recommend the inexpensive VPS servers offered by [Digital Ocean][digital_ocean_referal]. If you click through [this link][digital_ocean_referal] when signing up, you'll pay a bit of my server bill :)
 
 I'm also assuming you configured your DNS to point a domain at the server's IP. In this text, I pretend your domain is `example.com`
 
@@ -36,10 +36,9 @@ To install PostgreSQL on a Debian-based system run this command:
 
     $ sudo apt-get install postgresql postgresql-contrib
 
-Create a database and user with privileges.
+Create a database user and a new database for the app. Grab a [perfect password from GRC][perfect_passwords].
 
     $ sudo su - postgres
-    postgres@django:~$ createdb hello
     postgres@django:~$ createuser -P
     Enter name of role to add: hello_django
     Enter password for new role: 
@@ -47,13 +46,9 @@ Create a database and user with privileges.
     Shall the new role be a superuser? (y/n) n
     Shall the new role be allowed to create databases? (y/n) n
     Shall the new role be allowed to create more new roles? (y/n) n
-    postgres@django:~$ psql
-    psql (9.1.9)
-    Type "help" for help.
-
-    postgres=# GRANT ALL PRIVILEGES ON DATABASE hello TO hello_django;
-    GRANT
-    postgres=# \q
+    postgres@django:~$
+    
+    postgres@django:~$ createdb --owner hello_django hello
     postgres@django:~$ logout
     $
 
@@ -138,9 +133,9 @@ And finally build the initial database for Django:
 
     (hello_django) $ ./manage.py syncdb
 
-### System users
+### Application user
 
-Even though Django has a pretty good [security track record](http://django.readthedocs.org/en/latest/releases/security.html), web applications can become compromised. If the application has limited access to resources on your server, the potential damage can also be limited. Your web applications should run as system users with limited privileges.
+Even though Django has a pretty good [security track record](http://django.readthedocs.org/en/latest/releases/security.html), web applications can become compromised. If the application has limited access to resources on your server, potential damage can also be limited. Your web applications should run as system users with limited privileges.
 
 Create a user for your app, named `hello` and assigned to a system group called `webapps`.
 
@@ -358,3 +353,5 @@ If you never plan to use this application again, you can now remove its entire d
 If you would like some help with setting up a Nginx server to run multiple Django applications, check out [my next article][multiple_django].
 
 [multiple_django]: /blog/2013/10/29/serving-multiple-django-applications-with-nginx-gunicorn-supervisor/ "Serving multiple Django applications with Nginx and Gunicorn"
+[perfect_passwords]: https://www.grc.com/passwords.htm "GRC's Ultra High Security Password Generator"
+[digital_ocean_referal]: https://www.digitalocean.com/?refcode=053914aba44d "Digital Ocean VPS Hosting"
