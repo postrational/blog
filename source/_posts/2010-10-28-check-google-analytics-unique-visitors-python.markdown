@@ -23,17 +23,16 @@ For a simple example, I use a utility called [GeekTool](http://projects.tynsoe.o
 ### Install the Google Data APIs Python Client Library
 Visit the [gdata-python-client](http://code.google.com/p/gdata-python-client/) page, grab the latest version and install.
 
-    wget http://gdata-python-client.googlecode.com/files/gdata-2.0.17.tar.gz
-    tar -xzf gdata-2.0.17.tar.gz
-    cd gdata-2.0.17
-    sudo python setup.py install
-    
+    $ wget http://gdata-python-client.googlecode.com/files/gdata-2.0.18.tar.gz
+    $ tar -xzf gdata-2.0.18.tar.gz
+    $ cd gdata-2.0.18
+    $ sudo python setup.py install
 
 ### Test the installation
 Test that the installation was success full by downloading the [`account_feed_demo.py`](http://gdata-python-client.googlecode.com/hg/samples/analytics/account_feed_demo.py) script and running it.
 
-    curl -o account_feed_demo.py http://gdata-python-client.googlecode.com/hg/samples/analytics/account_feed_demo.py
-    python account_feed_demo.py
+    $ curl -o account_feed_demo.py http://gdata-python-client.googlecode.com/hg/samples/analytics/account_feed_demo.py
+    $ python account_feed_demo.py
 
 Follow the onscreen instructions and try to log into your account.
 
