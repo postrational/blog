@@ -131,7 +131,7 @@ DATABASES = {
 
 And finally build the initial database for Django:
 
-    (hello_django) $ ./manage.py syncdb
+    (hello_django) $ python manage.py syncdb
 
 ### Application user
 
@@ -165,7 +165,7 @@ Install gunicorn in your application's virtual environment:
 
 Now that you have gunicorn, you can test whether it can serve your Django application by running the following command:
 
-    (hello_django) $ gunicorn_django --bind example.com:8001
+    (hello_django) $ gunicorn hello.wsgi:application --bind example.com:8001
 
 You should now be able to access the Gunicorn server from http://example.com:8001 . I intentionally changed port 8000 to 8001 to force your browser to establish a new connection.
 
@@ -173,22 +173,50 @@ Gunicorn is installed and ready to serve your app. Let's set some configuration 
 
 <script src="https://gist.github.com/postrational/5747293.js?file=gunicorn_start.bash"></script>
 
+
+`gunicorn_start` will run the application as the user `hello`. We should give ownership of the entire application directory to that user. We will still want to be able to keep changing files in the application directory, so we can set the group owner to `users` and give the group write permissions.
+
+    $ sudo chown -R hello:users /webapps/hello_django
+    $ sudo chmod -R g+w /webapps/hello_django
+
+You can check what groups you're a member of by issuing the `groups` command or `id`.
+
+    $ id
+    uid=1000(michal) gid=1000(michal) groups=1000(michal),27(sudo),100(users)
+
+If you're not a member of `users`, you can add yourself to the group with this command:
+
+    $ sudo usermod -a -G users `whoami`
+
+> %tip%
+> Group memberships are assigned during login, so you may need to log out and back in again for the system to recognize your new group.
+
 Set the executable bit on the `gunicorn_start` script:
 
-    $ chmod u+x bin/gunicorn_start
+    $ sudo chmod u+x bin/gunicorn_start
 
-You can test your `gunicorn_start` script by running it:
+You can test your `gunicorn_start` script by running it as the user `hello`.
 
-    $ ./bin/gunicorn_start 
-    Starting hello_app
-    2013-06-09 21:14:07 [2792] [INFO] Starting gunicorn 0.17.4
-    2013-06-09 21:14:07 [2792] [DEBUG] Arbiter booted
-    2013-06-09 21:14:07 [2792] [INFO] Listening at: unix:/webapps/hello_django/run/gunicorn.sock (2792)
-    2013-06-09 21:14:07 [2792] [INFO] Using worker: sync
-    2013-06-09 21:14:07 [2798] [INFO] Booting worker with pid: 2798
-    2013-06-09 21:14:07 [2799] [INFO] Booting worker with pid: 2799
-    2013-06-09 21:14:07 [2800] [INFO] Booting worker with pid: 2800
+    $ sudo su - hello
+    $ bin/gunicorn_start
+    Starting hello_app as hello
+    2013-06-09 14:21:45 [10724] [INFO] Starting gunicorn 18.0
+    2013-06-09 14:21:45 [10724] [DEBUG] Arbiter booted
+    2013-06-09 14:21:45 [10724] [INFO] Listening at: unix:/webapps/hello_django/run/gunicorn.sock (10724)
+    2013-06-09 14:21:45 [10724] [INFO] Using worker: sync
+    2013-06-09 14:21:45 [10735] [INFO] Booting worker with pid: 10735
+    2013-06-09 14:21:45 [10736] [INFO] Booting worker with pid: 10736
+    2013-06-09 14:21:45 [10737] [INFO] Booting worker with pid: 10737
     
+    ^C (CONTROL-C to kill Gunicorn)
+    
+    2013-06-09 14:21:48 [10736] [INFO] Worker exiting (pid: 10736)
+    2013-06-09 14:21:48 [10735] [INFO] Worker exiting (pid: 10735)
+    2013-06-09 14:21:48 [10724] [INFO] Handling signal: int
+    2013-06-09 14:21:48 [10737] [INFO] Worker exiting (pid: 10737)
+    2013-06-09 14:21:48 [10724] [INFO] Shutting down: Master
+    $ exit
+
 Note the parameters set in `gunicorn_start`. You'll need to set the paths and filenames to match your setup.
 
 As a rule-of-thumb set the `--workers` (`NUM_WORKERS`) according to the following formula: 2&nbsp;*&nbsp;CPUs&nbsp;+&nbsp;1. The idea being, that at any given time half of your workers will be busy doing I/O. For a single CPU machine it would give you 3.
@@ -205,12 +233,11 @@ Now when you list processes, you should see which gunicorn belongs to which appl
     $ ps aux
     USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
     (...)
-    michal   16124  0.0  1.9  56168  9860 ?        S    15:37   0:00 gunicorn: master [hello_app]
-    michal   16130  0.0  4.5  73520 23004 ?        S    15:37   0:00 gunicorn: worker [hello_app]
-    michal   16131  0.0  4.5  73496 23004 ?        S    15:37   0:00 gunicorn: worker [hello_app]
-    michal   16132  0.0  4.5  73504 23004 ?        S    15:37   0:00 gunicorn: worker [hello_app]
-
-
+    hello    11588  0.7  0.2  58400 11568 ?        S    14:52   0:00 gunicorn: master [hello_app]
+    hello    11602  0.5  0.3  66584 16040 ?        S    14:52   0:00 gunicorn: worker [hello_app]
+    hello    11603  0.5  0.3  66592 16044 ?        S    14:52   0:00 gunicorn: worker [hello_app]
+    hello    11604  0.5  0.3  66604 16052 ?        S    14:52   0:00 gunicorn: worker [hello_app]
+    
 ### Starting and monitoring with Supervisor
 
 Your `gunicorn_start` script should now be ready and working. We need to make sure that it starts automatically with the system and that it can automatically restart if for some reason it exits unexpectedly. These tasks can easily be handled by a service called [supervisord](http://supervisord.org/). Installation is simple:
@@ -269,7 +296,7 @@ Create a new nginx server configuration file for your Django application running
 
 Create a symbolic link in the `sites-enabled` folder:
 
-    $ ln -s /etc/nginx/sites-available/hello /etc/nginx/sites-enabled/hello
+    $ sudo ln -s /etc/nginx/sites-available/hello /etc/nginx/sites-enabled/hello
 
 Restart Nginx:
 
@@ -336,13 +363,13 @@ If you never plan to use this application again, you can remove its config file 
 
 
 Stop the application with Supervisor:
-    
+
     $ sudo supervisorctl stop hello
-    
+
 Remove the application from Supervisor's control scripts directory:
 
     $ sudo rm /etc/supervisor/conf.d/hello.conf
-    
+
 If you never plan to use this application again, you can now remove its entire directory from `webapps`:
 
         $ sudo rm -r /webapps/hello_django
