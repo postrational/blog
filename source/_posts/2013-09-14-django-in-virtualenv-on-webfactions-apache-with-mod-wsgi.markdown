@@ -9,13 +9,13 @@ published: true
 tags: django virtualenv webfaction apache mod_wsgi
 ---
 
-If you want to run a Django application on [WebFaction](http://www.webfaction.com?affiliate=postrational), you can simply use their automatic application creation scripts. Unfortunately, if you want to place your application in a Virtualenv, the automatic installer will not help you. I'm sure that WebFaction will eventually add an installer to do this, but for now, you can follow this tutorial to set up a Django project in a Virtualenv running on WebFaction's Apache with mod_wsgi.
+If you want to run a Django application on [WebFaction](http://www.webfaction.com?affiliate=postrational), you may simply use their automatic application creation scripts. Unfortunately, if you want to place your application in a Virtualenv, the automatic installer will not help you. I'm sure that WebFaction will eventually add an  installer to set this up, but for now, you can use the following tutorial. In this text we set up a Django project in a Virtualenv running on WebFaction's Apache with mod_wsgi.
 
 <!-- more -->
 
 ### Create a new application
 
-Let's begin by setting up a generic `mod_wsgi` application in your WebFaction control panel. Log into the control panel, choose the option to add a new application and specify the following settings:
+Let's begin by setting up a generic `mod_wsgi` application in your WebFaction control panel. Log into the control panel, choose the option to [add a new application](https://my.webfaction.com/new-application) and specify the following settings:
 
 * Name: `test_app`
 * App category: `mod_wsgi `
@@ -28,7 +28,7 @@ The directory will contain two subdirectories:
 * `apache2` - contains the Apache configuration files (`apache2/conf`) and scripts which let you control the server (`apache2/bin`)
 * `htdocs` - contains default page files. 
 
-Configure a new website to hook up your application to a domain. Test that the website by visiting it in your browser. You should be greeted by a message beginning with the following text:
+Configure a [new website](https://my.webfaction.com/new-website) to hook up your application to a domain. Test the website by visiting it in your browser. You should be greeted by a message beginning with the following text:
 
     Welcome to your mod_wsgi website! It uses: Python 2.7....
 
@@ -50,13 +50,13 @@ Check if Virtualenv is installed on your server:
 
 If Virtualenv is installed, you will see a version number when running the above command. If it's missing you'll see a `command not found` error message instead.
 
-The steps to install Vitrualenv on a WebFaction server are the following:
+Steps to install Vitrualenv on a WebFaction server are the following:
 
     $ mkdir -p ~/lib/python2.7/
     $ easy_install-2.7 pip
     $ pip install virtualenv
 
-Verify that the installation was successful:
+Verify that installation was successful:
 
     $ virtualenv --version
     1.10.1
@@ -68,7 +68,7 @@ Let's proceed to turn our application directory into a virtual Python environmen
     $ cd ~/webapps/test_app
     $ virtualenv .
 
-This adds the folders and scripts for a virtual environment inside of the same directory which is used by our application.
+This adds the folders and scripts for a virtual environment inside of the directory which WebFaction created for our application.
 
 You can now activate the created environment:
 
@@ -78,13 +78,13 @@ You can now activate the created environment:
 
 ### Install Django and other dependencies
 
-Once the initial virtualenv setup is complete, you can install Django inside it's `lib/python2.7/site-packages` directory.
+Once the initial Virtualenv setup is complete, you can install Django inside it's `lib/python2.7/site-packages` directory.
 
     (test_app) $ pip install django
     
 Verify that Django installed correctly:
 
-    (test_app) $ $ django-admin.py --version
+    (test_app) $ django-admin.py --version
     1.5.2
 
 Your project will probably depend on other packages. You can install those from a `REQUIREMENTS.txt` file, which you can generate on your development server with the `pip freeze` command.
@@ -144,13 +144,13 @@ At this stage you should have created a directory structure resembling this:
 
 We are now ready to configure Apache to serve our Django-powered webapp. In order to do this, we'll need to modify the contents of the Apache configuration file located under `apache2/conf/httpd.conf`. Copy the original file to a backup for reference and make a note of the following values:
 
-* the port number under which Apache listens to connections. This value is located in the line with the `Listen` directive of the original `httpd.conf`. In the example below we set this to `12345`
-* the name of your application (`test_app`)
-* the domain name which your website uses (`example.com`)
-* the complete path to your application's virtualenv and project directory:
-`/home/my_username/webapps/test_app` and `/home/my_username/webapps/test_app/test_django`
-* the complete path to your application's WSGI script:
-`/home/my_username/webapps/test_app/test_django/test_django/wsgi.py`
+* port number on which Apache listens to connections. This value is located in the line with the `Listen` directive of the original `httpd.conf`. In the example below we set this to `12345`,
+* name of your application (`test_app`),
+* domain name which your website uses (`example.com`),
+* complete path to your application's virtualenv and project directory:
+`/home/my_username/webapps/test_app` and `/home/my_username/webapps/test_app/test_django`,
+* complete path to your application's WSGI script:
+`/home/my_username/webapps/test_app/test_django/test_django/wsgi.py`.
 
 Use these values to customize the configuration template below and save it as your new `httpd.conf`:
 
@@ -192,7 +192,7 @@ NameVirtualHost *
 </VirtualHost>
 ```
 
-Save the configuration to `/home/my_username/webapps/test_app/apache2/conf/httpd.conf` and restart Apache.
+Save the configuration to `~/webapps/test_app/apache2/conf/httpd.conf` and restart Apache.
 
     $ ./apache2/bin/restart
 
@@ -204,10 +204,10 @@ The recommended way to serve static and media files on WebFaction is to use Ngin
 
 Let's begin by creating the directories for static and media files.
 
-    cd ~/webapps/test_app
-    mkdir media static
+    $ cd ~/webapps/test_app
+    $ mkdir media static
 
-In order to tell Django where the files should be stored, we should place the appropriate lines in the `settings.py` file. I like to keep the location of `media` and `static` folders relative to the source code project, so I would set them in this way:
+In order to tell Django where the files should be stored, we should place the appropriate lines in the project's `settings.py` file. I like to keep the location of `media` and `static` folders relative to the source code project, so I would set them in this way:
 
 ```python
 import os
@@ -222,13 +222,18 @@ Let's collect the static files from all applications to the `static` directory:
     (test_app) $ cd test_app
     (test_app) $ python manage.py collecstatic
 
-We can now serve our static files: in the WebFaction control panel, add two new applications. These applications will be named `test_app_media` and `test_app_static`. Both will be defined using these settings:
+We can now serve our static files. In the WebFaction control panel, add two [new applications](https://my.webfaction.com/new-application) named `test_app_media` and `test_app_static`. Both will be defined using these settings:
 
 * App category: `Symbolic link`
 * App type: `Symbolic link to static-only app`
 * Extra info: the path to the file folder, i.e. `/home/my_username/webapps/test_app/media` or `/home/my_username/webapps/test_app/static`
 
 The final step is to add these Nginx-powered folders to our website definition. On the website settings screen for your domain, in the Contents section, choose to add an application. Choose the option to reuse an existing application and set the `test_app_media` to serve everything under `http://example.com/media` and `test_app_static` for `http://example.com/static`.
+
+<div class="figure">
+<img src="/images/illustrations/2013-09-14/webfaction-website-content.png">
+<div class="legend">Contents section of website settings</div>
+</div>
 
 
 ## Separating development and production settings
@@ -239,7 +244,7 @@ You will want to use slightly different settings for your development and produc
 * `settings_dev.py` - your development environment specific settings
 * `settings_prod.py` - production environment specific settings
 
-The `settings_prod.py` file should only contain the settings which are specific to this environment, but also include all the global settings. We can do this by importing all the global settings like this:
+The `settings_prod.py` file should only contain the settings which are specific to this environment, but also import all the global settings. We can do this by importing global settings like this:
 
 ```python
 from .settings import *
@@ -256,7 +261,7 @@ DATABASES = {
 
 Django checks the environment variable named `DJANGO_SETTINGS_MODULE` to determine which settings file to use. If this environment variable is undefined, it will fall back to `test_app.settings`.
 
-In order to use your new settings module at the command line, we can add the appropriate line to the end of the script which activates our virtual environment (`bin/activate`).
+In order to use your new settings module in the shell, we can add a line to the end of the script which activates our virtual environment (`bin/activate`).
 
     export DJANGO_SETTINGS_MODULE=test_app.settings_prod
 
