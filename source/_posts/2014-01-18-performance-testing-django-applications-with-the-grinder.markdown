@@ -104,11 +104,21 @@ Another obstacle to overcome when running automated tests on Django are [anti cr
 
 In the example test scenario we don't parse HTML forms, but instead rely on the fact that Django also sets a cookie with the CSRF token value. We fetch the cookie value (using the `get_csrf_token` function) and submit it as a field named `csrfmiddlewaretoken` in the POST data. 
 
+```python
+create_request(Test(1500, 'Post to form requiring login')).POST(HOST_URL + '/user/area/action', (
+    NVPair('csrfmiddlewaretoken', get_csrf_token(thread_context)),
+    NVPair('param1', 'value'),
+    NVPair('param2', 'value'),
+))
+```
+
 We can also simulate AJAX requests by sending appropriate headers, namely `X-Requested-With` and `X-CSRFToken`. The anti-CSRF token value is read from cookie and written the latter header.
 
 ```python
-NVPair('X-Requested-With', 'XMLHttpRequest'),
-NVPair('X-CSRFToken', get_csrf_token(thread_context)),
+ajax_request = create_request(Test(1600, 'Send an AJAX request requiring login'), [
+    NVPair('X-Requested-With', 'XMLHttpRequest'),
+    NVPair('X-CSRFToken', get_csrf_token(thread_context)),
+])
 ```
 
 If you're still having trouble with CSRF and keep testing 403 errors instead of your application, you can disable CSRF completely using a small bit of middleware. Just make sure you don't leave this on in your production setting.
