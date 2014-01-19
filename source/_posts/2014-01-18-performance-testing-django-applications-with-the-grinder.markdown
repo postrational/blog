@@ -112,7 +112,7 @@ create_request(Test(1500, 'Post to form requiring login')).POST(HOST_URL + '/use
 ))
 ```
 
-We can also simulate AJAX requests by sending appropriate headers, namely `X-Requested-With` and `X-CSRFToken`. The anti-CSRF token value is read from cookie and written the latter header.
+We can also simulate AJAX requests by sending appropriate headers, namely `X-Requested-With` and `X-CSRFToken`. The anti-CSRF token value is read from cookie and written in the latter header.
 
 ```python
 ajax_request = create_request(Test(1600, 'Send an AJAX request requiring login'), [
@@ -121,7 +121,7 @@ ajax_request = create_request(Test(1600, 'Send an AJAX request requiring login')
 ])
 ```
 
-If you're still having trouble with CSRF and keep testing 403 errors instead of your application, you can disable CSRF completely using a small bit of middleware. Just make sure you don't leave this on in your production setting.
+If you're still having trouble with CSRF and keep testing 403 errors instead of your application, you can disable CSRF completely using a small bit of middleware. Just make sure you don't leave this on in production.
 
 
 ```python
@@ -132,7 +132,7 @@ class StressTestingMiddleware(object):
 
 #### Final result
 
-When your tests are prepared and properly vetted you can leverage the power of The Grinder to run them from as many parallel agent machines (and/or threads) as you require. Your test output will include execution time for every test step.
+When your tests are prepared and properly vetted you can leverage the power of The Grinder to run them from as many parallel agent machines (and/or threads) as you require. Your test output will include execution time statistics for every test step.
 
 <div class="figure">
 <img src="/images/illustrations/2014-01-18/sample_grinder_output.png">
