@@ -102,7 +102,7 @@ The example test scenario file above depends on The Grinder's ability to parse a
 
 Another obstacle to overcome when running automated tests on Django are [anti cross-site request forgery tokens][django_csrf]. These tokens are generated dynamically for every form and Django requires that they be submitted with every POST request. 
 
-In the example test scenario we don't parse HTML forms, but instead rely on the fact that Django also sets a cookie with the CSRF token value. We fetch the cookie value (using the `get_csrf_token` function) and submit it as a field named `csrfmiddlewaretoken` in the POST data. 
+In the example test scenario we don't parse HTML forms, but instead rely on the fact that Django also sets a cookie with the CSRF token value. We fetch the cookie value (using the `get_csrf_token` function) and submit it as a field named `csrfmiddlewaretoken` in POST data. 
 
 ```python
 create_request(Test(1500, 'Post to form requiring login')).POST(HOST_URL + '/user/area/action', (
