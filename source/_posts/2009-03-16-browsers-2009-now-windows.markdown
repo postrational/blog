@@ -15,7 +15,7 @@ This time there are 2 arguable winners, but one clear loser.
 <!-- more -->
 
 <div class="figure">
-<img src="/images/illustrations/browsers-2009-now-windows-1-Acid3.png">
+<img src="/images/illustrations/2009-03-16/browsers-2009-now-windows-1-Acid3.png">
 <div class="legend">
 <a href="http://acid3.acidtests.org/">Acid 3</a> Rendering Test (<strong>longer</strong> is better, 100 is max.)
 </div>
@@ -23,7 +23,7 @@ This time there are 2 arguable winners, but one clear loser.
 
 
 <div class="figure">
-<img src="/images/illustrations/browsers-2009-now-windows-2-V8.png">
+<img src="/images/illustrations/2009-03-16/browsers-2009-now-windows-2-V8.png">
 <div class="legend">
 <a href="http://v8.googlecode.com/svn/data/benchmarks/v3/run.html">Google V8</a> Performance Benchmark (<strong>longer</strong> is better)
 </div>
@@ -31,7 +31,7 @@ This time there are 2 arguable winners, but one clear loser.
 
 
 <div class="figure">
-<img src="/images/illustrations/browsers-2009-now-windows-3-SunSpider.png">
+<img src="/images/illustrations/2009-03-16/browsers-2009-now-windows-3-SunSpider.png">
 <div class="legend">
 <a href="http://www2.webkit.org/perf/sunspider-0.9/sunspider.html">SunSpider</a> JavaScript Benchmark (<strong>shorter</strong> is better)
 </div>

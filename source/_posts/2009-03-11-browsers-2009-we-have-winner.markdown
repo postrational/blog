@@ -14,7 +14,7 @@ I downloaded the newest Beta versions of three popular OS X browsers: Opera, Saf
 <!-- more -->
 
 <div class="figure">
-<img src="/images/illustrations/browsers-2009-we-have-winner-1-Acid3.png">
+<img src="/images/illustrations/2009-03-11/browsers-2009-we-have-winner-1-Acid3.png">
 <div class="legend">
 <a href="http://acid3.acidtests.org/">Acid 3</a> Rendering Test (<strong>longer</strong> is better, 100 is max.)
 </div>
@@ -22,7 +22,7 @@ I downloaded the newest Beta versions of three popular OS X browsers: Opera, Saf
 
 
 <div class="figure">
-<img src="/images/illustrations/browsers-2009-we-have-winner-2-V8.png">
+<img src="/images/illustrations/2009-03-11/browsers-2009-we-have-winner-2-V8.png">
 <div class="legend">
 <a href="http://v8.googlecode.com/svn/data/benchmarks/v3/run.html">Google V8</a> Performance Benchmark (<strong>longer</strong> is better)
 </div>
@@ -30,7 +30,7 @@ I downloaded the newest Beta versions of three popular OS X browsers: Opera, Saf
 
 
 <div class="figure">
-<img src="/images/illustrations/browsers-2009-we-have-winner-3-SunSpider.png">
+<img src="/images/illustrations/2009-03-11/browsers-2009-we-have-winner-3-SunSpider.png">
 <div class="legend">
 <a href="http://www2.webkit.org/perf/sunspider-0.9/sunspider.html">SunSpider</a> JavaScript Benchmark (<strong>shorter</strong> is better)
 </div>

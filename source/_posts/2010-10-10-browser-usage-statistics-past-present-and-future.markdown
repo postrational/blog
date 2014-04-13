@@ -21,7 +21,7 @@ Black hat hackers, scammers and spammers had a field day with this, exploiting l
 There are two charts, I would like to share with you. The first one is just an illustration, which demonstrates two things. Firstly point is the enormous influence of Microsoft on the world over the last decade and a half. And the second is the lack of savvy of users, who once presented with a browser are content to use it without question.
 
 <div class="figure">
-<img src="/images/illustrations/browser-usage-statistics-past-present-and-future-1.png">
+<img src="/images/illustrations/2010-10-10/browser-usage-statistics-past-present-and-future-1.png">
 <div class="legend">Figure 1. Browser usage timeline 1994-2010</div>
 </div>
 
@@ -31,7 +31,7 @@ This chart shows the history of the Internet broken down by browser usage. It il
 The biggest causes of headache for web developers are the oldest versions of Internet Explorer, which are still inexplicably popular, namely IE 6 and 7. Let's be honest, by today's standards, these browsers suck. They have limited support for CSS, very inefficient JavaScript engines, need I go on? The poor web developer may make an excellent site in HTML5/CSS3 which will work in all browsers, but it will of course not work in IE. Are we stuck with this situation forever?
 
 <div class="figure">
-<img src="/images/illustrations/browser-usage-statistics-past-present-and-future-2.png">
+<img src="/images/illustrations/2010-10-10/browser-usage-statistics-past-present-and-future-2.png">
 <div class="legend">Figure 2. Usage of Internet Explorer by version 2009-2010</div>
 </div>
 

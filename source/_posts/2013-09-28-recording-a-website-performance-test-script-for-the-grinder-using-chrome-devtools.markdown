@@ -26,21 +26,21 @@ Chrome's DevTools allow you to save a history of your browsing including every H
 1. Fire up Chrome and open the DevTools.
 
 2. Click the Settings icon 
-![Settings icon](/images/illustrations/har2grinder/gear_icon.png) in the bottom right corner and Disable the cache.
+![Settings icon](/images/illustrations/2013-09-28/gear_icon.png) in the bottom right corner and Disable the cache.
 
 3. Open the Network tab of the DevTools.
 
 4. Clear the Network history 
-![No entry icon](/images/illustrations/har2grinder/clear_icon.png)
+![No entry icon](/images/illustrations/2013-09-28/clear_icon.png)
 
 5. Choose the option to Preserve Log upon navigation 
-![No entry icon](/images/illustrations/har2grinder/record_icon.png)
+![No entry icon](/images/illustrations/2013-09-28/record_icon.png)
 (circle icon turns red).
 
 6. Navigate around your site.
 
     <div class="figure">
-    <img src="/images/illustrations/har2grinder/recording_session.png">
+    <img src="/images/illustrations/2013-09-28/recording_session.png">
     <div class="legend">Copy your recorded browser session in HAR format</div>
     </div>
 

@@ -9,7 +9,7 @@ published: true
 tags: 
 ---
 
-<img src="/images/illustrations/milosc-integralna.png" title="Miłość Integralna">
+<img src="/images/illustrations/2009-06-22/milosc-integralna.png" title="Miłość Integralna">
 
 <!-- more -->
 

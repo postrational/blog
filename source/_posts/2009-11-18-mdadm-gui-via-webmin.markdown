@@ -76,9 +76,9 @@ Use your browser to access your webmin panel at the following url: <https://loca
 To administer the Software RAID using webmin login as a sudo-er, go to the page `Hardware > Linux RAID` and play around.
 
 <div class="figure">
-<img src="/images/illustrations/mdadm-gui-via-webmin-1.jpg">
+<img src="/images/illustrations/2009-11-18/mdadm-gui-via-webmin-1.jpg">
 </div>
 
 <div class="figure">
-<img src="/images/illustrations/mdadm-gui-via-webmin-2.jpg">
+<img src="/images/illustrations/2009-11-18/mdadm-gui-via-webmin-2.jpg">
 </div>

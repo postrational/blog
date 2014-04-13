@@ -12,14 +12,14 @@ tags:
 OS X has a nice functionality called services which allow you (and applications you install) to expand the functionality of your system by adding commands, which will be visible in a special menu. Services may also be available in contextual menus, for instance when you right-click on a file or folder in the Finder.
 
 <div class="figure">
-<img src="/images/illustrations/services_menu.png">
+<img src="/images/illustrations/2013-01-13/services_menu.png">
 <div class="legend">Services menu in Finder</div>
 </div>
 
 <!-- more -->
 
 <div class="figure">
-<img src="/images/illustrations/services_context_menu.png">
+<img src="/images/illustrations/2013-01-13/services_context_menu.png">
 <div class="legend">A contextual services menu in Finder</div>
 </div>
 
@@ -41,7 +41,7 @@ In order to turn a command like that into a Finder service, you need just a few 
 #### 1. Launch Automator (from your Applications folder) and when asked to choose a type for your document select "Service".
 
 <div class="figure">
-<img src="/images/illustrations/services_automator_create_service.png">
+<img src="/images/illustrations/2013-01-13/services_automator_create_service.png">
 <div class="legend">Automator - create a new Service</div>
 </div>
 
@@ -54,7 +54,7 @@ Shell: /bin/bash <br />
 And add your command to the command line.
 
 <div class="figure">
-<img src="/images/illustrations/services_automator_service.png">
+<img src="/images/illustrations/2013-01-13/services_automator_service.png">
 <div class="legend">Automator - "Run Shell Script" action</div>
 </div>
 
@@ -62,7 +62,7 @@ And add your command to the command line.
 The service should now appear in the Services menu in the Finder.
 
 <div class="figure">
-<img src="/images/illustrations/services_menu.png">
+<img src="/images/illustrations/2013-01-13/services_menu.png">
 <div class="legend">Services menu in Finder</div>
 </div>
 
