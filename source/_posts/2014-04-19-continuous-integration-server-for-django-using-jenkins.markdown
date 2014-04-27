@@ -105,7 +105,7 @@ Alternatively, to enable builds to be actively triggered by your source code rep
 <div class="legend">Build triggers (choose one or the other)</div>
 </div>
 
-If you want builds to be triggered actively by your source code repository, you will need to create a script called `post-commit` (in the `hooks` directory of your SVN repo root or the `.git/hooks` directory when using Git). Your hook script should execute a command such as `curl` to send an HTTP request to Jenkins which will trigger the build. The token is used here for security.
+If you want builds to be triggered actively by your source code repository, you will need to create a script called `post-commit` (in the `hooks` directory of your SVN repo directory or the `.git/hooks` directory when using Git). Your hook script should execute a command such as `curl` to send an HTTP request to Jenkins which will trigger the build. The token is used here for security.
 
 
 ```bash
@@ -119,7 +119,7 @@ curl http://test-server:8080/job/hello-django-trunk/build?token=xZrJ5WsSfJkGpNsr
 
 ```bash
 #!/bin/bash
-curl http://test-server:8080/buildByToken/build?job=hello-django-trunk&xZrJ5WsSfJkGpNsriOlY4PtQ7hC5olzDhNE
+curl http://test-server:8080/buildByToken/build?job=hello-django-trunk&token=xZrJ5WsSfJkGpNsriOlY4PtQ7hC5olzDhNE
 ```
 
 More information about using hooks: in [SVN][hooks-svn] and [Git][hooks-git].
@@ -137,6 +137,7 @@ Here we finally get to the meat of the matter. In the **Build** section we can e
 #!/bin/bash
 source /webapps/hello_django/activate     # Activate the virtualenv
 cd /webapps/hello_django/trunk/
+pip install -r REQUIREMENTS.txt           # Install or upgrade dependencies
 python manage.py migrate                  # Apply South's database migrations
 python manage.py compilemessages          # Create translation files
 python manage.py collectstatic --noinput  # Collect static files
