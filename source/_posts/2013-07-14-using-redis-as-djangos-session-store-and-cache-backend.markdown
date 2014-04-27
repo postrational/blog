@@ -19,7 +19,7 @@ I'm going to assume you have a Django application running in a virtual environme
 
 ## Redis
 
-Setting up Redis on Debian is simple using `apt-get`. On a RedHat-based system you can use the equivalent `yum` command.
+Setting up Redis on Debian is simple using `apt-get`. On an RPM-based system you can use the equivalent `yum` command or similar.
 
 ### Install Redis
 
@@ -64,20 +64,27 @@ You can now check if Redis is up and accepting connections:
 
 #### Redis socket permissions
 
-Default permissions on the Redis socket are very restrictive on Debian and allow only the user `redis` to connect through it. You can relax these permissions and allow any local user to connect to Redis like this:
+Default permissions on the Redis socket are very restrictive on Debian and allow only the user `redis` to connect through it. You can relax these permissions and allow any local user to connect to Redis by changing the `unixsocketperm` directive in `redis.conf` to:
 
-    $ sudo chmod 777 /var/run/redis/redis.sock
+    unixsocketperm 777
 
-For security reasons, it may be better to restrict access to the socket to a chosen group of users. You can add the user which your application will run as to the group `redis` and change the permissions on the socket file to allow writes only from the group.
+Remember to restart Redis after making configuration changes
+
+    $ sudo service redis-server restart
+
+For security reasons, it may be better to restrict access to the socket to a chosen group of users. You can add the user which your application will run as to the group `redis`:
 
     $ sudo usermod -a -G redis django_username
-    $ sudo chmod 775 /var/run/redis/redis.sock
+
+Then change the permissions on the socket file by changing the `unixsocketperm` directive in `redis.conf` to:
+
+    unixsocketperm 770
 
 Groups are assigned at login, so if your application is running, you'll need to restart it. If you're running an application called `hello` via `supervisor`, you can restart it like this:
 
     $ sudo supervisorctl restart hello
 
-On their site, you will find more information about [getting started with Redis](http://redis.io/topics/quickstart).
+Find more information about getting started with Redis [in the documentation](http://redis.io/topics/quickstart).
 
 
 
@@ -89,31 +96,11 @@ In order to use Redis with a Python application such as Django, you'll need to i
     (hello_django) $ pip install redis
 
 
-## Redis as backend for Django session data
-
-You can now set up Redis as a store for Django's session data. You can use  [django-redis-sessions](https://github.com/martinrusev/django-redis-sessions) module to do so.
-
-Inside your virtual environment install django-redis-sessions:
-
-    (hello_django) $ pip install django-redis-sessions
-
-Now, configure `redis_sessions.session` as the session engine in your `setting.py`. Since we're using a socket to connect, we also need to provide its path:
-
-```python
-SESSION_ENGINE = 'redis_sessions.session'
-SESSION_REDIS_UNIX_DOMAIN_SOCKET_PATH = '/var/run/redis/redis.sock'
-```
-
-That's it. After you restart your application, session data should be stored in Redis instead of the database.
-
-More information: [working with sessions in Django](https://docs.djangoproject.com/en/dev/topics/http/sessions/).
-
-
 ## Redis as backend for Django's cache
 
-We can also set up Redis to store our application's cache data. We can use [django-redis-cache](https://github.com/sebleier/django-redis-cache) for this.
+You can set up Redis to store your application's cache data. Use the [django-redis-cache](https://github.com/sebleier/django-redis-cache) module for this.
 
-Install django-redis-cache in your virtual environment:
+Install `django-redis-cache` in your virtual environment:
 
     (hello_django) $ pip install django-redis-cache 
 
@@ -142,6 +129,37 @@ MIDDLEWARE_CLASSES = (
 You can now restart your application and start using Django's Redis-powered cache.
 
 More information: [using Django's cache](https://docs.djangoproject.com/en/dev/topics/cache/).
+
+## Redis as backend for Django session data
+
+If you're using `django-redis-cache` as described above, you can use it to store Django's sessions by adding the following to your `setting.py`:
+
+    SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
+You can also write session information to the database and only load it from the cache by using:
+
+    SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+
+This ensures that session data is persistent and can survive a restart of Redis.
+
+### Redis for Django session data without django-redis-cache
+
+Alternatively, you can use Redis exclusively as a store for Django's session data. The  [django-redis-sessions](https://github.com/martinrusev/django-redis-sessions) module let's you do this.
+
+Inside your virtual environment install `django-redis-sessions`:
+
+    (hello_django) $ pip install django-redis-sessions
+
+Now, configure `redis_sessions.session` as the session engine in your `setting.py`. Since we're using a socket to connect, we also need to provide its path:
+
+```python
+SESSION_ENGINE = 'redis_sessions.session'
+SESSION_REDIS_UNIX_DOMAIN_SOCKET_PATH = '/var/run/redis/redis.sock'
+```
+
+That's it. After you restart your application, session data should be stored in Redis instead of the database.
+
+More information: [working with sessions in Django](https://docs.djangoproject.com/en/dev/topics/http/sessions/).
 
 
 ## Redis for multiple applications
