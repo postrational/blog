@@ -49,7 +49,7 @@ In order to avoid the small overhead of TCP, we can configure Redis to accept di
 # on a unix socket when not specified.
 #
 unixsocket /var/run/redis/redis.sock
-unixsocketperm 755
+unixsocketperm 700
 ```
 
 After making changes to its configuration you will need to restart Redis:
@@ -66,7 +66,9 @@ You can now check if Redis is up and accepting connections:
 
 Default permissions on the Redis socket are very restrictive on Debian and allow only the user `redis` to connect through it. You can relax these permissions and allow any local user to connect to Redis by changing the `unixsocketperm` directive in `redis.conf` to:
 
-    unixsocketperm 777
+```cfg
+unixsocketperm 777
+```
 
 Remember to restart Redis after making configuration changes
 
@@ -78,14 +80,15 @@ For security reasons, it may be better to restrict access to the socket to a cho
 
 Then change the permissions on the socket file by changing the `unixsocketperm` directive in `redis.conf` to:
 
-    unixsocketperm 770
+```cfg
+unixsocketperm 770
+```
 
 Groups are assigned at login, so if your application is running, you'll need to restart it. If you're running an application called `hello` via `supervisor`, you can restart it like this:
 
     $ sudo supervisorctl restart hello
 
 Find more information about getting started with Redis [in the documentation](http://redis.io/topics/quickstart).
-
 
 
 ### Python bindings for Redis
@@ -134,11 +137,15 @@ More information: [using Django's cache](https://docs.djangoproject.com/en/dev/t
 
 If you're using `django-redis-cache` as described above, you can use it to store Django's sessions by adding the following to your `setting.py`:
 
-    SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+```python
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+```
 
 You can also write session information to the database and only load it from the cache by using:
 
-    SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+```python
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+```
 
 This ensures that session data is persistent and can survive a restart of Redis.
 
