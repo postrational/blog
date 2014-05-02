@@ -142,7 +142,7 @@ python manage.py migrate                  # Apply South's database migrations
 python manage.py compilemessages          # Create translation files
 python manage.py collectstatic --noinput  # Collect static files
 sudo apachectl graceful                   # Restart the server, e.g. Apache
-python manage.py test app1 app2 app3 app4 # Run the tests
+python manage.py test --noinput app1 app2 # Run the tests
 ```
 
 #### Send emails when tests fail
