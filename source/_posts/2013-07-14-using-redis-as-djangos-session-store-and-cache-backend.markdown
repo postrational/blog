@@ -117,21 +117,70 @@ CACHES = {
     },
 }
 ```
-
-If you haven't set up Django's cacheing middleware, you should do so by adding lines 2 and 4 from the snippet below to `MIDDLEWARE_CLASSES` in your `settings.py`.
-
-```
-MIDDLEWARE_CLASSES = (
-    'django.middleware.cache.UpdateCacheMiddleware',    # This middleware must be first on the list
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    (...)
-```
-
 You can now restart your application and start using Django's Redis-powered cache.
 
+### Using Django's cache in your application
+
+Django's cache framework is very flexible and allows you to cache your entire site or individual views. You can control the behavior of the cache using the `@cache_page` decorator. For instance to cache the results of `my_view` for 15 minutes, you can use the following code:
+
+```python
+from django.views.decorators.cache import cache_page
+
+@cache_page(60 * 15) 
+def my_view(request):
+    ...
+```
+
+If you haven't set up Django's cacheing middleware yet, you should do so by adding lines 2 and 6 from the snippet below to `MIDDLEWARE_CLASSES` in your `settings.py`.
+
+```python
+MIDDLEWARE_CLASSES = (
+    'django.middleware.cache.UpdateCacheMiddleware',    # This must be first on the list
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    (...)
+    'django.middleware.cache.FetchFromCacheMiddleware', # This must be last
+```
+
 More information: [using Django's cache](https://docs.djangoproject.com/en/dev/topics/cache/).
+
+#### Using the cache inside your functions
+
+You can also use the cache in your functions to store arbitrary data for quick retrieval later on.
+
+```python
+# Start by importing your default cache:
+from django.core.cache import cache
+
+# Store data under a-unique-key:
+cache.set('a-unique-key', 'this is a string which will be cached')
+
+# Later on you can retrieve it in another function:
+cache.get('a-unique-key') # Will return None if key is not found in cache
+
+# You can specify a default value:
+cache.get('another-unique-key', 'default value')
+
+# You can store multiple values at once:
+cache.set_many({'a': 1, 'b': 2, 'c': 3})
+
+# And fetch multiple values:
+cache.get_many(['a', 'b', 'c']) # returns {'a': 1, 'b': 2, 'c': 3}
+
+# You can store complex types in the cache:
+cache.set('a-unique-key', {
+    'string'    : 'this is a string',
+    'int'       : 42,
+    'list'      : [1, 2, 3, 4],
+    'tuple'     : (1, 2, 3, 4),
+    'dict'      : {'A': 1, 'B' : 2},
+})
+```
+
+> %tip%
+> Complex values will be serialized and stored under a single key. Before you can look up a value in the structure, it has to be retrieved from cache and unserialized. This is not as fast as storing simple values directly in the cache under a more complex key namespace.
+
+More information: [Django's cache API](https://docs.djangoproject.com/en/dev/topics/cache/#the-low-level-cache-api).
 
 ## Redis as backend for Django session data
 
