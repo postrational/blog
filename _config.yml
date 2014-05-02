@@ -99,3 +99,6 @@ google_analytics_tracking_id: UA-602203-3
 
 # Facebook Like
 facebook_like: true
+
+# Gittip Button
+gittip_button: true
