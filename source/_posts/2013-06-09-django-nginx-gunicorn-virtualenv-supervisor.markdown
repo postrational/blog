@@ -17,7 +17,7 @@ In this text I will explain how to combine all of these components into a Django
 
 ### Prerequisites
 
-I assume you have a server available on which you have root privileges. I am using a server running Debian 7, so everything here should also work on an Ubuntu server or other Debian-based distribution. If you're using an RPM-based distro (such as CentOS), you will need to replace the `apt-get` commands by their `yum` counterparts and if you're using FreeBSD you can install the components from ports.
+I assume you have a server available on which you have root privileges. I am using a server running Debian 7, so everything here should also work on an Ubuntu server or other Debian-based distribution. If you're using an RPM-based distro (such as CentOS), you will need to replace the `aptitude` commands by their `yum` counterparts and if you're using FreeBSD you can install the components from ports.
 
 If you don't have a server to play with, I would recommend the inexpensive VPS servers offered by [Digital Ocean][digital_ocean_referal]. If you click through [this link][digital_ocean_referal] when signing up, you'll pay a bit of my server bill :)
 
@@ -27,14 +27,14 @@ I'm also assuming you configured your DNS to point a domain at the server's IP. 
 
 Let's get started by making sure our system is up to date.
 
-    $ sudo apt-get update
-    $ sudo apt-get upgrade
+    $ sudo aptitude update
+    $ sudo aptitude upgrade
 
 ### PostgreSQL
 
 To install PostgreSQL on a Debian-based system run this command:
 
-    $ sudo apt-get install postgresql postgresql-contrib
+    $ sudo aptitude install postgresql postgresql-contrib
 
 Create a database user and a new database for the app. Grab a [perfect password from GRC][perfect_passwords].
 
@@ -52,30 +52,46 @@ Create a database user and a new database for the app. Grab a [perfect password 
     postgres@django:~$ logout
     $
 
+
+### Application user
+
+Even though Django has a pretty good [security track record](http://django.readthedocs.org/en/latest/releases/security.html), web applications can become compromised. If the application has limited access to resources on your server, potential damage can also be limited. Your web applications should run as system users with limited privileges.
+
+Create a user for your app, named `hello` and assigned to a system group called `webapps`.
+
+    $ sudo groupadd --system webapps
+    $ sudo useradd --system --gid webapps --shell /bin/bash --home /webapps/hello_django hello
+
+
 ### Install virtualenv and create an environment for you app
 
 [Virtualenv](http://virtualenv.org/) is a tool which allows you to create separate Python environments on your system. This allows you to run applications with different sets of requirements concurrently (e.g. one based on Django 1.5, another based on 1.6). virtualenv is easy to install on Debian:
 
-    $ sudo apt-get install python-virtualenv
+    $ sudo aptitude install python-virtualenv
     
 #### Create and activate an environment for your application
 
-I like to keep all my web apps in the `/webapps/` directory. If you prefer `/var/www/` or something else, use that instead.
+I like to keep all my web apps in the `/webapps/` directory. If you prefer `/var/www/`, `/srv/` or something else, use that instead. Create a directory to store your application in `/webapps/hello_django/` and change the owner of that directory to your application user `hello`
 
-    $ cd /webapps/
-    $ virtualenv hello_django
+    $ sudo mkdir -p /webapps/hello_django/
+    $ sudo chown hello /webapps/hello_django/
+
+As the application user create a virtual Python environment in the application directory:
+
+    $ sudo su - hello
+    hello@django:~$ cd /webapps/hello_django/
+    hello@django:~$ virtualenv .
     
     New python executable in hello_django/bin/python
     Installing distribute..............done.
     Installing pip.....................done.
     
-    $ cd hello_django
-    $ source bin/activate
-    (hello_django) $ 
+    hello@django:~$ source bin/activate
+    (hello_django)hello@django:~$ 
     
 Your environment is now activated and you can proceed to install Django inside it.
     
-    (hello_django) $ pip install django
+    (hello_django)hello@django:~$ pip install django
     
     Downloading/unpacking django
     (...)
@@ -86,12 +102,12 @@ Your environment is now activated and you can proceed to install Django inside i
 
 Your environment with Django should be ready to use. Go ahead and create an empty Django project.
 
-    (hello_django) $ django-admin.py startproject hello
+    (hello_django)hello@django:~$ django-admin.py startproject hello
     
 You can test it by running the development server:
 
-    (hello_django) $ cd hello
-    (hello_django) $ python manage.py runserver example.com:8000
+    (hello_django)hello@django:~$ cd hello
+    (hello_django)hello@django:~$ python manage.py runserver example.com:8000
     Validating models...
 
     0 errors found
@@ -102,17 +118,38 @@ You can test it by running the development server:
 
 You should now be able to access your development server from http://example.com:8000
 
+#### Allowing other users write access to the application directory
+
+Your application will run as the user `hello`, who owns the entire application directory. If you want regular user to be able to change application files, you can set the group owner of the directory to `users` and give the group write permissions.
+
+    $ sudo chown -R hello:users /webapps/hello_django
+    $ sudo chmod -R g+w /webapps/hello_django
+
+You can check what groups you're a member of by issuing the `groups` command or `id`.
+
+    $ id
+    uid=1000(michal) gid=1000(michal) groups=1000(michal),27(sudo),100(users)
+
+If you're not a member of `users`, you can add yourself to the group with this command:
+
+    $ sudo usermod -a -G users `whoami`
+
+> %tip%
+> Group memberships are assigned during login, so you may need to log out and back in again for the system to recognize your new group.
+
+
+
 ### Configure PostgreSQL to work with Django
 
 In order to use Django with PostgreSQL you will need to install the `psycopg2` database adapter in your virtual environment. This step requires the compilation of a native extension (written in C). The compilation will fail if it cannot find header files and static libraries required for linking C programs with `libpq` (library for communication with Postgres) and building Python modules (`python-dev` package). We have to install these two packages first, then we can install `psycopg2` using PIP.
 
 Install dependencies:
 
-    $ sudo apt-get install libpq-dev python-dev
+    $ sudo aptitude install libpq-dev python-dev
 
 Install `psycopg2` database adapter:
 
-    (hello_django) $ pip install psycopg2
+    (hello_django)hello@django:~$ pip install psycopg2
 
 You can now configure the databases section in your `settings.py`:
 
@@ -131,16 +168,8 @@ DATABASES = {
 
 And finally build the initial database for Django:
 
-    (hello_django) $ python manage.py syncdb
+    (hello_django)hello@django:~$ python manage.py syncdb
 
-### Application user
-
-Even though Django has a pretty good [security track record](http://django.readthedocs.org/en/latest/releases/security.html), web applications can become compromised. If the application has limited access to resources on your server, potential damage can also be limited. Your web applications should run as system users with limited privileges.
-
-Create a user for your app, named `hello` and assigned to a system group called `webapps`.
-
-    $ sudo groupadd --system webapps
-    $ sudo useradd --system --gid webapps --home /webapps/hello_django hello 
 
 ### Gunicorn
 
@@ -148,7 +177,7 @@ In production we won't be using Django's single-threaded development server, but
 
 Install gunicorn in your application's virtual environment:
 
-    (hello_django) $ pip install gunicorn
+    (hello_django)hello@django:~$ pip install gunicorn
     Downloading/unpacking gunicorn
       Downloading gunicorn-0.17.4.tar.gz (372Kb): 372Kb downloaded
       Running setup.py egg_info for package gunicorn
@@ -165,7 +194,7 @@ Install gunicorn in your application's virtual environment:
 
 Now that you have gunicorn, you can test whether it can serve your Django application by running the following command:
 
-    (hello_django) $ gunicorn hello.wsgi:application --bind example.com:8001
+    (hello_django)hello@django:~$ gunicorn hello.wsgi:application --bind example.com:8001
 
 You should now be able to access the Gunicorn server from http://example.com:8001 . I intentionally changed port 8000 to 8001 to force your browser to establish a new connection.
 
@@ -174,23 +203,6 @@ Gunicorn is installed and ready to serve your app. Let's set some configuration 
 <script src="https://gist.github.com/postrational/5747293.js?file=gunicorn_start.bash"></script>
 
 
-`gunicorn_start` will run the application as the user `hello`. We should give ownership of the entire application directory to that user. We will still want to be able to keep changing files in the application directory, so we can set the group owner to `users` and give the group write permissions.
-
-    $ sudo chown -R hello:users /webapps/hello_django
-    $ sudo chmod -R g+w /webapps/hello_django
-
-You can check what groups you're a member of by issuing the `groups` command or `id`.
-
-    $ id
-    uid=1000(michal) gid=1000(michal) groups=1000(michal),27(sudo),100(users)
-
-If you're not a member of `users`, you can add yourself to the group with this command:
-
-    $ sudo usermod -a -G users `whoami`
-
-> %tip%
-> Group memberships are assigned during login, so you may need to log out and back in again for the system to recognize your new group.
-
 Set the executable bit on the `gunicorn_start` script:
 
     $ sudo chmod u+x bin/gunicorn_start
@@ -198,7 +210,7 @@ Set the executable bit on the `gunicorn_start` script:
 You can test your `gunicorn_start` script by running it as the user `hello`.
 
     $ sudo su - hello
-    $ bin/gunicorn_start
+    hello@django:~$ bin/gunicorn_start
     Starting hello_app as hello
     2013-06-09 14:21:45 [10724] [INFO] Starting gunicorn 18.0
     2013-06-09 14:21:45 [10724] [DEBUG] Arbiter booted
@@ -225,8 +237,8 @@ The `--name` (`NAME`) argument specifies how your application will identify itse
 
 In order for the `--name` argument to have an effect you need to install a Python module called `setproctitle`. To build this native extension `pip` needs to have access to C header files for Python. You can add them to your system with the `python-dev` package and then install `setproctitle`.
 
-    $ sudo apt-get install python-dev
-    (hello_django) $ pip install setproctitle
+    $ sudo aptitude install python-dev
+    (hello_django)hello@django:~$ pip install setproctitle
 
 Now when you list processes, you should see which gunicorn belongs to which application.
 
@@ -242,7 +254,7 @@ Now when you list processes, you should see which gunicorn belongs to which appl
 
 Your `gunicorn_start` script should now be ready and working. We need to make sure that it starts automatically with the system and that it can automatically restart if for some reason it exits unexpectedly. These tasks can easily be handled by a service called [supervisord](http://supervisord.org/). Installation is simple:
 
-    $ sudo apt-get install supervisor
+    $ sudo aptitude install supervisor
 
 When Supervisor is installed you can give it programs to start and watch by creating configuration files in the `/etc/supervisor/conf.d` directory. For our `hello` application we'll create a file named `/etc/supervisor/conf.d/hello.conf` with this content:
 
@@ -252,8 +264,8 @@ You can set [many other options](http://supervisord.org/configuration.html#progr
 
 Create the file to store your application's log messages:
 
-    $ mkdir -p /webapps/hello_django/logs/
-    $ touch /webapps/hello_django/logs/gunicorn_supervisor.log 
+    hello@django:~$ mkdir -p /webapps/hello_django/logs/
+    hello@django:~$ touch /webapps/hello_django/logs/gunicorn_supervisor.log 
 
 After you save the configuration file for your program you can ask supervisor to reread configuration files and update (which will start your the newly registered app).
 
@@ -281,7 +293,7 @@ Your application should now be automatically started after a system reboot and a
 
 Time to set up Nginx as a server for out application and its static files. Install and start Nginx:
 
-    $ sudo apt-get install nginx
+    $ sudo aptitude install nginx
     $ sudo service nginx start
 
 You can navigate to your server (http://example.com) with your browser and Nginx should greet you with the words "Welcome to nginx!".
@@ -372,7 +384,7 @@ Remove the application from Supervisor's control scripts directory:
 
 If you never plan to use this application again, you can now remove its entire directory from `webapps`:
 
-        $ sudo rm -r /webapps/hello_django
+    $ sudo rm -r /webapps/hello_django
 
 
 ### Running multiple applications
