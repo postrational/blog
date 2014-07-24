@@ -5,6 +5,16 @@
 Octopress is [Jekyll](https://github.com/mojombo/jekyll) blogging at its finest.
 Check out [Octopress.org](http://octopress.org/docs) for guides and documentation.
 
+### Installing Octopress dependencies
+
+    sudo gem install bundler
+    brew update
+    brew install rbenv ruby-build
+    rbenv init
+    rbenv rehash
+    bundle install
+    bundle exec rake generate ...
+
 ### Common tasks
 
 #### Creating a new post or page
