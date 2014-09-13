@@ -56,6 +56,10 @@ Steps to install Vitrualenv on a WebFaction server are the following:
     $ easy_install-2.7 pip
     $ pip install virtualenv
 
+If you get an permission denied error try this command to install virtualenv inside your user folder:
+
+    $  pip install --user virtualenv
+
 Verify that installation was successful:
 
     $ virtualenv --version

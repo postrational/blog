@@ -39,7 +39,7 @@ To install PostgreSQL on a Debian-based system run this command:
 Create a database user and a new database for the app. Grab a [perfect password from GRC][perfect_passwords].
 
     $ sudo su - postgres
-    postgres@django:~$ createuser -P
+    postgres@django:~$ createuser --interactive -P
     Enter name of role to add: hello_django
     Enter password for new role: 
     Enter it again: 
