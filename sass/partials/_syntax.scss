@@ -36,6 +36,9 @@ html .gist .gist-file {
   position: relative;
   border: none;
   padding-top: image-height("code_bg.png") !important;
+  td.line-data {
+    background: $base03 $noise-bg !important;
+  }
   .highlight {
     margin-bottom: 0;
   }
@@ -45,8 +48,17 @@ html .gist .gist-file {
     .gist-highlight {
       background: $base03 !important;
     }
+    
+    .pl-s1 .pl-s2, .pl-smi, .pl-smp, .pl-stj, .pl-vo, .pl-vpf {
+      color: #439644;
+    }
+    
     .highlight pre {
-      @extend .pre-code;
+      //      @extend .pre-code;
+        background: $base03 $noise-bg !important;
+        font-size: 13px !important;
+        line-height: 1.45em !important;
+        font-family: $mono !important;
       padding: 0;
     }
   }
