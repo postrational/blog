@@ -4,7 +4,7 @@ title: "DevOps tools for everyone - Vagrant, Puppet and Webmin"
 date: 2014-06-22
 comments: true
 categories: tech
-published: false
+published: true
 tags: vagrant puppet webmin devops
 ---
 
