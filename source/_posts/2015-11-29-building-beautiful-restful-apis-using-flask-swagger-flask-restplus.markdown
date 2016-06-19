@@ -57,7 +57,7 @@ To download and start the demo application issue the following commands.
 First clone the application code into any directory on your disk:
 
     $ cd /path/to/my/workspace/
-    $ git clone ...
+    $ git clone https://github.com/postrational/rest_api_demo
     $ cd rest_api_demo
 
 Create a virtualenv called `venv` in the application directory, activate the virtualenv and install required dependencies using `pip`:
