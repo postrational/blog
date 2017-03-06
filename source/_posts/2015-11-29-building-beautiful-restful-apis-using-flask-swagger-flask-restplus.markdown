@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Building beautiful RESTful APIs using Flask, Swagger UI and Flask-RESTPlus"
+title: "Building beautiful REST APIs using Flask, Swagger UI and Flask-RESTPlus"
 date: 2016-06-19 12:30
 permalink: "/blog/2016/06/19/building-beautiful-restful-apis-using-flask-swagger-ui-flask-restplus/"
 
@@ -10,7 +10,7 @@ published: true
 tags: rest restful api flask swagger openapi flask-restplus
 ---
 
-This article outlines steps needed to create a RESTful API using Flask and Flask-RESTPlus. These tools combine into a framework, which automates common tasks: 
+This article outlines steps needed to create a REST API using Flask and Flask-RESTPlus. These tools combine into a framework, which automates common tasks: 
 
 * API input validation
 * formatting output (as JSON)
@@ -206,7 +206,10 @@ The `api.namespace()` function creates a new namespace with a URL prefix. The `d
 
 The `@ns.route()` decorator is used to specify which URLs will be associated with a given resource. You can specify path parameters using angle brackets, such as in `@ns.route('/<int:id>')`.
 
-You can optionally specify the type of parameter using the the name of a converter and colon.  Available converters are `string` (default), `path` (string with slashes), `int`, `float`, `uuid` and `any` (can match multiple types). The URL converters come from the Werkzeug library on which Flask is based. You can read more about them in [Werkzeug docs][werkzeug_converters].
+You can optionally specify the type of parameter using the the name of a converter and colon.  Available converters are `string:` (default), `path:` (string with slashes), `int:`, `float:` and `uuid:`. 
+
+> %tip%
+> URL converters come from the Werkzeug library on which Flask is based. You can read more about them in [Werkzeug docs][werkzeug_converters]. Unfortunately not all Werkzeug converter options are currently supported by Flask-RESTPlus. Additional types can be added using Flask's `url_map` [option][flask_urlmap].
 
 Each resource is a class which contains functions which will be mapped to HTTP methods. The following functions are mapped: `get`, `post`, `put`, `delete`, `patch`, `options` and `head`.
 
@@ -497,6 +500,7 @@ There are a lot of resources on the net which can guide you to full Flask enligh
 [flask_restplus_github]: https://github.com/noirbizarre/flask-restplus
 [flask_restplus_reqparse]: http://flask-restplus.readthedocs.io/en/0.9.2/api.html#module-flask_restplus.reqparse
 [flask_sqlalchemy]: http://flask-sqlalchemy.pocoo.org/2.1/
+[flask_urlmap]: http://flask.pocoo.org/docs/0.11/api/#flask.Flask.url_map
 [markdown_syntax]: https://daringfireball.net/projects/markdown/syntax
 [open_apis_site]: https://openapis.org/
 [restful_resource]: http://restful-api-design.readthedocs.io/en/latest/resources.html
