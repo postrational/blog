@@ -391,6 +391,15 @@ If you never plan to use this application again, you can now remove its entire d
 
 If you would like some help with setting up a Nginx server to run multiple Django applications, check out [my next article][multiple_django].
 
+
+### Translations
+
+This article was actually translated into a number of languages. If you would like, you can read it in
+[Spanish](https://wildunix.es/posts/configurar-django-con-nginx-gunicorn-virtualenv-supervisor-y-postgresql/) or
+[Chinese](http://zqpythonic.qiniucdn.com/data/20130901152951/index.html).
+If you know of other translations, let me know.
+
+
 [multiple_django]: /blog/2013/10/29/serving-multiple-django-applications-with-nginx-gunicorn-supervisor/ "Serving multiple Django applications with Nginx and Gunicorn"
 [perfect_passwords]: https://www.grc.com/passwords.htm "GRC's Ultra High Security Password Generator"
 [digital_ocean_referal]: https://www.digitalocean.com/?refcode=053914aba44d "Digital Ocean VPS Hosting"
