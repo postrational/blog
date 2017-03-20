@@ -5,7 +5,7 @@ date: 2017-03-19 12:36
 permalink: "/blog/2017/03/19/developing-workflows-with-apache-airflow/"
 comments: true
 categories: tech
-published: false
+published: true
 tags: python airflow workflow pipeline
 ---
 
