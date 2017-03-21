@@ -64,10 +64,6 @@ Now let's install Airflow 1.8:
 
     (venv) $ pip install pip install airflow==1.8.0
 
-At the time of writing, Airflow 1.8 is not officially released yet. If the above command fails, try installing like this instead:
-
-    (venv) $ pip install https://dist.apache.org/repos/dist/dev/incubator/airflow/airflow-1.8.0rc5+apache.incubating.tar.gz
-
 Now we'll need to create the `AIRFLOW_HOME` directory where your DAG definition files and Airflow plugins will be stored. Once the directory is created, set the `AIRFLOW_HOME` environment variable:
 
     (venv) $ cd /path/to/my/airflow/workspace
