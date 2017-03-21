@@ -168,7 +168,10 @@ DATABASES = {
 
 And finally build the initial database for Django:
 
-    (hello_django)hello@django:~$ python manage.py syncdb
+    (hello_django)hello@django:~$ python manage.py migrate
+
+> %tip%
+> In older versions of Django the equivalent command was: `manage.py syncdb`
 
 
 ### Gunicorn
@@ -385,6 +388,20 @@ Remove the application from Supervisor's control scripts directory:
 If you never plan to use this application again, you can now remove its entire directory from `webapps`:
 
     $ sudo rm -r /webapps/hello_django
+
+
+### Different settings in production
+
+You will probably want to use different settings on your production server and different settings during development.
+
+To achieve this I usually create a second settings file called `settings_local.py`, which contains overrides of some values, but imports every default like so:
+
+```python
+from hello.settings import *
+DATABASES = ...
+```
+
+You can then tell Django to use this local settings file by specifying the environment variable `DJANGO_SETTINGS_MODULE=hello.settings_local`.
 
 
 ### Running multiple applications
