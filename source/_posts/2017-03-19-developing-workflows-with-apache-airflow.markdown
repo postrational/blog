@@ -37,6 +37,15 @@ Here is a brief overview of some terms used when designing Airflow workflows:
 * When a Task is executed in the context of a particular DAG Run, then a **Task Instance** is created.
 * `AIRFLOW_HOME` is the directory where you store your DAG definition files and Airflow plugins.
 
+
+When?               | DAG     | Task          | Info about other tasks 
+--------------------|---------|---------------|------------------------
+*During definition* | DAG     | Task          | [`get_flat_relatives`][airflow_code_get_flat_relatives]
+*During a run*      | DAG Run | Task Instance | [`xcom_pull`][airflow_xcom]
+*Base class*        | `DAG`   | `BaseOperator`|
+
+
+
 Airflow documentation provides more information about these and other [concepts][airflow_concepts].
 
 
@@ -62,7 +71,7 @@ Let's create a workspace directory for this tutorial, and inside it a Python 3 v
 
 Now let's install Airflow 1.8:
 
-    (venv) $ pip install pip install airflow==1.8.0
+    (venv) $ pip install airflow==1.8.0
 
 Now we'll need to create the `AIRFLOW_HOME` directory where your DAG definition files and Airflow plugins will be stored. Once the directory is created, set the `AIRFLOW_HOME` environment variable:
 
@@ -370,8 +379,6 @@ from datetime import datetime
 from airflow.operators.sensors import BaseSensorOperator
 
 class MyFirstSensor(BaseSensorOperator):
-    template_fields = tuple()
-    ui_color = '#b5f2ff'
 
     @apply_defaults
     def __init__(self, *args, **kwargs):
@@ -491,6 +498,7 @@ I hope you found this brief introduction to Airflow useful. Have fun developing 
 [airflow_plugins]: https://airflow.apache.org/plugins.html "Apache Airflow - Plugins"
 [airflow_sensors]: https://github.com/apache/incubator-airflow/blob/master/airflow/operators/sensors.py "Airflow Sensors on Github"
 [airflow_xcom]: https://airflow.incubator.apache.org/concepts.html#xcoms "Apache Airflow - Xcoms"
+[airflow_code_get_flat_relatives]: https://airflow.apache.org/_modules/airflow/models.html#BaseOperator.get_flat_relatives
 [idempotence]: https://en.wikipedia.org/wiki/Idempotence "Idempotence - Wikipedia"
 [pdb]: https://docs.python.org/3/library/pdb.html "pdb — The Python Debugger"
 [ipdb]: https://pypi.python.org/pypi/ipdb "IPython-enabled pdb"
