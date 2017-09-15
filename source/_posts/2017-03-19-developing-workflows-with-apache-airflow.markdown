@@ -246,6 +246,9 @@ We are also defining an Airflow plugin named `MyFirstPlugin`. By defining a plug
 
 In the docs, you can read more about [Airflow plugins][airflow_plugins].
 
+> %tip%
+> Make sure your `PYTHONPATH` is set to include directories where your custom modules are stored.
+
 Now, we'll need to create a new DAG to test our operator. Create a `dags/test_operators.py` file and fill it with the following content:
 
 {% codeblock lang:py airflow_home/dags/test_operators.py %}
@@ -356,7 +359,12 @@ In [2]: self.operator_param
 Out[2]: 'This is a test.'
 ```
 
-You could of course also drop into [Python's interactive debugger][pdb] `pdb` (`import pdb; pdb.set_trace()`) or the [IPython enhanced version][ipdb] `ipdb` (`import ipdb; ipdb.set_trace()`). Alternatively, you can also use an `airflow test` based run configuration to set breakpoints in IDEs such as PyCharm.
+You could of course also drop into [Python's interactive debugger][pdb] `pdb` (`import pdb; pdb.set_trace()`) or the [IPython enhanced version][ipdb] `ipdb` (`import ipdb; ipdb.set_trace()`). Alternatively, you can also use an `airflow test` based [run configuration][pycharm-debug-config] to set breakpoints in IDEs such as PyCharm.
+
+<div class="figure">
+    <img src="/images/illustrations/2017-03-19/pycharm-debug-config.png">
+    <div class="legend">A PyCharm debug configuration</div>
+</div>
 
 Code is in [this commit](https://github.com/postrational/airflow_tutorial/tree/45fe1a53d1306ad4e385dc7e85d8e606f860f750/airflow_home) on GitHub.
 
@@ -476,7 +484,7 @@ class MyFirstOperator(BaseOperator):
         log.info("Hello World!")
         log.info('operator_param: %s', self.operator_param)
         task_instance = context['task_instance']
-        sensors_minute = task_instance.xcom_pull('sensor_task_id', key='sensors_minute')
+        sensors_minute = task_instance.xcom_pull('my_sensor_task', key='sensors_minute')
         log.info('Valid minute as determined by sensor: %s', sensors_minute)
 {% endcodeblock %}
 
@@ -502,6 +510,6 @@ I hope you found this brief introduction to Airflow useful. Have fun developing 
 [idempotence]: https://en.wikipedia.org/wiki/Idempotence "Idempotence - Wikipedia"
 [pdb]: https://docs.python.org/3/library/pdb.html "pdb — The Python Debugger"
 [ipdb]: https://pypi.python.org/pypi/ipdb "IPython-enabled pdb"
-[pickle]: https://docs.python.org/3/library/pickle.html "pickle — Python object serialization¶"
-
+[pickle]: https://docs.python.org/3/library/pickle.html "pickle — Python object serialization"
+[pycharm-debug-config]: https://www.jetbrains.com/help/pycharm/creating-and-editing-run-debug-configurations.html "Creating Debug Configurations in PyCharm"
 
