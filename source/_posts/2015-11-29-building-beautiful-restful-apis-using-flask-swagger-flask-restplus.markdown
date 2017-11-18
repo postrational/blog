@@ -10,7 +10,7 @@ published: true
 tags: rest restful api flask swagger openapi flask-restplus
 ---
 
-This article outlines steps needed to create a REST API using Flask and Flask-RESTPlus. These tools combine into a framework, which automates common tasks: 
+This article outlines steps needed to create a REST API using Flask and Flask-RESTPlus. These tools combine into a framework, which automates common tasks:
 
 * API input validation
 * formatting output (as JSON)
@@ -46,7 +46,7 @@ Let's start by downloading and running this demo on your system, then we'll walk
 
 #### Prerequisites
 
-You will need to have Python with [Virtualenv][virtualenv_installation] and [Git](https://git-scm.com/) installed on your machine. 
+You will need to have Python with [Virtualenv][virtualenv_installation] and [Git](https://git-scm.com/) installed on your machine.
 
 I would recommend using Python 3, but Python 2 should work just fine.
 
@@ -106,19 +106,19 @@ if __name__ == '__main__':
 To make the code more maintainable, in our demo application we separate the app definition, API methods and other types of code into separate files. The following directory tree shows where each part of the logic is located.
 
 
-    ├── api                         #  
+    ├── api                         #
     │   ├── blog                    #  Blog-related API directory
-    │   │   ├── business.py         #  
+    │   │   ├── business.py         #
     │   │   ├── endpoints           #  API namespaces and REST methods
-    │   │   │   ├── categories.py   #  
-    │   │   │   └── posts.py        #  
+    │   │   │   ├── categories.py   #
+    │   │   │   └── posts.py        #
     │   │   ├── parsers.py          #  Argument parsers
     │   │   └── serializers.py      #  Output serializers
     │   └── restplus.py             #  API bootstrap file
     ├── app.py                      #  Application bootstrap file
-    ├── database                    #  
+    ├── database                    #
     │   └── models.py               #  Definition of SQLAlchemy models
-    ├── db.sqlite                   #  
+    ├── db.sqlite                   #
     └── settings.py                 #  Global app settings
 
 
@@ -146,7 +146,7 @@ The RESTPlus API itself is also split into a number of separate namespaces. Each
 `initialize_app` also sets configuration values loaded from `settings.py` and configures the app to use a database through the magic of [Flask-SQLAlchemy][flask_sqlalchemy].
 
 
-### Defining API namespaces and RESTful resources 
+### Defining API namespaces and RESTful resources
 
 Your API will be organized using API namespaces, RESTful resources and HTTP methods. Namespaces, as described above, allow your API definitions to be split into multiple files, each defining a part of the API with a different URL prefix.
 
@@ -206,7 +206,7 @@ The `api.namespace()` function creates a new namespace with a URL prefix. The `d
 
 The `@ns.route()` decorator is used to specify which URLs will be associated with a given resource. You can specify path parameters using angle brackets, such as in `@ns.route('/<int:id>')`.
 
-You can optionally specify the type of parameter using the the name of a converter and colon.  Available converters are `string:` (default), `path:` (string with slashes), `int:`, `float:` and `uuid:`. 
+You can optionally specify the type of parameter using the the name of a converter and colon.  Available converters are `string:` (default), `path:` (string with slashes), `int:`, `float:` and `uuid:`.
 
 > %tip%
 > URL converters come from the Werkzeug library on which Flask is based. You can read more about them in [Werkzeug docs][werkzeug_converters]. Unfortunately not all Werkzeug converter options are currently supported by Flask-RESTPlus. Additional types can be added using Flask's `url_map` [option][flask_urlmap].
@@ -256,7 +256,7 @@ class PostsCollection(Resource):
         ...
 ```
 
-Once the method is decorated with an argument parser, the method's Swagger&nbsp;UI will display a form to specify the argument values. 
+Once the method is decorated with an argument parser, the method's Swagger&nbsp;UI will display a form to specify argument values.
 
 #### Validating argument values
 
@@ -266,7 +266,7 @@ The argument parser serves another function, it can validate the argument values
 {
     "errors": {
         "per_page": "Results per page 3 is not a valid choice"
-    }, 
+    },
     "message": "Input payload validation failed"
 }
 ```
@@ -330,7 +330,7 @@ blog_post = api.model('Blog post', {
 
 Once the model is defined you can attach it to a method using the `@api.expect()` decorator.
 
-```python 
+```python
 @ns.route('/')
 class BlogPostCollection(Resource):
 
@@ -404,7 +404,7 @@ page_of_blog_posts = api.inherit('Page of blog posts', pagination, {
 
 ### Marshaling output JSON objects
 
-API models can also be used as serializers. If you decorate a method with `@api.marshal_with(model)`, Flask-RESTPlus will generate a JSON object with the same fields as are specified in the `model`. 
+API models can also be used as serializers. If you decorate a method with `@api.marshal_with(model)`, Flask-RESTPlus will generate a JSON object with the same fields as are specified in the `model`.
 
 The method just has to return an object which has attributes with the same names as the fields. Alternatively, the method could return a dictionary with values assigned to the same keys as the names of model fields.
 
@@ -465,7 +465,7 @@ def default_error_handler(e):
         return {'message': message}, 500
 ```
 
-You can specify custom error handling logic for different types of exceptions. 
+You can specify custom error handling logic for different types of exceptions.
 
 ```python rest_api_demo/api/restplus.py
 @api.errorhandler(NoResultFound)
@@ -481,6 +481,20 @@ The `default_error_handler` function as written above will not return any respon
     <div class="legend">Werkzeug interactive debugger</div>
 </div>
 
+### Resetting the database
+
+If you delete the `db.sqlite` file or simply want to reset your database to an empty state, you can enter the following commands in your Python console.
+
+```python
+>>> from rest_api_demo.app import initialize_app, app
+>>> from rest_api_demo.database import reset_database
+>>>
+>>> initialize_app(app)
+>>> with app.app_context():
+...     reset_database()
+```
+
+
 ### Further reading
 
 There are a lot of resources on the net which can guide you to full Flask enlightenment. I would recommend getting to know the following:
@@ -495,7 +509,7 @@ There are a lot of resources on the net which can guide you to full Flask enligh
 [flask_blueprints]: http://flask.pocoo.org/docs/0.11/blueprints/
 [flask_docs]: http://flask.readthedocs.io/
 [flask_extensions]: http://flask.pocoo.org/extensions/ "Flask Extensions Registry"
-[flask_restplus_docs]: http://flask-restplus.readthedocs.io/ 
+[flask_restplus_docs]: http://flask-restplus.readthedocs.io/
 [flask_restplus_fields_source]: https://github.com/noirbizarre/flask-restplus/blob/0.9.2/flask_restplus/fields.py#L355-L609
 [flask_restplus_github]: https://github.com/noirbizarre/flask-restplus
 [flask_restplus_reqparse]: http://flask-restplus.readthedocs.io/en/0.9.2/api.html#module-flask_restplus.reqparse
