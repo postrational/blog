@@ -101,4 +101,7 @@ google_analytics_tracking_id: UA-602203-3
 facebook_like: true
 
 # Gittip Button
-gittip_button: true
+gittip_button: false
+
+# LinkedIn Button
+linkedin_button: true
