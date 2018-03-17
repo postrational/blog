@@ -27,11 +27,11 @@ The challenge, then, for an aspiring Flask developer lies in picking the right e
 
 #### Flask-RESTPlus
 
-[Flask-RESTPlus][flask_restplus_github] aims to make building REST APIs quick and easy. It provides just enough syntactic sugar to make your code readable and easy to maintain. The killer feature of RESTPlus is its ability to automatically generate an interactive documentation for your API using Swagger&nbsp;UI.
+[Flask-RESTPlus][flask_restplus_github] aims to make building REST APIs quick and easy. It provides just enough syntactic sugar to make your code readable and easy to maintain. Its killer feature is the ability to automatically generate interactive documentation for your API using Swagger&nbsp;UI.
 
 #### Swagger UI
 
-[Swagger UI][swagger_ui_site] is part of a suite of technologies for documenting RESTful web services. Swagger has evolved into the [OpenAPI specification][open_apis_site], currently curated by the Linux Foundation. Once you have an OpenAPI description of your web service, you can use a variety of tool to generate documentation or even boilerplate code in a variety of languages. Take a look at [swagger.io](http://swagger.io/) for more information.
+[Swagger UI][swagger_ui_site] is part of a suite of technologies for documenting RESTful web services. Swagger has evolved into the [OpenAPI specification][open_apis_site], currently curated by the Linux Foundation. Once you have an OpenAPI description of your web service, you can use software tools to generate documentation or even boilerplate code (client or server) in a variety of languages. Take a look at [swagger.io](http://swagger.io/) for more information.
 
 Swagger&nbsp;UI is a great tool for describing and visualizing RESTful web services. It generates a small webpage, which documents your API and allows you to make test queries using JavaScript. Click here to see a small [demo][swagger_ui_demo].
 
@@ -60,18 +60,18 @@ First clone the application code into any directory on your disk:
     $ git clone https://github.com/postrational/rest_api_demo
     $ cd rest_api_demo
 
-Create a virtualenv called `venv` in the application directory, activate the virtualenv and install required dependencies using `pip`:
+Create a virtual Python environment in a directory named `venv`, activate the virtualenv and install required dependencies using `pip`:
 
-    $ pyvenv venv
+    $ virtualenv -p `which python3` venv
     $ source venv/bin/activate
-    $ pip install -r requirements.txt
+    (venv) $ pip install -r requirements.txt
 
-Make sure the current working directory is on your `PYTHONPATH` and start the app:
+Now let's set up the app for development and start it:
 
-    $ export PYTHONPATH=.:$PYTHONPATH
-    $ python rest_api_demo/app.py
+    (venv) $ python setup.py develop
+    (venv) $ python rest_api_demo/app.py
 
-Now everything should be ready. In your browser, open the URL http://localhost:8888/api/
+OK, everything should be ready. In your browser, open the URL http://localhost:8888/api/
 
 You should be greeted with a page similar to the following.
 
@@ -91,7 +91,7 @@ Flask and Flask-RESTPlus make it very easy to get started. Minimal code required
 from flask import Flask
 from flask_restplus import Resource, Api
 
-app = Flask(__name__)                  #  Create a Flask WSGI appliction
+app = Flask(__name__)                  #  Create a Flask WSGI application
 api = Api(app)                         #  Create a Flask-RESTPlus API
 
 @api.route('/hello')                   #  Create a URL route to this resource
