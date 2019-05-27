@@ -1,4 +1,7 @@
 <div class="sharing">
+  {% if site.patreon_button %}
+    {% include custom/patreon.html %}
+  {% endif %}
   {% if site.gittip_button %}
     {% include custom/gittip.html %}
   {% endif %}

@@ -105,3 +105,6 @@ gittip_button: false
 
 # LinkedIn Button
 linkedin_button: true
+
+# Patreon Button
+patreon_button: true
