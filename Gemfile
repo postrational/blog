@@ -11,7 +11,7 @@ group :development do
   gem 'sass', '~> 3.2'
   gem 'sass-globbing', '~> 1.0.0'
   gem 'rubypants', '~> 0.2.0'
-  gem 'rb-fsevent', '~> 0.9'
+  gem 'rb-fsevent', '~> 0.10'
   gem 'stringex', '~> 1.4.0'
   gem 'liquid', '~> 2.3.0'
   gem 'directory_watcher', '1.4.1'
