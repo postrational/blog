@@ -73,15 +73,6 @@ github_skip_forks: true
 twitter_user: postrational
 twitter_tweet_button: true
 
-# Google +1
-google_plus_one: true
-google_plus_one_size: medium
-
-# Google Plus Profile
-# Hidden: No visible button, just add author information to search results
-googleplus_user:
-googleplus_hidden: false
-
 # Pinboard
 pinboard_user:
 pinboard_count: 3
