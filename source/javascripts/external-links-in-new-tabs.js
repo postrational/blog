@@ -19,7 +19,7 @@ ready(function() {
 
   var internalLinkRegex = new RegExp('^((((http:\\/\\/|https:\\/\\/)(www\\.)?)?'
                                      + website
-                                     + ')|(localhost:\\d{4})|(\\/.*))(\\/.*)?$', '');
+                                     + ')|(localhost:\\d{4})|(\\/.*))|(#.*)(\\/.*)?$', '');
 
   var anchorEls = document.querySelectorAll('a');
   var anchorElsLength = anchorEls.length;

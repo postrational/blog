@@ -18,34 +18,38 @@ The Python community has created a rich ecosystem of tools, which can help you d
 This is an opinionated article. I will run though a long list of tools and practices, I've had good experience with. Some of your favorite tools may be left out, some of my choices you may find unnecessary. Feel free to adapt the list to your liking and leave a comment below.
 
 
-
 | Project maturity checklist
 :-------:|:--------------------------------------------------:
- &#9744; | Define your command-line interface (CLI)
- &#9744; | Structure your code
- &#9744; | Write a `setup.py` file
- &#9744; | Add `entry_points` for your script command
- &#9744; | Create a `requirements.txt` file
- &#9744; | Set up a Git repo
- &#9744; | Use Black to format your code
- &#9744; | pre-commit hooks
- &#9744; | Code linters
- &#9744; | Create a `tox.ini` config
- &#9744; | Write unit-tests
- &#9744; | Add `docstrings` and documentation
- &#9744; | Type annotations and MyPy
- &#9744; | Upload to GitHub
- &#9744; | README and LICENSE files
- &#9744; | Continuous integration service
- &#9744; | Requirements updater
- &#9744; | Test coverage checker
- &#9744; | Automated code review
- &#9744; | Publish your project on PyPI
- &#9744; | Advertise your project
+ &#9744; | [Define your command-line interface (CLI)](#define-cli)
+ &#9744; | [Structure your code](#structure-code)
+ &#9744; | [Write a `setup.py` file](#setup-py)
+ &#9744; | [Add `entry_points` for your script command](#entry-points)
+ &#9744; | [Create a `requirements.txt` file](#requirements-txt)
+ &#9744; | [Set up a Git repo](#git-repo)
+ &#9744; | [Use Black to format your code](#use-black)
+ &#9744; | [pre-commit hooks](#pre-commit)
+ &#9744; | [Code linters](#code-linters)
+ &#9744; | [Create a `tox.ini` config](#tox-ini)
+ &#9744; | [Write unit-tests](#unit-tests)
+ &#9744; | [Add `docstrings` and documentation](#docstrings)
+ &#9744; | [Type annotations and MyPy](#type-annotations)
+ &#9744; | [Upload to GitHub](#upload-to-github)
+ &#9744; | [README and LICENSE files](#readme-and-license)
+ &#9744; | [Continuous integration service](#continuous-integration)
+ &#9744; | [Requirements updater](#requirements-updater)
+ &#9744; | [Test coverage checker](#coverage-checker)
+ &#9744; | [Automated code review](#code-review)
+ &#9744; | [Publish your project on PyPI](#publish-on-pypi)
+ &#9744; | [Advertise your project](#advertise)
+
 
 > %tip%
-> Download a [PDF version](/images/illustrations/2019-05-26/Project_maturity_checklist.pdf) of the checklist.
+> You can download a printable [PDF version](/images/illustrations/2019-05-26/Project_maturity_checklist.pdf) of the checklist.
 
+I tried to complete the entire checklist in my small open-source project named [`gym-demo`][gym-demo]. Feel free to use it as a reference and submit PRs if you find room for improvement.
+
+
+<a name="define-cli"></a>
 ### &#9745; Define your command-line interface (CLI)
 
 If you're going to provide a command-line utility, then you need to define a friendly command-line user interface. Your interface will be more intuitive for users if it follows the [GNU conventions for command line arguments][cli_conventions].
@@ -82,6 +86,7 @@ env_name = arguments.get("ENV_NAME")
 > I usually start with Docopt by copying one of the [examples][docopt_examples] and modifying it to my needs.
 
 
+<a name="structure-code"></a>
 ### &#9745;  Structure your code
 
 Python has established conventions for most things, this includes the layout of your code directory and naming of some files and directories. Follow these conventions to make your project easier to understand by other Python developers.
@@ -149,6 +154,7 @@ if __name__ == "__main__":
 The advantage of splitting the main logic into a separate `main()` function is that you'll be able to use the `main` function as an entry point. We'll come back to this when talking about `entry_points`.
 
 
+<a name="setup-py"></a>
 ###  &#9745; Write a `setup.py` file
 
 Python has a mature and well maintained packaging utility called `setuptools`. A `setup.py` file is the build script for `setuptools` and every Python project should have one.
@@ -208,8 +214,16 @@ You can find out about other `setup.py` commands by running:
 
 > %tip%
 > If you're not using [virtual environments][packaging_tutorial_venv] you're missing out. <br>
-> I would also recommend using [`virtualenvwrapper`][virtualenvwrapper] tools.
+> I would also recommend using [`virtualenvwrapper`][virtualenvwrapper] tools. <br>
+> Alternatively you can switch to the new [`pipenv`][pipenv] tool.
 
+[packaging_tutorial]: https://packaging.python.org/tutorials/packaging-projects/ "Packaging Python Projects"
+[packaging_tutorial_venv]: https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments "Creating Virtual Environments"
+[virtualenvwrapper]: https://virtualenvwrapper.readthedocs.io/en/latest/ "virtualenvwrapper - a set of extensions virtualenv"
+[pipenv]: https://github.com/pypa/pipenv "Pipenv: Python Development Workflow for Humans"
+
+
+<a name="entry-points"></a>
 ###  &#9745; Add `entry_points` for your script command
 
 If you're writing a command-line utility, you should create a console script entry point for your command. This will create an executable launcher for your script, which users can easily call at the command line.
@@ -229,6 +243,8 @@ setup(
 
 Read more about [automated script creation][entry_points_script_creation] in the `setuptools` [docs][entry_points_script_creation].
 
+
+<a name="requirements-txt"></a>
 ###  &#9745; Create a `requirements.txt` file
 
 You should provide your users with information about which other packages your package will require to work properly. The right place to put this information is inside `setup.py` as an `install_requires` list.
@@ -256,6 +272,8 @@ Users can then install these precise versions of your dependencies by running:
 
 The easiest way to generate a `requirements.txt` file is to run the `pip freeze` command. Be careful with this though, as it will list all installed packages, whether they are dependencies of your package, the dependencies of these dependencies, or simply unrelated packages you installed in your environment.
 
+
+<a name="git-repo"></a>
 ###  &#9745; Set up a Git repo
 
 It's time to put your code under source-control. Everyone is using Git these days, so let's roll with it.
@@ -275,6 +293,8 @@ Verify that only files you want are being added to the repo with `git status` an
 
 More sample `.gitignore` files may be found in the [GitHub gitignore repo][gitignore].
 
+
+<a name="use-black"></a>
 ###  &#9745; Use Black to format your code
 
 The Python community is very lucky for many reasons and one of them is the early adoption of a common code-style guide [the PEP8][pep8]. This is a great blessing, because we don't have to argue which coding style is better, we don't have to define a different style for each project, in each company, etc. We have PEP8 and we should all just stick to PEP8.
@@ -288,6 +308,8 @@ To that end, Łukasz Langa crated [Black][black_github] - the uncompromising cod
 
 You may disagree with some of the formatting decisions [Black][black_github] makes. I would say, that it's better to have a consistent style, rather then a prettier, but inconsistent one. Let's just all use Black and get along. ☺
 
+
+<a name="pre-commit"></a>
 ###  &#9745; Set up pre-commit hooks
 
 The best way to run Black and any other code formatters you may want to use, is to use [`pre-commit`][pre_commit]. This is a tool which is triggered every time you `git commit` and runs code-linters and formatters on any modified files.
@@ -324,6 +346,8 @@ From now on, each time you run `git commit` Black will be called to check your s
 
 Now simply re-add the reformatted file with `git add` and commit again.
 
+
+<a name="code-linters"></a>
 ###  &#9745; Code linters
 
 Python has a great set of code linters, which can help you avoid making common mistakes and keep your style in line with PEP8 and other standard conventions. Many of these tools are maintained by the [Python Code Quality Authority][pycqa].
@@ -367,6 +391,7 @@ ignore=C812,C813,D104
 There are other code linters you may find interesting. For example [Bugbear][flake8_bugbear] finds common sources of bugs, while [Bandit][bandit] finds common security issues in Python code. You can use them both as a [Flake8 plugins][flake8_bandit] of course.
 
 
+<a name="tox-ini"></a>
 ###  &#9745; Create a `tox.ini` config
 
 [`tox`][tox] is a great tool, which aims to standardize testing in Python. You can use it to setup a virtual environment for testing your project, create a package, install the package along with its dependencies and then run tests and linters. All of this is automated, so you just need to type one `tox` command.
@@ -418,6 +443,8 @@ ignore=C812,C813,D104,D400,E203
 
 If you automate testing using `tox`, you will be able to just run that one command in your continuous integration environment. Make sure you run `tox` on every commit you want to merge.
 
+
+<a name="unit-tests"></a>
 ###  &#9745; Refactor your code to be unit-testable and add tests
 
 Using unit tests is one of the best practices you can adopt. Writing unit tests for your function gives you a chance to take one more look your code. Perhaps the function is too complex and should be simplified? Perhaps there's a bug you didn't notice before or an edge-case you didn't consider?
@@ -457,6 +484,8 @@ tests/test_main.py .......                                          [100%]
 
 Make sure to add the `pytest` command to your `tox.ini` file.
 
+
+<a name="docstrings"></a>
 ###  &#9745; Add `docstrings` and documentation
 
 Writing good documentation is very important for your users. You should start by making sure each function and module are described by a docstring. The docstring should describe what the function should do in an imperative mood sentence. For example:
@@ -489,6 +518,8 @@ Use the `flake8-docstrings` plugin to verify all your functions have a docstring
 
 If your project grows larger, you will probably want to create a full-fledged documentation site. You can use [Sphinx][sphinx] or the simpler [MkDocs][mk_docs] to generate the documentation and host the site on [Read the docs][read_the_docs] or [GitHub Pages][github_pages]. 
 
+
+<a name="type-annotations"></a>
 ###  &#9745; Add type annotations and a MyPy verification step
 
 Python 3.5 added the option to annotate your code with type information. This is a very useful and clean type of documentation and you should use.
@@ -509,6 +540,8 @@ my_module/main.py:43:27: error: Argument 1 to "my_function" has incompatible typ
 
 You can add a call to `mypy` to your `tox` configuration to verify that you're not introducing any type-related mistakes in your commits.
 
+
+<a name="upload-to-github"></a>
 ###  &#9745; Upload to GitHub
 
 Alright. If you completed all the previous steps and checked all the boxes, your code is ready to be shared with the world!
@@ -518,6 +551,8 @@ Most open-source projects are hosted on GitHub, so your project should probably 
 > %tip%
 > Microsoft recently acquired GitHub, which makes some people sceptical, if this should still remain the canonical place for open-source projects online. You can consider [GitLab][gitlab] as an alternative. So far however, Microsoft have been good stewards of GitHub.
 
+
+<a name="readme-and-license"></a>
 ###  &#9745; Add README and LICENSE files
 
 The first thing people see when they visit your project's repository is the contents of the `README.md` file. GitHub and GitLab do a good job of rendering [Markdown][markdown]-formatted text, so you can include links, tables, pictures, etc.
@@ -544,6 +579,7 @@ More info about choosing a license [here][choosealicense].
 [choosealicense]: https://choosealicense.com/
 
 
+<a name="continuous-integration"></a>
 ###  &#9745; Add a continuous integration service
 
 OK, now that your project is online and you prepared a `tox` configuration, it's time to set up a continuous integration service. This will run your style-checking, static code analysis and unit-tests on every pull request (PR) made to your repository.
@@ -603,6 +639,7 @@ A completed Travis run will look like [this example][travis_example].
 [circle_ci]: https://circleci.com/
 
 
+<a name="requirements-updater"></a>
 ###  &#9745; Add a requirements updater
 
 Breaking changes in dependencies are a common problem in all software development. Your code was working just fine a while ago, but if you try to build it today, it fails, because some package it uses changed in an unforeseen way.
@@ -622,6 +659,7 @@ I use the [PyUp][pyup] service for this. The service requires no configuration, 
 [dependabot]: https://dependabot.com/
 
 
+<a name="coverage-checker"></a>
 ###  &#9745; Add test coverage checker
 
 Python unit-testing frameworks have the ability to determine which lines and branches of code were hit when running unit tests. This coverage report is very useful, as it lets you know how much of your code is being exercised by tests and which parts are not.
@@ -684,6 +722,7 @@ commands=
 [coveralls-python]: https://github.com/coveralls-clients/coveralls-python
 
 
+<a name="code-review"></a>
 ### &#9745; Automated code review
 
 The best thing you can do when working as a team is to thoroughly review each other's code. You should point out any mistakes, parts of code, which are difficult to understand, badly documented or anything else which doesn't smell quite right.
@@ -695,6 +734,8 @@ Setting up a service like [Code Climate Quality][code_climate_quality] or [Codac
 [code_climate_quality]: https://codeclimate.com/
 [codacy]: https://www.codacy.com/
 
+
+<a name="publish-on-pypi"></a>
 ###  &#9745; Publish your project on PyPI
 
 So, now you're ready to publish your project on PyPI. This is quite a simple operation, unless your package is larger than 60MB or you selected a name, which is already taken.
@@ -741,13 +782,15 @@ Congratulations, your project is now online and fully ready to be used by the co
 [github_release]: https://help.github.com/en/articles/creating-releases
 [semver]: https://semver.org/ "Semantic Versioning"
 
+
+<a name="advertise"></a>
 ###  &#9745; Advertise your project
 
 OK, you're done. Take to Twitter, Facebook, LinkedIn or wherever else your potential users and contributors may be and let them know about your project.
 
 Congratulations and good luck!
 
-
+[gym_demo]: https://github.com/postrational/gym-demo "Explore OpenAI Gym environments"
 [cli_conventions]: https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html "CLI Conventions - POSIX with GNU extensions"
 [docopt_python]: https://github.com/docopt/docopt "docopt on GitHub"
 [docopt_presentation]: https://www.youtube.com/watch?v=pXhcPJK5cMc "PyCon UK 2012: Create *beautiful* command-line interfaces with Python"
@@ -755,10 +798,6 @@ Congratulations and good luck!
 [pep8]: https://www.python.org/dev/peps/pep-0008/ "PEP8: Python style guide"
 [pep8_package_names]: https://www.python.org/dev/peps/pep-0008/#package-and-module-names "PEP8: Package and module naming"
 [clean_code_book]: https://isbnsearch.org/isbn/9780132350884 "Clean Code by Robert C. Martin"
-[packaging_tutorial]: https://packaging.python.org/tutorials/packaging-projects/ "Packaging Python Projects"
-[gym_demo]: https://github.com/postrational/gym-demo "Explore OpenAI Gym environments"
-[packaging_tutorial_venv]: https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments "Creating Virtual Environments"
-[virtualenvwrapper]: https://virtualenvwrapper.readthedocs.io/en/latest/ "virtualenvwrapper - a set of extensions virtualenv"
 [entry_points_services]: https://setuptools.readthedocs.io/en/latest/setuptools.html#dynamic-discovery-of-services-and-plugins
 [entry_points_setup_commands]: https://setuptools.readthedocs.io/en/latest/setuptools.html#adding-commands
 [entry_points_script_creation]: https://setuptools.readthedocs.io/en/latest/setuptools.html#automatic-script-creation
