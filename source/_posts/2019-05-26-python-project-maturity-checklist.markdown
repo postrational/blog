@@ -312,7 +312,7 @@ You may disagree with some of the formatting decisions [Black][black_github] mak
 <a name="pre-commit"></a>
 ###  &#9745; Set up pre-commit hooks
 
-The best way to run Black and any other code formatters you may want to use, is to use [`pre-commit`][pre_commit]. This is a tool which is triggered every time you `git commit` and runs code-linters and formatters on any modified files.
+The best way to run Black and any other code formatters is to use [`pre-commit`][pre_commit]. This is a tool which is triggered every time you `git commit` and runs code-linters and formatters on any modified files.
 
 Install `pre-commit` as usual:
 
@@ -725,15 +725,17 @@ commands=
 <a name="code-review"></a>
 ### &#9745; Automated code review
 
-The best thing you can do when working as a team is to thoroughly review each other's code. You should point out any mistakes, parts of code, which are difficult to understand, badly documented or anything else which doesn't smell quite right.
+The best thing you can do when working as a team is to thoroughly review each other's code. You should point out any mistakes, parts of code which are difficult to understand or badly documented, or anything else which doesn't quite smell right.
 
 If you're working alone, or would like another pair of eyes, you can set up one of the services providing automated code review. These services are still evolving and are not providing a huge value yet, but sometimes they catch something your code linters missed.
 
 Setting up a service like [Code Climate Quality][code_climate_quality] or [Codacy][codacy] is very simple. Just set up an account using your GitHub credentials, add your repository and configure your preferences.
 
+A report can look like [this example][codacy_example_report].
+
 [code_climate_quality]: https://codeclimate.com/
 [codacy]: https://www.codacy.com/
-
+[codacy_example_report]: https://app.codacy.com/app/postrational/ngraph-onnx/issues?&filters=W3siaWQiOiJMYW5ndWFnZSIsInZhbHVlcyI6WyJQeXRob24iXX0seyJpZCI6IkNhdGVnb3J5IiwidmFsdWVzIjpbbnVsbF19LHsiaWQiOiJMZXZlbCIsInZhbHVlcyI6W251bGxdfSx7ImlkIjoiUGF0dGVybiIsInZhbHVlcyI6W251bGxdfSx7ImlkIjoiQXV0aG9yIiwidmFsdWVzIjpbbnVsbF19XQ==
 
 <a name="publish-on-pypi"></a>
 ###  &#9745; Publish your project on PyPI
