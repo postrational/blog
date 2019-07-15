@@ -256,7 +256,7 @@ setup(
 )
 ```
 
-It's also very useful to inform your users which versions of each dependency you tested your package with. A good way to do this is to add a `requirements.txt` file in your repository. The file should contain the list of your dependencies along with version numbers, for example:
+It's also very useful to inform your users which versions of each dependency you tested your package with. A good way to do this is to put a [requirements file][pip_requirements] in your repository. The file is usually named `requirements.txt` and should contain the list of your dependencies along with version numbers, for example:
 
 ```text requirements.txt
 colorful==0.5.0
@@ -272,6 +272,8 @@ Users can then install these precise versions of your dependencies by running:
 
 The easiest way to generate a `requirements.txt` file is to run the `pip freeze` command. Be careful with this though, as it will list all installed packages, whether they are dependencies of your package, the dependencies of these dependencies, or simply unrelated packages you installed in your environment.
 
+
+[pip_requirements]: https://pip.pypa.io/en/stable/user_guide/#requirements-files
 
 <a name="git-repo"></a>
 ###  &#9745; Set up a Git repo
