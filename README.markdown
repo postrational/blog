@@ -1,5 +1,11 @@
 ## Michał's Octopress Blog
 
+### Using Dockerized version of Octopress:
+
+    docker build -t karzyn_octopress .
+    docker run -v /.../karzyn_octopress:/srv/karzyn_octopress -it karzyn_octopress
+    root@container:/srv/karzyn_octopress# rake generate
+
 ### Documentation
 
 Octopress is [Jekyll](https://github.com/mojombo/jekyll) blogging at its finest.
@@ -37,7 +43,7 @@ Check out [Octopress.org](http://octopress.org/docs) for guides and documentatio
     bundle exec rake generate && bundle exec rake watch
     bundle exec rake isolate\["about-me"\]
     bundle exec rake integrate
-    bundle exec rake generate 
+    bundle exec rake generate
     bundle exec rake watch
     bundle exec rake deploy
 
