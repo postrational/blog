@@ -8,7 +8,7 @@ group :development do
   gem 'RedCloth', '~> 4.3.0'
   gem 'haml', '~> 5.1.1'
   gem 'compass', '~> 0.12.2'
-  gem 'sass', '~> 3.2'
+  gem 'sass', '~> 3.7'
   gem 'sass-globbing', '~> 1.1.5'
   gem 'rubypants', '~> 0.2.0'
   gem 'rb-fsevent', '~> 0.10'
