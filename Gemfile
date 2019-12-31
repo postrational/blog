@@ -10,7 +10,7 @@ group :development do
   gem 'compass', '~> 0.12.2'
   gem 'sass', '~> 3.2'
   gem 'sass-globbing', '~> 1.1.5'
-  gem 'rubypants', '~> 0.2.0'
+  gem 'rubypants', '~> 0.7.1'
   gem 'rb-fsevent', '~> 0.10'
   gem 'stringex', '~> 1.4.0'
   gem 'liquid', '~> 2.6.3'
