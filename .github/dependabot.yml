@@ -1,0 +1,22 @@
+version: 2
+updates:
+- package-ecosystem: bundler
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  assignees:
+  - postrational
+  ignore:
+  - dependency-name: liquid
+    versions:
+    - 4.0.3
+    - 4.0.3
+  - dependency-name: jekyll
+    versions:
+    - 4.2.0
+    - 4.2.0
+  - dependency-name: pygments.rb
+    versions:
+    - 2.0.0
+    - 2.1.0
