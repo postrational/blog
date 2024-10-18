@@ -1,3 +1,3 @@
 <script>
-  window.location.href = "/blog/";
+  window.location.href = "blog/";
 </script>
