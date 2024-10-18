@@ -1,0 +1,15 @@
+---
+title: Tusk
+date: 2005-09-09
+slug: tusk
+layout: post
+categories:
+  - personal
+comments: true
+draft: true
+---
+
+<img src='http://www.karzyn.com/photoblog/Wybory_Tusk01.jpg' width='600'><br />
+<img src='http://www.karzyn.com/photoblog/Wybory_Tusk02.jpg' width='600'><br />
+<img src='http://www.karzyn.com/photoblog/Wybory_Tusk03.jpg' width='600'><br />
+<img src='http://www.karzyn.com/photoblog/Wybory_Tusk04.jpg' width='600'><br />

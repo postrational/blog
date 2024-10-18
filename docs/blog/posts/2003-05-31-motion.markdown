@@ -1,0 +1,11 @@
+---
+title: Motion
+date: 2003-05-31
+slug: motion
+layout: post
+categories:
+  - personal
+comments: true
+---
+
+<a href="http://www.allmusic.com/cg/amg.dll?p=amg&amp;uid=MISS70305151018&amp;sql=Afa1gtq9z9u42"><img src="http://image.allmusic.com/00/amg/cov200/dre000/e081/e081100v7de.jpg" border="0" alt="" /></a>

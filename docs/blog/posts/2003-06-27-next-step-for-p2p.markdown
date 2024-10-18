@@ -1,0 +1,13 @@
+---
+title: Next step for P2P
+date: 2003-06-27
+slug: next-step-for-p2p
+layout: post
+categories:
+  - personal
+comments: true
+---
+
+<b>Next step for P2P</b><br /><br />The struggle of RIAA to control P2P is a truly fascinating battle to follow. First they shut down Napster (and Audiogalaxy), the P2P community responded by creating decentralizd networks. Then they tried flodding the networks with "fake" files, the community counterd with hashing.<br /><br />Now they want to go after individual users!<br />But fear not, the developers have an answer up their sleeve. The way the RIAA tries to go after users is to obtain their IPs and then their identity from the ISPs. <br />The internet is based on the TCP/IP protocol, which requires both sides to know their IPs in order for any information to be exchanged. There is no way to really hide or mask your own IP, except one...<br /><br />
+<!--more-->
+<b>Distributed proxying</b><br />In order to mask your IP you need to go through a PROXY server. This means that you send your TCP request to a server, which then sends it on its way, recieves the answer and sends it back to you. <br />Unfortunatelly, in this case the owner of the proxy server could be held responsible by the RIAA....<br /><br />Alas, there is an answer: incorporate the proxy software into the P2P client.<br />If you do that, then you can assign every user a unique number (call it the <i>session number</i>) and make him anonymous. The user would send all his requests not directly to another user, but to a randomly chosen user nearby. The request would wonder a little trying to find the user with the appropriate session number and then come back the way it came. It would be P2P2P2P rather then P2P :)<br /><br />The process would have to be optimized of course (maybe by incorporation of super nodes), and even then the speed of the network would fall. But just remember how dramatically the initial decetralization of P2P networks slowed them down. Network bandwith is going up and will continue to do so, eventually these obsicles will be overcome.<br /><br />Moreover, a session number does not have to be constant. It can change everytime you restart your program, or even more often, making you an untraceable moving target.<br /><br />I am  not sure how much of this is already being done by Filetopia, but my advice is: If you are in USA and you share a lot of files, switch to Filetopia until the other networks incorporate some distributed proxying.<br /><br /><hr><br /><a href="http://www.slyck.com/forums/viewtopic.php?p=8033"> Add a comment... </a>

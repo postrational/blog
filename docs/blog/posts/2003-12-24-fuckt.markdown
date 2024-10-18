@@ -1,0 +1,12 @@
+---
+title: Fuckt
+date: 2003-12-24
+slug: fuckt
+layout: post
+categories:
+  - personal
+comments: true
+draft: true
+---
+
+<img src="http://www.pg.gda.pl/~karzyn/fuckt.gif" border="0" alt="Fuckt -- Gazeta ociezalych umyslowo" />

@@ -1,0 +1,19 @@
+<!-- Copyright and theme information -->
+<div class="md-copyright">
+  {% if config.copyright %}
+    <div class="md-copyright__highlight">
+      {{ config.copyright }}
+
+  {% if not config.extra.generator == false %}
+    / Theme:
+    <a
+      href="https://squidfunk.github.io/mkdocs-material/"
+      target="_blank" rel="noopener"
+    >
+      Material
+    </a>
+  {% endif %}
+    </div>
+  {% endif %}
+
+</div>

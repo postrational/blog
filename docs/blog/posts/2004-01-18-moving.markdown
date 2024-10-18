@@ -1,0 +1,20 @@
+---
+title: Moving
+date: 2004-01-18
+slug: moving
+layout: post
+categories:
+  - personal
+comments: true
+draft: true
+---
+
+Hi...
+As you can see, I'm moving my blog to a new software system.
+The new program is called Movable Type and should be more flexible and have more features then the previous one.
+
+I've just imported the content of my old blog (which was almost easy), but I will work on the templates (look and feel) another time.
+
+The old blog can still be found at:
+<A href="http://www.lonet.gdynia.pl/~mike/nibylog/nibylog.php">
+http://www.lonet.gdynia.pl/~mike/nibylog/nibylog.php</A>

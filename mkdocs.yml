@@ -1,0 +1,65 @@
+site_name: Michał Karzyński
+site_url: https://michal.karzynski.pl
+copyright: © Michał Karzyński
+nav:
+  - Blog:
+    - blog/index.md
+extra:
+  social:
+  - icon: fontawesome/brands/github
+    name: postrational on GitHub
+    link: https://github.com/postrational
+  - icon: fontawesome/brands/linkedin
+    name: My LinkedIn profile
+    link: http://www.linkedin.com/pub/micha%C5%82-karzy%C5%84ski/9/7a7/ba3
+  - icon: fontawesome/brands/lastfm
+    name: postrational on lastfm
+    link: https://www.last.fm/user/postrational
+  - icon: /fontawesome/regular/envelope
+    name: send me an email
+    link: mailto:contact@karzynski.pl
+theme:
+  name: material
+  logo: images/meditate-retina.png
+  favicon: images/meditate-retina.png
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to dark mode
+    - scheme: slate
+      primary: teal
+      toggle:
+        icon: material/brightness-5
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.indexes
+    - content.code.copy
+  custom_dir: overrides
+plugins:
+  - blog:
+      archive_url_format: "{date}"
+  - search
+  - tags
+validation:
+  links:
+    not_found: warn
+    anchors: info
+    absolute_links: ignore
+    unrecognized_links: info
+markdown_extensions:
+  - admonition
+  - tables
+  - footnotes
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.superfences
