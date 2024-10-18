@@ -2,14 +2,14 @@
 layout: post
 title: "(...)"
 date: "2004-09-10"
-permalink: "/blog/2004/09/10//"
+permalink: "/blog/2004/09/10/stiglitz/"
 comments: true
 categories: personal
 published: false
-tags: 
+tags:
 ---
 
 > "What obligations the citizens of one country owe to citizens of another is a question that goes to the heart of what is involved in being a nation-state and in acting as a responsible human being. Is it morally legitimate for US citizens to pay taxes to provide fellow Americans with a minimum standard of health care under Medicaid, or a minimum standard of nutrition through food stamps, that is far above what the average Angolan receives&#8212;and not at the same time be willing to pay the costs of bringing Angola, and the rest of the world's low-income countries, up to that standard? Most Americans will readily answer yes. But as philosophers like John Rawls and Thomas Pogge have argued, wholly apart from the practical benefits that we might gain from alleviating human misery abroad, justifying in moral terms why we owe more to strangers who are close at hand than we owe to strangers who are far away turns out to be complicated and, in the end, extremely difficult."
 
-> - from <a href="http://www.nybooks.com/articles/15630">Globalization: Stiglitz's Case by Benjamin M. Friedman</a> 
+> - from <a href="http://www.nybooks.com/articles/15630">Globalization: Stiglitz's Case by Benjamin M. Friedman</a>
 <i>New York Times Review of Books</i>

@@ -3,7 +3,8 @@ layout: post
 title: "Top 20 EuroPython 2019 talks"
 date: 2019-07-15 20:48
 comments: true
-published: true
+published: false
+categories: tech
 tags: python europython talks
 ---
 

@@ -196,7 +196,7 @@ Once you have a `setup.py` file, you can use it to build your Python project's d
     $ python setup.py sdist
     $ python setup.py bdist_wheel
 
-The `sdist` command creates a source distribution (such as a tarball or zip file with Python source code). `bdist_wheel` creates a binary Wheel distribution file which your users may download from PyPI in the future. Both distribution files will be placed in the `dist` subdirectory. 
+The `sdist` command creates a source distribution (such as a tarball or zip file with Python source code). `bdist_wheel` creates a binary Wheel distribution file which your users may download from PyPI in the future. Both distribution files will be placed in the `dist` subdirectory.
 
 > %tip%
 > The `bdist_wheel` command comes from the `wheel` package.
@@ -339,9 +339,9 @@ From now on, each time you run `git commit` Black will be called to check your s
     (my_venv) $ git commit
     black....................................................................Failed
     hookid: black
-    
+
     Files were modified by this hook. Additional output:
-    
+
     reformatted gym_demo/demo.py
     All done! ✨ 🍰 ✨
     1 file reformatted.
@@ -354,7 +354,7 @@ Now simply re-add the reformatted file with `git add` and commit again.
 
 Python has a great set of code linters, which can help you avoid making common mistakes and keep your style in line with PEP8 and other standard conventions. Many of these tools are maintained by the [Python Code Quality Authority][pycqa].
 
-My favorite Python linting tool is [Flake8][flake8], which checks for compliance with PEP8. It's base functionality can be extended by installing some of its [many plugins][flake8_plugins]. My favorite Flake8 plugins are listed below. 
+My favorite Python linting tool is [Flake8][flake8], which checks for compliance with PEP8. It's base functionality can be extended by installing some of its [many plugins][flake8_plugins]. My favorite Flake8 plugins are listed below.
 
 ```text requirements_test.txt
 flake8
@@ -374,7 +374,7 @@ Once you install all those packages, you can simply run `flake8` to check your c
 ```console
 (my_venv) $ flake8
 ./my_package/my_module.py:1:1: D100 Missing docstring in public module
-``` 
+```
 
 You can [configure Flake8][flake8_configuration] by adding a `[flake8]` configuration section to `setup.cfg`, `tox.ini`, or `.flake8` files in your project's root directory.
 
@@ -441,7 +441,7 @@ ignore=C812,C813,D104,D400,E203
 ```
 
 > %tip%
-> You can use `tox` to easily run tests on multiple Python versions if they are installed in your system. Just extend the `envlist`, e.g. `envlist=py35,py36,py37`. 
+> You can use `tox` to easily run tests on multiple Python versions if they are installed in your system. Just extend the `envlist`, e.g. `envlist=py35,py36,py37`.
 
 If you automate testing using `tox`, you will be able to just run that one command in your continuous integration environment. Make sure you run `tox` on every commit you want to merge.
 
@@ -496,15 +496,15 @@ Writing good documentation is very important for your users. You should start by
 def hello_world() -> Text:
     """Return a greeting."""
     return("Hello World!")
-``` 
+```
 
 The parameters and return values of your functions should also be included in docstrings:
 
 ```python
 def get_columns_count_and_width(strings: List[Text]) -> Tuple[int, int]:
     """Calculate how to break a list of strings into multiple columns.
-    
-    Calculate the optimal column width and number of columns 
+
+    Calculate the optimal column width and number of columns
     to display a list of strings on screen.
 
     :param strings: list of strings
@@ -514,11 +514,11 @@ def get_columns_count_and_width(strings: List[Text]) -> Tuple[int, int]:
 ```
 
 > %tip%
-> Notice, that I'm also using Python3 type annotations to specify parameter and return types.  
+> Notice, that I'm also using Python3 type annotations to specify parameter and return types.
 
 Use the `flake8-docstrings` plugin to verify all your functions have a docstring.
 
-If your project grows larger, you will probably want to create a full-fledged documentation site. You can use [Sphinx][sphinx] or the simpler [MkDocs][mk_docs] to generate the documentation and host the site on [Read the docs][read_the_docs] or [GitHub Pages][github_pages]. 
+If your project grows larger, you will probably want to create a full-fledged documentation site. You can use [Sphinx][sphinx] or the simpler [MkDocs][mk_docs] to generate the documentation and host the site on [Read the docs][read_the_docs] or [GitHub Pages][github_pages].
 
 
 <a name="type-annotations"></a>
@@ -526,7 +526,7 @@ If your project grows larger, you will probably want to create a full-fledged do
 
 Python 3.5 added the option to annotate your code with type information. This is a very useful and clean type of documentation and you should use.
 
-For example, `my_function` below takes a unicode string as an argument and returns a `dict` of strings mapping to numeric or textual values. 
+For example, `my_function` below takes a unicode string as an argument and returns a `dict` of strings mapping to numeric or textual values.
 
 ```python
 def my_function(name: Text) -> Mapping[str, Union[int, float, Text]]:
@@ -595,7 +595,7 @@ language: python
 os: linux
 install:
   - pip install tox
-script: 
+script:
   - tox
 git:
   depth: false
@@ -612,7 +612,7 @@ All you need to do after commiting `.travis.yaml` to your repo, is to log into [
 > %tip%
 > You can [set up branch protection][github_branch_protection] on `master` to require status checks to pass before a PR can be merged.
 
-If you'd like to run your CI on multiple versions of Python or multiple operating systems, you can set up a test matrix like so: 
+If you'd like to run your CI on multiple versions of Python or multiple operating systems, you can set up a test matrix like so:
 
 
 ```yaml .travis.yaml
@@ -666,7 +666,7 @@ I use the [PyUp][pyup] service for this. The service requires no configuration, 
 
 Python unit-testing frameworks have the ability to determine which lines and branches of code were hit when running unit tests. This coverage report is very useful, as it lets you know how much of your code is being exercised by tests and which parts are not.
 
-If you install the `pytest-cov` module, you can use the `--cov` argument to `pytest` to generate a coverage report. 
+If you install the `pytest-cov` module, you can use the `--cov` argument to `pytest` to generate a coverage report.
 
 ```console
 (my_venv) $ pip install pytest pytest-cov
@@ -693,11 +693,11 @@ If you add the `--cov-report=html` argument, you can generate an HTML version of
 
 #### Track test coverage over time
 
-Online services, such as [Coveralls][coveralls] or [Codecov][codecov] can track your code coverage with every commit and on every pull request. You can decide not to accept PRs which decrease your code coverage. See an [example report here][coveralls_report]. 
+Online services, such as [Coveralls][coveralls] or [Codecov][codecov] can track your code coverage with every commit and on every pull request. You can decide not to accept PRs which decrease your code coverage. See an [example report here][coveralls_report].
 
-In order to start using [Coveralls][coveralls], sign up using your GitHub credentials and set up tracking for your repository. 
+In order to start using [Coveralls][coveralls], sign up using your GitHub credentials and set up tracking for your repository.
 
-You can report your coverage using the [`coveralls-python`][coveralls-python] package, which provides the `coveralls` command. You can test it manually by specifying the `COVERALLS_REPO_TOKEN` environment variable. You can find your token by going to your repository's settings on the Coveralls site.  
+You can report your coverage using the [`coveralls-python`][coveralls-python] package, which provides the `coveralls` command. You can test it manually by specifying the `COVERALLS_REPO_TOKEN` environment variable. You can find your token by going to your repository's settings on the Coveralls site.
 
 ```console
 (my_venv) $ pip install coveralls
@@ -720,7 +720,7 @@ commands=
 
 [coveralls]: https://coveralls.io
 [coveralls_report]: https://coveralls.io/builds/23741751/source?filename=gym_demo/demo.py
-[codecov]: https://codecov.io/gh/codecov 
+[codecov]: https://codecov.io/gh/codecov
 [coveralls-python]: https://github.com/coveralls-clients/coveralls-python
 
 
@@ -748,10 +748,10 @@ Before you publish a package, create a release version. Start by bumping your ve
 
 The next step is to [create a release on GitHub][github_release]. This will create a tag you can use to look up the code associated with a specific version of your package.
 
-Now you'll need to set up an account on the [Test version of PyPI][pypi_test]. 
+Now you'll need to set up an account on the [Test version of PyPI][pypi_test].
 
 > %tip%
-> You should always start by uploading your package to the test version of PyPI. You should then test your package from test PyPI on multiple environments to make sure it works, before posting it on the official PyPI. 
+> You should always start by uploading your package to the test version of PyPI. You should then test your package from test PyPI on multiple environments to make sure it works, before posting it on the official PyPI.
 
 Use the following instructions to create your packages and upload them to test PyPI:
 
@@ -773,7 +773,7 @@ Uploading my_package-0.2.2-py3-none-any.whl
 Uploading my-package-0.2.2.tar.gz
 ```
 
-You can now visit your project page on test PyPI under the URL: 
+You can now visit your project page on test PyPI under the URL:
 https://test.pypi.org/project/my-package/
 
 Once you test your package thoroughly, you can repeat the same steps for the official version of PyPI. Just change the upload command to:
@@ -806,7 +806,7 @@ Congratulations and good luck!
 [entry_points_setup_commands]: https://setuptools.readthedocs.io/en/latest/setuptools.html#adding-commands
 [entry_points_script_creation]: https://setuptools.readthedocs.io/en/latest/setuptools.html#automatic-script-creation
 [black_github]: https://github.com/python/black "Black - The Uncompromising Code Formatter"
-[pre_commit]: https://pre-commit.com/ 
+[pre_commit]: https://pre-commit.com/
 [gitignore]: https://github.com/github/gitignore "A collection of .gitignore templates"
 [flake8]: http://flake8.pycqa.org/en/latest/ "Flake8: Your Tool For Style Guide Enforcement"
 [pycqa]: https://github.com/PyCQA "Python Code Quality Authority"
