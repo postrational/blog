@@ -1,0 +1,1412 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://michal.karzynski.pl/blog/2013/09/14/django-in-virtualenv-on-webfactions-apache-with-mod-wsgi/">
+      
+      
+        <link rel="prev" href="../../../08/19/pywaw-presentation/">
+      
+      
+        <link rel="next" href="../../28/website-performance-script-for-the-grinder-using-har2grinder/">
+      
+      
+      <link rel="icon" href="../../../../../images/meditate-retina.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.41">
+    
+    
+      
+        <title>Setting up Django in Virtualenv on WebFaction's Apache with mod_wsgi - Michał Karzyński</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.0253249f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#create-a-new-application" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="Michał Karzyński" class="md-header__button md-logo" aria-label="Michał Karzyński" data-md-component="logo">
+      
+  <img src="../../../../../images/meditate-retina.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Michał Karzyński
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Setting up Django in Virtualenv on WebFaction's Apache with mod_wsgi
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-2.69L23.31 12 20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="Michał Karzyński" class="md-nav__button md-logo" aria-label="Michał Karzyński" data-md-component="logo">
+      
+  <img src="../../../../../images/meditate-retina.png" alt="logo">
+
+    </a>
+    Michał Karzyński
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Blog
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Blog
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_2" id="__nav_1_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Archive
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            Archive
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2023/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2023
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2019/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2019
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2017/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2017
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2016/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2016
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2015/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2015
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2014/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2014
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2013
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2010/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2010
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2009/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2009
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2006/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2006
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2005/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2005
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2004/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2004
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2003/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2003
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2002/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2002
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2001/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2001
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2000/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2000
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Categories
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            Categories
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/personal/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    personal
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/tech/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    tech
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-new-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create a new application
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remove-htdocs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Remove htdocs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-virtualenv" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install Virtualenv
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-virtual-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create a virtual environment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-django-and-other-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install Django and other dependencies
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start-a-django-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      Start a Django project
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#directory-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Directory structure
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configure-an-apache-virtualhost" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure an Apache VirtualHost
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serving-static-and-media-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Serving static and media files
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#separating-development-and-production-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Separating development and production settings
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../../../../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2013-09-14 19:00:00" class="md-ellipsis">September 14, 2013</time>
+                      </div>
+                    </li>
+                    
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+                          <span class="md-ellipsis">
+                            in
+                            
+                              <a href="../../../../category/tech/">tech</a></span>
+                        </div>
+                      </li>
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              6 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+  
+
+<nav class="md-tags" >
+  
+    
+    
+    
+      <span class="md-tag">django</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">virtualenv</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">webfaction</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">apache</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">mod_wsgi</span>
+    
+  
+</nav>
+
+
+
+  <h1>Setting up Django in Virtualenv on WebFaction's Apache with mod_wsgi</h1>
+
+<p>If you want to run a Django application on <a href="http://www.webfaction.com?affiliate=postrational">WebFaction</a>, you may simply use their automatic application creation scripts. Unfortunately, if you want to place your application in a Virtualenv, the automatic installer will not help you. I'm sure that WebFaction will eventually add an  installer to set this up, but for now, you can use the following tutorial. In this text we set up a Django project in a Virtualenv running on WebFaction's Apache with mod_wsgi.</p>
+<!-- more -->
+
+<h3 id="create-a-new-application">Create a new application</h3>
+<p>Let's begin by setting up a generic <code>mod_wsgi</code> application in your WebFaction control panel. Log into the control panel, choose the option to <a href="https://my.webfaction.com/new-application">add a new application</a> and specify the following settings:</p>
+<ul>
+<li>Name: <code>test_app</code></li>
+<li>App category: <code>mod_wsgi</code></li>
+<li>App type : <code>mod_wsgi 3.4 / Python 2.7</code></li>
+</ul>
+<p>The new application will be created in your home directory (<code>~</code>) under: <code>~/webapps/test_app</code>. </p>
+<p>The directory will contain two subdirectories: </p>
+<ul>
+<li><code>apache2</code> - contains the Apache configuration files (<code>apache2/conf</code>) and scripts which let you control the server (<code>apache2/bin</code>)</li>
+<li><code>htdocs</code> - contains default page files. </li>
+</ul>
+<p>Configure a <a href="https://my.webfaction.com/new-website">new website</a> to hook up your application to a domain. Test the website by visiting it in your browser. You should be greeted by a message beginning with the following text:</p>
+<div class="language-text highlight"><pre><span></span><code>Welcome to your mod_wsgi website! It uses: Python 2.7....
+</code></pre></div>
+<p>If you see the above, then the generic application is set up correctly and we can proceed to turn it into a Virtualenv Django application.</p>
+<h3 id="remove-htdocs">Remove htdocs</h3>
+<p>The <code>htdocs</code> directory will not be needed, so feel free to remove it.</p>
+<div class="language-text highlight"><pre><span></span><code>$ cd ~/webapps/test_app
+$ rm -r htdocs
+</code></pre></div>
+<h3 id="install-virtualenv">Install Virtualenv</h3>
+<p>Check if Virtualenv is installed on your server:</p>
+<div class="language-text highlight"><pre><span></span><code>$ virtualenv --version
+-bash: virtualenv: command not found
+</code></pre></div>
+<p>If Virtualenv is installed, you will see a version number when running the above command. If it's missing you'll see a <code>command not found</code> error message instead.</p>
+<p>Steps to install Vitrualenv on a WebFaction server are the following:</p>
+<div class="language-text highlight"><pre><span></span><code>$ mkdir -p ~/lib/python2.7/
+$ easy_install-2.7 pip
+$ pip install virtualenv
+</code></pre></div>
+<p>If you get an permission denied error try this command to install virtualenv inside your user folder:</p>
+<div class="language-text highlight"><pre><span></span><code>$  pip install --user virtualenv
+</code></pre></div>
+<p>Verify that installation was successful:</p>
+<div class="language-text highlight"><pre><span></span><code>$ virtualenv --version
+1.10.1
+</code></pre></div>
+<h3 id="create-a-virtual-environment">Create a virtual environment</h3>
+<p>Let's proceed to turn our application directory into a virtual Python environment:</p>
+<div class="language-text highlight"><pre><span></span><code>$ cd ~/webapps/test_app
+$ virtualenv .
+</code></pre></div>
+<p>This adds the folders and scripts for a virtual environment inside of the directory which WebFaction created for our application.</p>
+<p>You can now activate the created environment:</p>
+<div class="language-text highlight"><pre><span></span><code>$ source bin/activate
+(test_app) $
+</code></pre></div>
+<h3 id="install-django-and-other-dependencies">Install Django and other dependencies</h3>
+<p>Once the initial Virtualenv setup is complete, you can install Django inside it's <code>lib/python2.7/site-packages</code> directory.</p>
+<div class="language-text highlight"><pre><span></span><code>(test_app) $ pip install django
+</code></pre></div>
+<p>Verify that Django installed correctly:</p>
+<div class="language-text highlight"><pre><span></span><code>(test_app) $ django-admin.py --version
+1.5.2
+</code></pre></div>
+<p>Your project will probably depend on other packages. You can install those from a <code>REQUIREMENTS.txt</code> file, which you can generate on your development server with the <code>pip freeze</code> command.</p>
+<div class="language-text highlight"><pre><span></span><code>(test_app) $ pip install -r REQUIREMENTS.txt
+</code></pre></div>
+<h3 id="start-a-django-project">Start a Django project</h3>
+<p>Let's create a new Django project inside the virtual environment:</p>
+<div class="language-text highlight"><pre><span></span><code>(test_app) $ django-admin.py startproject test_django
+</code></pre></div>
+<h3 id="directory-structure">Directory structure</h3>
+<p>At this stage you should have created a directory structure resembling this:</p>
+<div class="language-text highlight"><pre><span></span><code>~/webapps/test_app
+|-- apache2
+|   |-- bin
+|   |   |-- httpd
+|   |   |-- httpd.worker
+|   |   |-- restart             &lt;== Scripts which start, stop and restart Apache
+|   |   |-- start
+|   |   `-- stop
+|   |-- conf
+|   |   |-- httpd.conf          &lt;== Apache configuration file
+|   |   `-- mime.types
+|   |-- lib
+|   |-- logs                    &lt;== Apache error log is here
+|   `-- modules
+|-- bin                         &lt;== Virtualenv scipts and binaries
+|   |-- activate                &lt;== Virtualenv activation script
+|   |-- django-admin.py
+|   |-- easy_install
+|   |-- easy_install-2.7
+|   |-- pip
+|   |-- pip-2.7
+|   |-- python -&gt; python2.7
+|   |-- python2 -&gt; python2.7
+|   `-- python2.7
+|-- include
+|-- lib
+|   `-- python2.7
+|       `-- site-packages       &lt;== Virtualenv&#39;s Python packages directory
+`-- test_django                 &lt;== Your Django project directory
+    |-- manage.py
+    `-- test_django
+        |-- __init__.py
+        |-- settings.py
+        |-- urls.py
+        `-- wsgi.py             &lt;== WSGI script file which Apache runs through mod_wsgi
+</code></pre></div>
+<h3 id="configure-an-apache-virtualhost">Configure an Apache VirtualHost</h3>
+<p>We are now ready to configure Apache to serve our Django-powered webapp. In order to do this, we'll need to modify the contents of the Apache configuration file located under <code>apache2/conf/httpd.conf</code>. Copy the original file to a backup for reference and make a note of the following values:</p>
+<ul>
+<li>port number on which Apache listens to connections. This value is located in the line with the <code>Listen</code> directive of the original <code>httpd.conf</code>. In the example below we set this to <code>12345</code>,</li>
+<li>name of your application (<code>test_app</code>),</li>
+<li>domain name which your website uses (<code>example.com</code>),</li>
+<li>complete path to your application's virtualenv and project directory:
+<code>/home/my_username/webapps/test_app</code> and <code>/home/my_username/webapps/test_app/test_django</code>,</li>
+<li>complete path to your application's WSGI script:
+<code>/home/my_username/webapps/test_app/test_django/test_django/wsgi.py</code>.</li>
+</ul>
+<p>Use these values to customize the configuration template below and save it as your new <code>httpd.conf</code>:</p>
+<div class="language-apache highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">ServerRoot</span><span class="w"> </span><span class="s2">&quot;/home/my_username/webapps/test_app/apache2&quot;</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">LoadModule</span><span class="w"> </span>dir_module<span class="w">        </span>modules/mod_dir.so
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nb">LoadModule</span><span class="w"> </span>env_module<span class="w">        </span>modules/mod_env.so
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nb">LoadModule</span><span class="w"> </span>log_config_module<span class="w"> </span>modules/mod_log_config.so
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nb">LoadModule</span><span class="w"> </span>mime_module<span class="w">       </span>modules/mod_mime.so
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nb">LoadModule</span><span class="w"> </span>rewrite_module<span class="w">    </span>modules/mod_rewrite.so
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nb">LoadModule</span><span class="w"> </span>setenvif_module<span class="w">   </span>modules/mod_setenvif.so
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="nb">LoadModule</span><span class="w"> </span>wsgi_module<span class="w">       </span>modules/mod_wsgi.so
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="nb">KeepAlive</span><span class="w"> </span><span class="k">Off</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="nb">Listen</span><span class="w"> </span><span class="m">12345</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="nb">MaxSpareThreads</span><span class="w"> </span><span class="m">3</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="nb">MinSpareThreads</span><span class="w"> </span><span class="m">1</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="nb">ServerLimit</span><span class="w"> </span><span class="m">1</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="nb">SetEnvIf</span><span class="w"> </span>X-Forwarded-SSL<span class="w"> </span><span class="k">on</span><span class="w"> </span>HTTPS=1
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="nb">ThreadsPerChild</span><span class="w"> </span><span class="m">5</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="nb">WSGIRestrictEmbedded</span><span class="w"> </span><span class="k">On</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="nb">WSGILazyInitialization</span><span class="w"> </span><span class="k">On</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="nb">NameVirtualHost</span><span class="w"> </span>*
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="nt">&lt;VirtualHost</span><span class="w"> </span><span class="s">*</span><span class="nt">&gt;</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">    </span><span class="nb">ServerName</span><span class="w">  </span>example.com
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">    </span><span class="c"># Logging configuration</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">    </span><span class="nb">LogFormat</span><span class="w"> </span><span class="s2">&quot;%{X-Forwarded-For}i %l %u %t \&quot;%r\&quot; %&gt;s %b \&quot;%{Referer}i\&quot; \&quot;%{User-Agent}i\&quot;&quot;</span><span class="w"> </span>combined
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">    </span><span class="nb">CustomLog</span><span class="w"> </span><span class="sx">/home/my_username/logs/user/access_test_app.log</span><span class="w"> </span>combined
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">    </span><span class="nb">ErrorLog</span><span class="w"> </span><span class="sx">/home/my_username/logs/user/error_test_app.log</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">    </span><span class="c"># Django WSGI settings</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="w">    </span><span class="nb">WSGIDaemonProcess</span><span class="w"> </span>test_app<span class="w"> </span>processes=5<span class="w"> </span>python-path=/home/my_username/webapps/test_app/test_django:/home/my_username/webapps/test_app/lib/python2.7/site-packages:/home/my_username/webapps/test_app/lib/python2.7<span class="w"> </span>threads=1
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">    </span><span class="nb">WSGIProcessGroup</span><span class="w"> </span>test_app
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="w">    </span><span class="nb">WSGIScriptAlias</span><span class="w"> </span>/<span class="w"> </span><span class="sx">/home/my_username/webapps/test_app/test_django/test_django/wsgi.py</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="nt">&lt;/VirtualHost&gt;</span>
+</span></code></pre></div>
+<p>Save the configuration to <code>~/webapps/test_app/apache2/conf/httpd.conf</code> and restart Apache.</p>
+<div class="language-text highlight"><pre><span></span><code>$ ./apache2/bin/restart
+</code></pre></div>
+<p>Visit your website again and you should be presented with Django congratulating you for setting your server up correctly.</p>
+<h2 id="serving-static-and-media-files">Serving static and media files</h2>
+<p>The recommended way to serve static and media files on WebFaction is to use Nginx directly. </p>
+<p>Let's begin by creating the directories for static and media files.</p>
+<div class="language-text highlight"><pre><span></span><code>$ cd ~/webapps/test_app
+$ mkdir media static
+</code></pre></div>
+<p>In order to tell Django where the files should be stored, we should place the appropriate lines in the project's <code>settings.py</code> file. I like to keep the location of <code>media</code> and <code>static</code> folders relative to the source code project, so I would set them in this way:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span> <span class="nn">os</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">MEDIA_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;../../media/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;/&#39;</span><span class="p">))</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">STATIC_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;../../static/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;/&#39;</span><span class="p">))</span>
+</span></code></pre></div>
+<p>Let's collect the static files from all applications to the <code>static</code> directory:</p>
+<div class="language-text highlight"><pre><span></span><code>$ cd ~/webapps/test_app
+$ source bin/activate
+(test_app) $ cd test_app
+(test_app) $ python manage.py collecstatic
+</code></pre></div>
+<p>We can now serve our static files. In the WebFaction control panel, add two <a href="https://my.webfaction.com/new-application">new applications</a> named <code>test_app_media</code> and <code>test_app_static</code>. Both will be defined using these settings:</p>
+<ul>
+<li>App category: <code>Symbolic link</code></li>
+<li>App type: <code>Symbolic link to static-only app</code></li>
+<li>Extra info: the path to the file folder, i.e. <code>/home/my_username/webapps/test_app/media</code> or <code>/home/my_username/webapps/test_app/static</code></li>
+</ul>
+<p>The final step is to add these Nginx-powered folders to our website definition. On the website settings screen for your domain, in the Contents section, choose to add an application. Choose the option to reuse an existing application and set the <code>test_app_media</code> to serve everything under <code>http://example.com/media</code> and <code>test_app_static</code> for <code>http://example.com/static</code>.</p>
+<div class="figure">
+<img src="/images/illustrations/2013-09-14/webfaction-website-content.png">
+<div class="legend">Contents section of website settings</div>
+</div>
+
+<h2 id="separating-development-and-production-settings">Separating development and production settings</h2>
+<p>You will want to use slightly different settings for your development and production environments. In order to separate them you can create three separate settings files:</p>
+<ul>
+<li><code>settings.py</code> - global settings, which apply to both environments</li>
+<li><code>settings_dev.py</code> - your development environment specific settings</li>
+<li><code>settings_prod.py</code> - production environment specific settings</li>
+</ul>
+<p>The <code>settings_prod.py</code> file should only contain the settings which are specific to this environment, but also import all the global settings. We can do this by importing global settings like this:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">.settings</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Define production-specific settings </span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">TEMPLATE_DEBUG</span> <span class="o">=</span> <span class="n">DEBUG</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="c1"># ... production server database settings ...</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Django checks the environment variable named <code>DJANGO_SETTINGS_MODULE</code> to determine which settings file to use. If this environment variable is undefined, it will fall back to <code>test_app.settings</code>.</p>
+<p>In order to use your new settings module in the shell, we can add a line to the end of the script which activates our virtual environment (<code>bin/activate</code>).</p>
+<div class="language-text highlight"><pre><span></span><code>export DJANGO_SETTINGS_MODULE=test_app.settings_prod
+</code></pre></div>
+<p>Apache and mod_wsgi don't know about our new settings yet. We can set the <code>DJANGO_SETTINGS_MODULE</code> dynamically inside the <code>wsgi.py</code> script. Create a <code>wsgi_prod.py</code> script which will contain the following:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span> <span class="nn">os</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;DJANGO_SETTINGS_MODULE&quot;</span><span class="p">,</span> <span class="s2">&quot;test_app.settings_prod&quot;</span><span class="p">)</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span> <span class="nn">django.core.wsgi</span> <span class="kn">import</span> <span class="n">get_wsgi_application</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">application</span> <span class="o">=</span> <span class="n">get_wsgi_application</span><span class="p">()</span>
+</span></code></pre></div>
+<p>Now instruct Apache to use this WSGI script by setting the <code>WSGIScriptAlias</code> directive line to:</p>
+<div class="language-apache highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">WSGIScriptAlias</span><span class="w"> </span>/<span class="w"> </span><span class="sx">/home/my_username/webapps/test_app/test_django/test_django/wsgi_prod.py</span>
+</span></code></pre></div>
+<p>Restart Apache and your application should run with production settings applied.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+<!-- Comments -->
+
+<div id="disqus_thread"></div>
+<script>
+    // var disqus_config = function () {
+    // this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    // this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    // };
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://postrational.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- End of comments -->
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <!-- Copyright and theme information -->
+<div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      © Michał Karzyński
+
+  
+    / Theme:
+    <a
+      href="https://squidfunk.github.io/mkdocs-material/"
+      target="_blank" rel="noopener"
+    >
+      Material
+    </a>
+  
+    </div>
+  
+
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/postrational" target="_blank" rel="noopener" title="postrational on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="http://www.linkedin.com/pub/micha%C5%82-karzy%C5%84ski/9/7a7/ba3" target="_blank" rel="noopener" title="My LinkedIn profile" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5m282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.last.fm/user/postrational" target="_blank" rel="noopener" title="postrational on lastfm" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="m225.8 367.1-18.8-51s-30.5 34-76.2 34c-40.5 0-69.2-35.2-69.2-91.5 0-72.1 36.4-97.9 72.1-97.9 66.5 0 74.8 53.3 100.9 134.9 18.8 56.9 54 102.6 155.4 102.6 72.7 0 122-22.3 122-80.9 0-72.9-62.7-80.6-115-92.1-25.8-5.9-33.4-16.4-33.4-34 0-19.9 15.8-31.7 41.6-31.7 28.2 0 43.4 10.6 45.7 35.8l58.6-7c-4.7-52.8-41.1-74.5-100.9-74.5-52.8 0-104.4 19.9-104.4 83.9 0 39.9 19.4 65.1 68 76.8 44.9 10.6 79.8 13.8 79.8 45.7 0 21.7-21.1 30.5-61 30.5-59.2 0-83.9-31.1-97.9-73.9-32-96.8-43.6-163-161.3-163C45.7 113.8 0 168.3 0 261c0 89.1 45.7 137.2 127.9 137.2 66.2 0 97.9-31.1 97.9-31.1"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="mailto:contact@karzynski.pl" target="_blank" rel="noopener" title="send me an email" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M64 112c-8.8 0-16 7.2-16 16v22.1l172.5 141.6c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16zM48 212.2V384c0 8.8 7.2 16 16 16h384c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0zM0 128c0-35.3 28.7-64 64-64h384c35.3 0 64 28.7 64 64v256c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../../../..", "features": ["navigation.sections", "navigation.indexes", "content.code.copy"], "search": "../../../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+    
+  </body>
+</html>
