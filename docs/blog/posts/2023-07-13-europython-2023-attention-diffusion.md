@@ -9,15 +9,15 @@ tags:
   - diffusion
   - GenAI
   - LLM
+  - europython
 comments: true
 ---
 
 # Neural network architectures of LLMs and Diffusion Models
 
-Presentation discussing neural network architectures of Large Language Models and Diffusion Models at EuroPython 2023.
+Talk discussing architectures of generative neural networks: Large Language Models and Diffusion Models.
 
-Slides for a [presentation](https://ep2023.europython.eu/session/understanding-neural-network-architectures-with-attention-and-diffusion/)
-I gave the [EuroPython 2023](https://ep2023.europython.eu/) conference in Prague.
+Slides for a [presentation][abstract] I gave the [EuroPython 2023][ep] conference in Prague, Czechia.
 
 <script defer class="speakerdeck-embed" data-id="f4840978f8f0476b915428e014fade1c" data-ratio="1.7777777777777777" src="//speakerdeck.com/assets/embed.js"></script>
 
@@ -36,3 +36,6 @@ By the end of the talk, you'll have a better understanding of these cutting-edge
 ## Talk recording
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Clh0nJRMvNs?si=MRlJWwT-tUdx-6nQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+[abstract]: https://ep2023.europython.eu/session/understanding-neural-network-architectures-with-attention-and-diffusion/
+[ep]: https://ep2023.europython.eu/
