@@ -1,5 +1,5 @@
 ---
-title: EuroPython 2016 Presentation
+title: Beautiful REST APIs with Flask, Swagger and Flask-RESTPlus
 date: 2016-08-22T14:00:00
 layout: post
 categories:
