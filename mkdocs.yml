@@ -1,9 +1,11 @@
 site_name: Michał Karzyński
 site_url: https://michal.karzynski.pl
 copyright: © Michał Karzyński
+
 nav:
   - Blog:
     - blog/index.md
+
 extra:
   social:
   - icon: fontawesome/brands/github
@@ -18,6 +20,7 @@ extra:
   - icon: /fontawesome/regular/envelope
     name: send me an email
     link: mailto:contact@karzynski.pl
+
 theme:
   name: material
   logo: images/meditate-retina.png
@@ -39,17 +42,20 @@ theme:
     - navigation.indexes
     - content.code.copy
   custom_dir: overrides
+
 plugins:
   - blog:
       archive_url_format: "{date}"
   - search
   - tags
+
 validation:
   links:
     not_found: warn
     anchors: info
     absolute_links: ignore
     unrecognized_links: info
+
 markdown_extensions:
   - admonition
   - tables
