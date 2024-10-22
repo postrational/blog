@@ -1,0 +1,1578 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://michal.karzynski.pl/blog/2015/04/19/packaging-django-applications-as-docker-container-images/">
+      
+      
+        <link rel="prev" href="../../../../2014/06/22/devops-tools-for-everyone---vagrant-puppet-and-webmin/">
+      
+      
+        <link rel="next" href="../../../../2016/06/19/building-beautiful-restful-apis-using-flask-swagger-ui-flask-restplus/">
+      
+      
+      <link rel="icon" href="../../../../../images/meditate-retina.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.42">
+    
+    
+      
+        <title>Packaging Django applications into Docker container images - Michał Karzyński</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.0253249f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#benefits-of-docker" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="Michał Karzyński" class="md-header__button md-logo" aria-label="Michał Karzyński" data-md-component="logo">
+      
+  <img src="../../../../../images/meditate-retina.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Michał Karzyński
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Packaging Django applications into Docker container images
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-2.69L23.31 12 20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="Michał Karzyński" class="md-nav__button md-logo" aria-label="Michał Karzyński" data-md-component="logo">
+      
+  <img src="../../../../../images/meditate-retina.png" alt="logo">
+
+    </a>
+    Michał Karzyński
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../" class="md-nav__link ">
+              
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 14.27 10.64 13A11.24 11.24 0 0 0 5 10.18v6.95c2.61.34 5 1.34 7 2.82 2-1.48 4.39-2.48 7-2.82v-6.95c-2.16.39-4.09 1.39-5.64 2.82M19 8.15c.65-.1 1.32-.15 2-.15v11c-3.5 0-6.64 1.35-9 3.54C9.64 20.35 6.5 19 3 19V8c.68 0 1.35.05 2 .15 2.69.41 5.1 1.63 7 3.39 1.9-1.76 4.31-2.98 7-3.39M12 6c.27 0 .5-.1.71-.29.19-.21.29-.44.29-.71s-.1-.5-.29-.71C12.5 4.11 12.27 4 12 4s-.5.11-.71.29c-.18.21-.29.45-.29.71s.11.5.29.71c.21.19.45.29.71.29m2.12 1.12a2.997 2.997 0 1 1-4.24-4.24 2.997 2.997 0 1 1 4.24 4.24"/></svg>
+  
+  <span class="md-ellipsis">
+    Blog
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Blog
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_2" id="__nav_1_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Archive
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            Archive
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2023/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2023
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2022/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2022
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2019/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2019
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2017/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2017
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2016/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2016
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2015
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2014/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2014
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2013/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2013
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2010/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2010
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2009/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2009
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2006/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2006
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2005/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2005
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2004/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2004
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2003/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2003
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2002/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2002
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2001/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2001
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2000/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2000
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Categories
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            Categories
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/personal/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    personal
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/tech/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    tech
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#benefits-of-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benefits of Docker
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#in-this-article" class="md-nav__link">
+    <span class="md-ellipsis">
+      In this article
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installing-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installing Docker
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-docker-image-with-your-django-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating a Docker image with your Django application
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating a Docker image with your Django application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-an-entry-point-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create an entry-point script
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-the-dockerfile" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create the Dockerfile
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-the-docker-container-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      Build the Docker container image
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-a-docker-container-with-your-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running a Docker container with your application
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Running a Docker container with your application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#running-the-container-in-detached-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running the container in detached mode
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passing-additional-arguments-to-gunicorn" class="md-nav__link">
+    <span class="md-ellipsis">
+      Passing additional arguments to Gunicorn
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backing-up-user-media-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Backing up user media files
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#writing-logs-to-a-directory-on-the-docker-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      Writing logs to a directory on the Docker host
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-custom-django-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using custom Django settings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#running-django-management-commands-in-the-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running Django management commands in the container
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../../../../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2015-04-19 12:40:00" class="md-ellipsis">April 19, 2015</time>
+                      </div>
+                    </li>
+                    
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+                          <span class="md-ellipsis">
+                            in
+                            
+                              <a href="../../../../category/tech/">tech</a></span>
+                        </div>
+                      </li>
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              11 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+  
+
+<nav class="md-tags" >
+  
+    
+    
+    
+      <span class="md-tag">django</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">docker</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">container</span>
+    
+  
+</nav>
+
+
+
+  <h1>Packaging Django applications into Docker container images</h1>
+
+<p><a href="https://www.docker.com/whatisdocker/" title="What is Docker?">Docker</a> is an open-source software container management system. It allows you to create an isolated, self-contained environment to run your application. In this article we will walk thought steps needed to create a Docker image containing a Django application and demonstrate how to run it and access the container.</p>
+<!-- more -->
+
+<h4 id="benefits-of-docker">Benefits of Docker</h4>
+<p>So why is this Docker thing so popular these days? The basic answer is that it makes your applications portable. Django applications can make use of Python's <code>virtualenv</code> to create isolated environments, but if some of your apps use Python 2 and some use Python 3, you may need to install a whole slew of additional libraries on your host server.</p>
+<p>With Docker on the other hand, each container includes a specific version of the Linux kernel and all other dependencies of your app. You install dependencies such as <code>libjpeg</code> in the container, not on the host, so if your apps need different version of this or any other system libraries, you won't run into problems.</p>
+<ul>
+<li>An application running in a Docker container is sandboxed and doesn't have access to the host machine. This limits the potential security implications of a breach if someone were to exploit a bug in your app.</li>
+<li>Docker containers are much lighter then full VMs, because they don't run the operating system and rely on the host's kernel. The only processes running in the container are the ones your application requires.</li>
+<li>Once created the same container can be shared among developers and run in your testing and production environments.</li>
+</ul>
+<p>You can find more information about Docker in its <a href="http://docs.docker.com/faq/" title="Docker - Frequently asked questions">FAQ pages</a>.</p>
+<h3 id="in-this-article">In this article</h3>
+<ul>
+<li>Installing Docker</li>
+<li>Creating a Docker image with your Django application</li>
+<li>Creating an entry-point script which starts Gunicorn</li>
+<li>Creating a Dockerfile</li>
+<li>Building a Docker container image</li>
+<li>Running a Docker container with your application</li>
+<li>Running the container in detached mode</li>
+<li>Passing additional arguments to Gunicorn</li>
+<li>Running Django management commands in the container</li>
+<li>Backing up user media files</li>
+<li>Writing logs to the Docker host</li>
+<li>Running the container with custom Django settings</li>
+</ul>
+<h3 id="prerequisites">Prerequisites</h3>
+<p>The following procedure was tested on systems running <strong>Debian 7</strong> and <strong>Ubuntu 14.04LTS</strong>. Everything should also work other Debian-based distributions. If you're using an RPM-based distro (such as CentOS), you will need to replace the <code>apt-get</code> commands by their <code>yum</code> counterparts and if you're using FreeBSD you can install the components from ports. If you don't have a server to play with, I can recommend the inexpensive VPS servers offered by <a href="https://www.digitalocean.com/?refcode=053914aba44d" title="Digital Ocean VPS Hosting">Digital Ocean</a>.</p>
+<h3 id="installing-docker">Installing Docker</h3>
+<p>A Docker package is available in the <strong>Debian 8</strong> repositories, so installing is as simple as:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo apt-get install docker.io
+</code></pre></div>
+<p>On <strong>Debian 7</strong> and <strong>Ubuntu</strong>, you will have to run an installation script provided by Docker:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo apt-get install wget
+$ wget -qO- https://get.docker.com/ | sh
+</code></pre></div>
+<p>If you want to be able to run Docker containers as your user, not only as <code>root</code>, you should add yourself to the group called <code>docker</code> using the following command. </p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo usermod -aG docker `whoami`
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Remember to log out and back in to pick up your new groups.</p>
+</div>
+<p>Once Docker is installed, you can test it by running the following command. This will take a few minutes, so be patient.</p>
+<div class="language-text highlight"><pre><span></span><code>$ docker run -i -t ubuntu:14.04 /bin/bash
+Unable to find image &#39;ubuntu:14.04&#39; locally
+14.04: Pulling from ubuntu
+511136ea3c5a: Pull complete
+f3c84ac3a053: Pull complete
+a1a958a24818: Pull complete
+9fec74352904: Pull complete
+d0955f21bf24: Already exists
+Digest: sha256:2a214fd5c1c2048ef34bb79b5411efe4aa1e082b53ac1de3191992fe3ec64395
+Status: Downloaded newer image for ubuntu:14.04
+root@a8fd0ab40b7e:/#
+</code></pre></div>
+<p>The above command actually downloaded (pulled) a docker container with Ubuntu 14.04 from the official Docker base images repository. After the image was downloaded, Docker fired up the container and started <code>bash</code> inside. 
+Feel free to look around. It looks like a normal Ubuntu system, except that only your <code>bash</code> process is running here:</p>
+<div class="language-text highlight"><pre><span></span><code>root@a8fd0ab40b7e:/# ps aux
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.0  18160  1984 ?        Ss   13:07   0:00 /bin/bash
+root        23  0.0  0.0  15560  1148 ?        R+   13:10   0:00 ps aux
+</code></pre></div>
+<p>Type <code>exit</code> or hit <code>Ctrl-D</code> to exit <code>bash</code> and stop the container.</p>
+<p>You can list all running Docker containers using the <code>docker ps</code> command. If you add the <code>--all</code> switch you will also list containers, which were running previously, but are currently closed.</p>
+<div class="language-text highlight"><pre><span></span><code>$ docker ps --all
+CONTAINER ID        IMAGE          COMMAND        CREATED          STATUS       PORTS    NAMES
+a8fd0ab40b7e        ubuntu:14.04   &quot;/bin/bash&quot;    6 minutes ago    Exited (0)            sad_galileo
+</code></pre></div>
+<h3 id="creating-a-docker-image-with-your-django-application">Creating a Docker image with your Django application</h3>
+<p>Let's proceed to create the Docker image for our Django application.</p>
+<p>We will need a directory to work in and a copy of our application's source. Let's create a directory called <code>dockyard</code>, where we will be making our containers and a subdirectory for the Docker image we are creating.</p>
+<div class="language-text highlight"><pre><span></span><code>$ mkdir -p dockyard/hello_django_docker
+$ cd dockyard/hello_django_docker
+</code></pre></div>
+<p>For the purposes of this article I uploaded a sample Django app to Github, so we can grab a copy of the source code using the following command:</p>
+<div class="language-text highlight"><pre><span></span><code>$ git clone https://github.com/postrational/hello_django.git
+</code></pre></div>
+<p>We should now have a working directory containing the source code of our Django application. Please note that I assume that a PIP-compatible <code>requirements.txt</code> file and the Django <code>manage.py</code> script are in the main source code directory named <code>hello_django</code>. The project's <code>settings.py</code> file is located in the subdirectory <code>hello</code>.</p>
+<div class="language-text highlight"><pre><span></span><code>~/dockyard/hello_django_docker    # Our working directory
+`-- hello_django                  # Main project source directroy (from repo)
+    |-- hello
+    |   |-- __init__.py
+    |   |-- settings.py           # Project settings
+    |   |-- urls.py
+    |   `-- wsgi.py               # Project&#39;s WSGI start script
+    |-- manage.py                 # Django&#39;s management command
+    |-- project_application_1
+    |   `-- (more files...)
+    |-- project_application_2
+    |   `-- (more files...)
+    `-- requirements.txt          # File generated using pip freeze
+</code></pre></div>
+<p>With the code in place, let's proceed to create Docker-related files.</p>
+<h4 id="create-an-entry-point-script">Create an entry-point script</h4>
+<p>A Docker container can use an script as the default command which will be fired when the container is run.
+In our case we will use the following script as the entry point.</p>
+<div class="language-bash highlight"><span class="filename">docker-entrypoint.sh</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="ch">#!/bin/bash</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>python<span class="w"> </span>manage.py<span class="w"> </span>migrate<span class="w">                  </span><span class="c1"># Apply database migrations</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>python<span class="w"> </span>manage.py<span class="w"> </span>collectstatic<span class="w"> </span>--noinput<span class="w">  </span><span class="c1"># Collect static files</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Prepare log files and start outputting logs to stdout</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>touch<span class="w"> </span>/srv/logs/gunicorn.log
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>touch<span class="w"> </span>/srv/logs/access.log
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">0</span><span class="w"> </span>-f<span class="w"> </span>/srv/logs/*.log<span class="w"> </span><span class="p">&amp;</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Start Gunicorn processes</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="nb">echo</span><span class="w"> </span>Starting<span class="w"> </span>Gunicorn.
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="nb">exec</span><span class="w"> </span>gunicorn<span class="w"> </span>hello.wsgi:application<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span>--name<span class="w"> </span>hello_django<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span>--bind<span class="w"> </span><span class="m">0</span>.0.0.0:8000<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span>--workers<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span>--log-level<span class="o">=</span>info<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span>--log-file<span class="o">=</span>/srv/logs/gunicorn.log<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span>--access-logfile<span class="o">=</span>/srv/logs/access.log<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
+</span></code></pre></div>
+<p>The above entry point script does a few things:</p>
+<ul>
+<li>starts by running a few management commands, to apply the changes made in the application source code</li>
+<li>proceeds to create two log files in <code>/srv/logs/</code> and to run the <code>tail -f</code> command which will output the logs to the console</li>
+<li>finally is starts <code>gunicorn</code> which will serve our Django application</li>
+<li>the <code>"$@"</code> notation in the last line will allow you to pass additional arguments to <code>gunicorn</code> when you start the container.</li>
+</ul>
+<p>Save the script as <code>docker-entrypoint.sh</code> and change its permissions to make it executable:</p>
+<div class="language-text highlight"><pre><span></span><code>$ chmod u+x docker-entrypoint.sh
+</code></pre></div>
+<h4 id="create-the-dockerfile">Create the Dockerfile</h4>
+<p>We will now make the container definition file named <code>Dockerfile</code>. Create the file and give it the following content.</p>
+<div class="language-make highlight"><span class="filename">Dockerfile</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c">############################################################</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c"># Dockerfile to run a Django-based web application</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c"># Based on an Ubuntu Image</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c">############################################################</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c"># Set the base image to use to Ubuntu</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="nf">FROM ubuntu</span><span class="o">:</span>14.04
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c"># Set the file maintainer (your name - the file&#39;s author)</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="err">MAINTAINER</span><span class="w"> </span><span class="err">Michal</span><span class="w"> </span><span class="err">Karzynski</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="c"># Set env variables used in this Dockerfile (add a unique prefix, such as DOCKYARD)</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="c"># Local directory with project source</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="err">ENV</span><span class="w"> </span><span class="nv">DOCKYARD_SRC</span><span class="o">=</span>hello_django
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="c"># Directory in container for all project files</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="err">ENV</span><span class="w"> </span><span class="nv">DOCKYARD_SRVHOME</span><span class="o">=</span>/srv
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="c"># Directory in container for project source files</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="err">ENV</span><span class="w"> </span><span class="nv">DOCKYARD_SRVPROJ</span><span class="o">=</span>/srv/hello_django
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="c"># Update the default application repository sources list</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="err">RUN</span><span class="w"> </span><span class="err">apt-get</span><span class="w"> </span><span class="err">update</span><span class="w"> </span><span class="err">&amp;&amp;</span><span class="w"> </span><span class="err">apt-get</span><span class="w"> </span><span class="err">-y</span><span class="w"> </span><span class="err">upgrade</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="err">RUN</span><span class="w"> </span><span class="err">apt-get</span><span class="w"> </span><span class="err">install</span><span class="w"> </span><span class="err">-y</span><span class="w"> </span><span class="err">python</span><span class="w"> </span><span class="err">python-pip</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="c"># Create application subdirectories</span>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="err">WORKDIR</span><span class="w"> </span><span class="err">$DOCKYARD_SRVHOME</span>
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="err">RUN</span><span class="w"> </span><span class="err">mkdir</span><span class="w"> </span><span class="err">media</span><span class="w"> </span><span class="err">static</span><span class="w"> </span><span class="err">logs</span>
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="err">VOLUME</span><span class="w"> </span><span class="err">[</span><span class="s2">&quot;$DOCKYARD_SRVHOME/media/&quot;</span><span class="err">,</span><span class="w"> </span><span class="s2">&quot;$DOCKYARD_SRVHOME/logs/&quot;</span><span class="err">]</span>
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="c"># Copy application source code to SRCDIR</span>
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="err">COPY</span><span class="w"> </span><span class="err">$DOCKYARD_SRC</span><span class="w"> </span><span class="err">$DOCKYARD_SRVPROJ</span>
+</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>
+</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="c"># Install Python dependencies</span>
+</span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="err">RUN</span><span class="w"> </span><span class="err">pip</span><span class="w"> </span><span class="err">install</span><span class="w"> </span><span class="err">-r</span><span class="w"> </span><span class="err">$DOCKYARD_SRVPROJ/requirements.txt</span>
+</span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>
+</span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="c"># Port to expose</span>
+</span><span id="__span-1-36"><a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="err">EXPOSE</span><span class="w"> </span><span class="err">8000</span>
+</span><span id="__span-1-37"><a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>
+</span><span id="__span-1-38"><a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="c"># Copy entrypoint script into the image</span>
+</span><span id="__span-1-39"><a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="err">WORKDIR</span><span class="w"> </span><span class="err">$DOCKYARD_SRVPROJ</span>
+</span><span id="__span-1-40"><a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a><span class="err">COPY</span><span class="w"> </span><span class="err">./docker-entrypoint.sh</span><span class="w"> </span><span class="err">/</span>
+</span><span id="__span-1-41"><a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a><span class="err">ENTRYPOINT</span><span class="w"> </span><span class="err">[</span><span class="s2">&quot;/docker-entrypoint.sh&quot;</span><span class="err">]</span>
+</span></code></pre></div>
+<p><code>Dockerfile</code> specifies the steps needed to create our container image:</p>
+<ol>
+<li>Use Ubuntu 14.04 as the base image of our container. Docker will download the image named <code>ubuntu:14.04</code> and all subsequent commands will be executed inside of a running container with this base OS.</li>
+<li>We set some environment variables in our container using the <code>ENV</code> commands. These variables can be used later in the <code>Dockerfile</code>, but will also be available in the environment of all programs executed in the container. For this reason we use a prefix (<code>DOCKYARD</code>), so that our variables don't accidentally override anything else.</li>
+<li>We run <code>apt-get</code> to install any system tools and libraries we may need.</li>
+<li>We prepare all directories our application will use in the <code>/srv/</code> directory of our container. Using the <code>VOLUME</code> command we make some of these directories available to other containers. This will come in handy later, see "Backing up user media files".</li>
+<li>Next we use the <code>COPY</code> command to copy the source code of our app into the container.</li>
+<li>We use the <code>requirements.txt</code> file from the source code to install Python dependencies.</li>
+<li>We use the <code>EXPOSE</code> command to make the Gunicorn port (8000) accessible outside of our container.</li>
+<li>Finally we copy over <code>docker-entrypoint.sh</code> and define it as the script which should execute when the container is started.</li>
+</ol>
+<p>You may want to refer to the <a href="https://docs.docker.com/reference/builder/" title="Dockerfile reference">Dockerfile documentation</a> for more information about the available commands.</p>
+<h4 id="build-the-docker-container-image">Build the Docker container image</h4>
+<p>All the pieces are now in place. Let's just review to make sure the files we created are in the right spot:</p>
+<div class="language-text highlight"><pre><span></span><code>~/dockyard/hello_django_docker
+|-- docker-entrypoint.sh         # We added the executable entry script here
+|-- Dockerfile                   # And the Dockerfile here
+`-- hello_django
+    |-- hello
+    |   |-- __init__.py
+    |   |-- settings.py
+    |   |-- urls.py
+    |   `-- wsgi.py
+    |-- manage.py
+    |-- project_application_1
+    |-- project_application_2
+    `-- requirements.txt
+</code></pre></div>
+<p>We can now build the Docker container image. I will call the image <code>michal/hello_django</code>. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Docker image names follow the convention of <code>user-name/image-name</code>. When you upload your image to a repository it will be added to your user account based on the name.</p>
+<p>$ docker build -t michal/hello_django ~/dockyard/hello_django_docker
+Sending build context to Docker daemon 80.38 kB
+Sending build context to Docker daemon
+Step 0 : FROM ubuntu:14.04
+(...)
+Successfully built 03c7aeb70a09</p>
+</div>
+<p>You will see output of many commands as the container is put together. At the end you should be able to see you newly created image when running the <code>docker images</code> command:</p>
+<div class="language-text highlight"><pre><span></span><code>$ docker images
+REPOSITORY            TAG      IMAGE ID       CREATED         VIRTUAL SIZE
+michal/hello_django   latest   17a441b8bdbd   2 seconds ago   394.6 MB
+</code></pre></div>
+<h3 id="running-a-docker-container-with-your-application">Running a Docker container with your application</h3>
+<p>Now that the container image is created, we can use it to start a container.</p>
+<div class="language-text highlight"><pre><span></span><code>$ docker run --publish=8001:8000 michal/hello_django:latest
+</code></pre></div>
+<p>This command starts a new container from the <code>michal/hello_django</code> image.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It also makes the container's port 8000, which is the default Gunicorn port available on port 8001 of the Docker host. Reassigning ports in this way allows you to have multiple Django applications running in different containers. You just need to assign port 8000 of each container to a different port on the Docker host.</p>
+</div>
+<p>Once the container is started in this way, you should be able to navigate to port 8001 of the Docker host and see the famous Django start page declaring that "It worked!".</p>
+<p>Visit your docker host in a browser (use the IP or domain of you machine): http://docker.host:8001</p>
+<p>You can stop the container by hitting Ctrl-C in the terminal.</p>
+<h4 id="running-the-container-in-detached-mode">Running the container in detached mode</h4>
+<p>Starting and stopping a container as we did above is useful for debugging, but in most other cases you will want to start the container without attaching it to a terminal session. </p>
+<p>Use the <code>--detach=true</code> argument when starting the container.</p>
+<div class="language-text highlight"><pre><span></span><code>$ docker run --name=hello_django \
+    --detach=true \
+    --restart=always \
+    --publish=8001:8000 \
+    michal/hello_django:latest
+81512acac0e4875a218587737ea31ce09aae746e4a8248461e16ab601bb1b0aa
+</code></pre></div>
+<p>Note, that we specified the name of the container (<code>--name=hello_django</code>). We also specified that the container should always be restarted if the process inside stops or crashes (<code>--restart=always</code>).</p>
+<p>You can now check that the container is running by listing all running Docker containers using the <code>docker ps</code> command.</p>
+<div class="language-text highlight"><pre><span></span><code>$ docker ps
+CONTAINER ID        IMAGE                        COMMAND                CREATED             STATUS              PORTS                    NAMES
+2c7cbc6fd5b8        michal/hello_django:latest   &quot;/docker-entrypoint.   3 seconds ago       Up 3 seconds        0.0.0.0:8001-&gt;8000/tcp   hello_django
+</code></pre></div>
+<p>You can also follow the logs which are being output by the processes running in the container using the <code>docker logs</code> command.</p>
+<div class="language-text highlight"><pre><span></span><code>$ docker logs -f hello_django
+</code></pre></div>
+<p>You can stop and restart the container:</p>
+<div class="language-text highlight"><pre><span></span><code>$ docker stop hello_django
+$ docker start hello_django
+$ docker restart hello_django
+</code></pre></div>
+<p>And you can delete the container when you're done with it.</p>
+<div class="language-text highlight"><pre><span></span><code>$ docker stop hello_django
+$ docker rm hello_django
+</code></pre></div>
+<h4 id="passing-additional-arguments-to-gunicorn">Passing additional arguments to Gunicorn</h4>
+<p>Docker will pass any arguments specified after the name of the image to the command which starts the container. In our case those arguments will be passed to the <code>docker-entrypoint.sh</code> script, which in turn will pass them to the <code>gunicorn</code> command which it starts.</p>
+<p>If we want to change the number of Gunicorn worker processes running in the container, we just need to add the <code>--workers</code> argument to the end of <code>docker run</code>.</p>
+<div class="language-text highlight"><pre><span></span><code>$ docker run \
+    michal/hello_django:latest \
+    --workers 5
+</code></pre></div>
+<h4 id="backing-up-user-media-files">Backing up user media files</h4>
+<p>As we noted earlier, the <code>VOLUME</code> command in the Dockerfile made some directories accessible from other containers. If you would like to make a backup up of files stored in the <code>/srv/media/</code> directory, you can start another container using the <code>--volumes-from</code> argument. The volume directories will be accessible in the newly stared container.</p>
+<div class="language-text highlight"><pre><span></span><code>$ docker run --rm -i -t --volumes-from=hello_django ubuntu:14.04 /bin/bash
+root@ed95f0967489:/# cd /srv/media/
+root@d0198a264b3a:/srv/media# apt-get install -y ssh-client
+root@d0198a264b3a:/srv/media# scp -r * user@remote-host:~/path/to/backup
+</code></pre></div>
+<p>You can find more information about <a href="http://docs.docker.com/userguide/dockervolumes/" title="Managing Data in Containers">managing volumes in containers in the docs</a>.</p>
+<h4 id="writing-logs-to-a-directory-on-the-docker-host">Writing logs to a directory on the Docker host</h4>
+<p>You can also mount a Docker host machine directory as a volume inside the container, using the <code>--volume</code> argument.</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo mkdir -p /var/log/webapps/hello
+$ docker run --name=hello_django \
+    --detach=true \
+    --restart=always \
+    --publish=8001:8000 \
+    --volume=/var/log/webapps/hello:/srv/logs \
+    michal/hello_django:latest \
+    --workers 5
+$ tail -f /var/log/webapps/hello/*.log
+</code></pre></div>
+<p>You can find more information about <a href="http://docs.docker.com/userguide/dockervolumes/" title="Managing Data in Containers">managing volumes in containers in the docs</a>.</p>
+<h4 id="using-custom-django-settings">Using custom Django settings</h4>
+<p>In many cases you will want to use different settings when running your Django application in development, during testing and in production. </p>
+<p>In order to do this, create a new settings file on the Docker host. Let's assume you save it in the directory <code>/etc/webapps/hello_django/local_settings.py</code>. In the file import all of your project's default settings and override only what's needed. </p>
+<div class="language-python highlight"><span class="filename">local_settings.py</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>    <span class="kn">from</span> <span class="nn">hello.settings</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>        <span class="c1"># Databases for this instance of the container</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="p">}</span>
+</span></code></pre></div>
+<p>You can then use the <code>--volume</code> argument to mount the single file <code>local_settings.py</code> into your container and use the <code>--env</code> argument to set the <code>DJANGO_SETTINGS_MODULE</code> environment variable to the new settings module.</p>
+<div class="language-text highlight"><pre><span></span><code>$ docker run --name=hello_django \
+    --detach=true \
+    --restart=always \
+    --publish=8001:8000 \
+    --env=&quot;DJANGO_SETTINGS_MODULE=hello.local_settings&quot; \
+    --volume=/etc/webapps/hello_django/local_settings.py:/srv/hello_django/hello/local_settings.py \
+    michal/hello_django:latest \
+    --workers 5
+</code></pre></div>
+<h4 id="running-django-management-commands-in-the-container">Running Django management commands in the container</h4>
+<p>You will probably want to run some Django management commands on the Docker host. In order to do this you can start another container from the same image and specify another command which will be started instead of the entrypoint script. If you use <code>/bin/bash</code>, you will arrive at a shell in the container. From here you can execute Django's <code>manage.py</code> commands.</p>
+<div class="language-text highlight"><pre><span></span><code>$ docker run --rm -i -t --entrypoint=/bin/bash michal/hello_django:latest
+root@ac0073a6bb9c:/srv/hello_django# ./manage.py createsuperuser
+Username (leave blank to use &#39;root&#39;): michal
+Email address: michal@docker.image
+Password:
+Password (again):
+Superuser created successfully.
+</code></pre></div>
+<p>Thanks for reading. If you find any issues with this article of have any other ideas, leave a comment below.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+<!-- Comments -->
+
+<div id="disqus_thread"></div>
+<script>
+    // var disqus_config = function () {
+    // this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    // this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    // };
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://postrational.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- End of comments -->
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <!-- Copyright and theme information -->
+<div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      © Michał Karzyński
+
+  
+    / Theme:
+    <a
+      href="https://squidfunk.github.io/mkdocs-material/"
+      target="_blank" rel="noopener"
+    >
+      Material
+    </a>
+  
+    </div>
+  
+
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/postrational" target="_blank" rel="noopener" title="postrational on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="http://www.linkedin.com/pub/micha%C5%82-karzy%C5%84ski/9/7a7/ba3" target="_blank" rel="noopener" title="My LinkedIn profile" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5m282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.last.fm/user/postrational" target="_blank" rel="noopener" title="postrational on lastfm" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="m225.8 367.1-18.8-51s-30.5 34-76.2 34c-40.5 0-69.2-35.2-69.2-91.5 0-72.1 36.4-97.9 72.1-97.9 66.5 0 74.8 53.3 100.9 134.9 18.8 56.9 54 102.6 155.4 102.6 72.7 0 122-22.3 122-80.9 0-72.9-62.7-80.6-115-92.1-25.8-5.9-33.4-16.4-33.4-34 0-19.9 15.8-31.7 41.6-31.7 28.2 0 43.4 10.6 45.7 35.8l58.6-7c-4.7-52.8-41.1-74.5-100.9-74.5-52.8 0-104.4 19.9-104.4 83.9 0 39.9 19.4 65.1 68 76.8 44.9 10.6 79.8 13.8 79.8 45.7 0 21.7-21.1 30.5-61 30.5-59.2 0-83.9-31.1-97.9-73.9-32-96.8-43.6-163-161.3-163C45.7 113.8 0 168.3 0 261c0 89.1 45.7 137.2 127.9 137.2 66.2 0 97.9-31.1 97.9-31.1"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="mailto:contact@karzynski.pl" target="_blank" rel="noopener" title="send me an email" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M64 112c-8.8 0-16 7.2-16 16v22.1l172.5 141.6c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16zM48 212.2V384c0 8.8 7.2 16 16 16h384c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0zM0 128c0-35.3 28.7-64 64-64h384c35.3 0 64 28.7 64 64v256c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../../../..", "features": ["navigation.sections", "navigation.indexes", "content.tooltips", "content.code.copy"], "search": "../../../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1810 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://michal.karzynski.pl/blog/2013/06/09/django-nginx-gunicorn-virtualenv-supervisor/">
+      
+      
+        <link rel="prev" href="../../07/running-drupal-nginx-memcached/">
+      
+      
+        <link rel="next" href="../../../07/14/using-redis-as-django-session-store-and-cache-backend/">
+      
+      
+      <link rel="icon" href="../../../../../images/meditate-retina.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.42">
+    
+    
+      
+        <title>Setting up Django with Nginx, Gunicorn, virtualenv, supervisor and PostgreSQL - Michał Karzyński</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.0253249f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#prerequisites" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="Michał Karzyński" class="md-header__button md-logo" aria-label="Michał Karzyński" data-md-component="logo">
+      
+  <img src="../../../../../images/meditate-retina.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Michał Karzyński
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Setting up Django with Nginx, Gunicorn, virtualenv, supervisor and PostgreSQL
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-2.69L23.31 12 20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="Michał Karzyński" class="md-nav__button md-logo" aria-label="Michał Karzyński" data-md-component="logo">
+      
+  <img src="../../../../../images/meditate-retina.png" alt="logo">
+
+    </a>
+    Michał Karzyński
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../" class="md-nav__link ">
+              
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 14.27 10.64 13A11.24 11.24 0 0 0 5 10.18v6.95c2.61.34 5 1.34 7 2.82 2-1.48 4.39-2.48 7-2.82v-6.95c-2.16.39-4.09 1.39-5.64 2.82M19 8.15c.65-.1 1.32-.15 2-.15v11c-3.5 0-6.64 1.35-9 3.54C9.64 20.35 6.5 19 3 19V8c.68 0 1.35.05 2 .15 2.69.41 5.1 1.63 7 3.39 1.9-1.76 4.31-2.98 7-3.39M12 6c.27 0 .5-.1.71-.29.19-.21.29-.44.29-.71s-.1-.5-.29-.71C12.5 4.11 12.27 4 12 4s-.5.11-.71.29c-.18.21-.29.45-.29.71s.11.5.29.71c.21.19.45.29.71.29m2.12 1.12a2.997 2.997 0 1 1-4.24-4.24 2.997 2.997 0 1 1 4.24 4.24"/></svg>
+  
+  <span class="md-ellipsis">
+    Blog
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Blog
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_2" id="__nav_1_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Archive
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            Archive
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2023/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2023
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2022/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2022
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2019/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2019
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2017/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2017
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2016/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2016
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2015/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2015
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2014/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2014
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2013
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2010/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2010
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2009/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2009
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2006/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2006
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2005/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2005
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2004/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2004
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2003/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2003
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2002/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2002
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2001/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2001
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2000/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2000
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Categories
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            Categories
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/personal/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    personal
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/tech/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    tech
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#update-your-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      Update your system
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#postgresql" class="md-nav__link">
+    <span class="md-ellipsis">
+      PostgreSQL
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application-user" class="md-nav__link">
+    <span class="md-ellipsis">
+      Application user
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-virtualenv-and-create-an-environment-for-you-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install virtualenv and create an environment for you app
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Install virtualenv and create an environment for you app">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-and-activate-an-environment-for-your-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create and activate an environment for your application
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#allowing-other-users-write-access-to-the-application-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      Allowing other users write access to the application directory
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configure-postgresql-to-work-with-django" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure PostgreSQL to work with Django
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gunicorn" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gunicorn
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#starting-and-monitoring-with-supervisor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Starting and monitoring with Supervisor
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nginx" class="md-nav__link">
+    <span class="md-ellipsis">
+      Nginx
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Nginx">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-an-nginx-virtual-server-configuration-for-django" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create an Nginx virtual server configuration for Django
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-directory-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Final directory structure
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uninstalling-the-django-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Uninstalling the Django application
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#different-settings-in-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      Different settings in production
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-multiple-applications" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running multiple applications
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#translations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Translations
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../../../../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2013-06-09 00:00:00" class="md-ellipsis">June 9, 2013</time>
+                      </div>
+                    </li>
+                    
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+                          <span class="md-ellipsis">
+                            in
+                            
+                              <a href="../../../../category/tech/">tech</a></span>
+                        </div>
+                      </li>
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              12 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+  
+
+<nav class="md-tags" >
+  
+    
+    
+    
+      <span class="md-tag">django</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">nginx</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">gunicorn</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">virtualenv</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">supervisord</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">postgresql</span>
+    
+  
+</nav>
+
+
+
+  <h1>Setting up Django with Nginx, Gunicorn, virtualenv, supervisor and PostgreSQL</h1>
+
+<p><a href="http://www.djangoproject.com/">Django</a> is an efficient, versatile and dynamically evolving web application development framework. When Django initially gained popularity, the recommended setup for running Django applications was based around Apache with mod_wsgi. The art of running Django advanced and these days the recommended configuration is more efficient and resilient, but also more complex and includes such tools as: Nginx, Gunicorn, virtualenv, supervisord and PostgreSQL. </p>
+<p>In this text I will explain how to combine all of these components into a Django server running on Linux.</p>
+<!-- more -->
+
+<h3 id="prerequisites">Prerequisites</h3>
+<p>I assume you have a server available on which you have root privileges. I am using a server running Debian 7, so everything here should also work on an Ubuntu server or other Debian-based distribution. If you're using an RPM-based distro (such as CentOS), you will need to replace the <code>aptitude</code> commands by their <code>yum</code> counterparts and if you're using FreeBSD you can install the components from ports.</p>
+<p>If you don't have a server to play with, I would recommend the inexpensive VPS servers offered by <a href="https://www.digitalocean.com/?refcode=053914aba44d" title="Digital Ocean VPS Hosting">Digital Ocean</a>. If you click through <a href="https://www.digitalocean.com/?refcode=053914aba44d" title="Digital Ocean VPS Hosting">this link</a> when signing up, you'll pay a bit of my server bill :)</p>
+<p>I'm also assuming you configured your DNS to point a domain at the server's IP. In this text, I pretend your domain is <code>example.com</code></p>
+<h3 id="update-your-system">Update your system</h3>
+<p>Let's get started by making sure our system is up to date.</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo aptitude update
+$ sudo aptitude upgrade
+</code></pre></div>
+<h3 id="postgresql">PostgreSQL</h3>
+<p>To install PostgreSQL on a Debian-based system run this command:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo aptitude install postgresql postgresql-contrib
+</code></pre></div>
+<p>Create a database user and a new database for the app. Grab a <a href="https://www.grc.com/passwords.htm" title="GRC's Ultra High Security Password Generator">perfect password from GRC</a>.</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo su - postgres
+postgres@django:~$ createuser --interactive -P
+Enter name of role to add: hello_django
+Enter password for new role: 
+Enter it again: 
+Shall the new role be a superuser? (y/n) n
+Shall the new role be allowed to create databases? (y/n) n
+Shall the new role be allowed to create more new roles? (y/n) n
+postgres@django:~$
+
+postgres@django:~$ createdb --owner hello_django hello
+postgres@django:~$ logout
+$
+</code></pre></div>
+<h3 id="application-user">Application user</h3>
+<p>Even though Django has a pretty good <a href="http://django.readthedocs.org/en/latest/releases/security.html">security track record</a>, web applications can become compromised. If the application has limited access to resources on your server, potential damage can also be limited. Your web applications should run as system users with limited privileges.</p>
+<p>Create a user for your app, named <code>hello</code> and assigned to a system group called <code>webapps</code>.</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo groupadd --system webapps
+$ sudo useradd --system --gid webapps --shell /bin/bash --home /webapps/hello_django hello
+</code></pre></div>
+<h3 id="install-virtualenv-and-create-an-environment-for-you-app">Install virtualenv and create an environment for you app</h3>
+<p><a href="http://virtualenv.org/">Virtualenv</a> is a tool which allows you to create separate Python environments on your system. This allows you to run applications with different sets of requirements concurrently (e.g. one based on Django 1.5, another based on 1.6). virtualenv is easy to install on Debian:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo aptitude install python-virtualenv
+</code></pre></div>
+<h4 id="create-and-activate-an-environment-for-your-application">Create and activate an environment for your application</h4>
+<p>I like to keep all my web apps in the <code>/webapps/</code> directory. If you prefer <code>/var/www/</code>, <code>/srv/</code> or something else, use that instead. Create a directory to store your application in <code>/webapps/hello_django/</code> and change the owner of that directory to your application user <code>hello</code></p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo mkdir -p /webapps/hello_django/
+$ sudo chown hello /webapps/hello_django/
+</code></pre></div>
+<p>As the application user create a virtual Python environment in the application directory:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo su - hello
+hello@django:~$ cd /webapps/hello_django/
+hello@django:~$ virtualenv .
+
+New python executable in hello_django/bin/python
+Installing distribute..............done.
+Installing pip.....................done.
+
+hello@django:~$ source bin/activate
+(hello_django)hello@django:~$
+</code></pre></div>
+<p>Your environment is now activated and you can proceed to install Django inside it.</p>
+<div class="language-text highlight"><pre><span></span><code>(hello_django)hello@django:~$ pip install django
+
+Downloading/unpacking django
+(...)
+Installing collected packages: django
+(...)
+Successfully installed django
+Cleaning up...
+</code></pre></div>
+<p>Your environment with Django should be ready to use. Go ahead and create an empty Django project.</p>
+<div class="language-text highlight"><pre><span></span><code>(hello_django)hello@django:~$ django-admin.py startproject hello
+</code></pre></div>
+<p>You can test it by running the development server:</p>
+<div class="language-text highlight"><pre><span></span><code>(hello_django)hello@django:~$ cd hello
+(hello_django)hello@django:~$ python manage.py runserver example.com:8000
+Validating models...
+
+0 errors found
+June 09, 2013 - 06:12:00
+Django version 1.5.1, using settings &#39;hello.settings&#39;
+Development server is running at http://example.com:8000/
+Quit the server with CONTROL-C.
+</code></pre></div>
+<p>You should now be able to access your development server from http://example.com:8000</p>
+<h4 id="allowing-other-users-write-access-to-the-application-directory">Allowing other users write access to the application directory</h4>
+<p>Your application will run as the user <code>hello</code>, who owns the entire application directory. If you want regular user to be able to change application files, you can set the group owner of the directory to <code>users</code> and give the group write permissions.</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo chown -R hello:users /webapps/hello_django
+$ sudo chmod -R g+w /webapps/hello_django
+</code></pre></div>
+<p>You can check what groups you're a member of by issuing the <code>groups</code> command or <code>id</code>.</p>
+<div class="language-text highlight"><pre><span></span><code>$ id
+uid=1000(michal) gid=1000(michal) groups=1000(michal),27(sudo),100(users)
+</code></pre></div>
+<p>If you're not a member of <code>users</code>, you can add yourself to the group with this command:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo usermod -a -G users `whoami`
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Group memberships are assigned during login, so you may need to log out and back in again for the system to recognize your new group.</p>
+</div>
+<h3 id="configure-postgresql-to-work-with-django">Configure PostgreSQL to work with Django</h3>
+<p>In order to use Django with PostgreSQL you will need to install the <code>psycopg2</code> database adapter in your virtual environment. This step requires the compilation of a native extension (written in C). The compilation will fail if it cannot find header files and static libraries required for linking C programs with <code>libpq</code> (library for communication with Postgres) and building Python modules (<code>python-dev</code> package). We have to install these two packages first, then we can install <code>psycopg2</code> using PIP.</p>
+<p>Install dependencies:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo aptitude install libpq-dev python-dev
+</code></pre></div>
+<p>Install <code>psycopg2</code> database adapter:</p>
+<div class="language-text highlight"><pre><span></span><code>(hello_django)hello@django:~$ pip install psycopg2
+</code></pre></div>
+<p>You can now configure the databases section in your <code>settings.py</code>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        <span class="s1">&#39;ENGINE&#39;</span><span class="p">:</span> <span class="s1">&#39;django.db.backends.postgresql_psycopg2&#39;</span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="s1">&#39;hello&#39;</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        <span class="s1">&#39;USER&#39;</span><span class="p">:</span> <span class="s1">&#39;hello_django&#39;</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        <span class="s1">&#39;PASSWORD&#39;</span><span class="p">:</span> <span class="s1">&#39;1Ak5RTQt7mtw0OREsfPhJYzXIak41gnrm5NWYEosCeIduJck10awIzoys1wvbL8&#39;</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        <span class="s1">&#39;HOST&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        <span class="s1">&#39;PORT&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>                      <span class="c1"># Set to empty string for default.</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="p">}</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>And finally build the initial database for Django:</p>
+<div class="language-text highlight"><pre><span></span><code>(hello_django)hello@django:~$ python manage.py migrate
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In older versions of Django the equivalent command was: <code>manage.py syncdb</code></p>
+</div>
+<h3 id="gunicorn">Gunicorn</h3>
+<p>In production we won't be using Django's single-threaded development server, but a dedicated application server called <a href="http://gunicorn.org/">gunicorn</a>.</p>
+<p>Install gunicorn in your application's virtual environment:</p>
+<div class="language-text highlight"><pre><span></span><code>(hello_django)hello@django:~$ pip install gunicorn
+Downloading/unpacking gunicorn
+  Downloading gunicorn-0.17.4.tar.gz (372Kb): 372Kb downloaded
+  Running setup.py egg_info for package gunicorn
+
+Installing collected packages: gunicorn
+  Running setup.py install for gunicorn
+
+    Installing gunicorn_paster script to /webapps/hello_django/bin
+    Installing gunicorn script to /webapps/hello_django/bin
+    Installing gunicorn_django script to /webapps/hello_django/bin
+Successfully installed gunicorn
+Cleaning up...
+</code></pre></div>
+<p>Now that you have gunicorn, you can test whether it can serve your Django application by running the following command:</p>
+<div class="language-text highlight"><pre><span></span><code>(hello_django)hello@django:~$ gunicorn hello.wsgi:application --bind example.com:8001
+</code></pre></div>
+<p>You should now be able to access the Gunicorn server from http://example.com:8001 . I intentionally changed port 8000 to 8001 to force your browser to establish a new connection.</p>
+<p>Gunicorn is installed and ready to serve your app. Let's set some configuration options to make it more useful. I like to set a number of parameters, so let's put them all into a small BASH script, which I save as <code>bin/gunicorn_start</code></p>
+<div class="language-py highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">gunicorn_start.bash</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span>
+<span class="normal"><a href="#__codelineno-1-16">16</a></span>
+<span class="normal"><a href="#__codelineno-1-17">17</a></span>
+<span class="normal"><a href="#__codelineno-1-18">18</a></span>
+<span class="normal"><a href="#__codelineno-1-19">19</a></span>
+<span class="normal"><a href="#__codelineno-1-20">20</a></span>
+<span class="normal"><a href="#__codelineno-1-21">21</a></span>
+<span class="normal"><a href="#__codelineno-1-22">22</a></span>
+<span class="normal"><a href="#__codelineno-1-23">23</a></span>
+<span class="normal"><a href="#__codelineno-1-24">24</a></span>
+<span class="normal"><a href="#__codelineno-1-25">25</a></span>
+<span class="normal"><a href="#__codelineno-1-26">26</a></span>
+<span class="normal"><a href="#__codelineno-1-27">27</a></span>
+<span class="normal"><a href="#__codelineno-1-28">28</a></span>
+<span class="normal"><a href="#__codelineno-1-29">29</a></span>
+<span class="normal"><a href="#__codelineno-1-30">30</a></span>
+<span class="normal"><a href="#__codelineno-1-31">31</a></span>
+<span class="normal"><a href="#__codelineno-1-32">32</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="ch">#!/bin/bash</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="n">NAME</span><span class="o">=</span><span class="s2">&quot;hello_app&quot;</span>                                  <span class="c1"># Name of the application</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="n">DJANGODIR</span><span class="o">=/</span><span class="n">webapps</span><span class="o">/</span><span class="n">hello_django</span><span class="o">/</span><span class="n">hello</span>             <span class="c1"># Django project directory</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="n">SOCKFILE</span><span class="o">=/</span><span class="n">webapps</span><span class="o">/</span><span class="n">hello_django</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">gunicorn</span><span class="o">.</span><span class="n">sock</span>  <span class="c1"># we will communicte using this unix socket</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="n">USER</span><span class="o">=</span><span class="n">hello</span>                                        <span class="c1"># the user to run as</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="n">GROUP</span><span class="o">=</span><span class="n">webapps</span>                                     <span class="c1"># the group to run as</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="n">NUM_WORKERS</span><span class="o">=</span><span class="mi">3</span>                                     <span class="c1"># how many worker processes should Gunicorn spawn</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="n">DJANGO_SETTINGS_MODULE</span><span class="o">=</span><span class="n">hello</span><span class="o">.</span><span class="n">settings</span>             <span class="c1"># which settings file should Django use</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="n">DJANGO_WSGI_MODULE</span><span class="o">=</span><span class="n">hello</span><span class="o">.</span><span class="n">wsgi</span>                     <span class="c1"># WSGI module name</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11"></a>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="n">echo</span> <span class="s2">&quot;Starting $NAME as `whoami`&quot;</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13"></a>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="c1"># Activate the virtual environment</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="n">cd</span> <span class="err">$</span><span class="n">DJANGODIR</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="n">source</span> <span class="o">../</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17"></a><span class="n">export</span> <span class="n">DJANGO_SETTINGS_MODULE</span><span class="o">=</span><span class="err">$</span><span class="n">DJANGO_SETTINGS_MODULE</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18"></a><span class="n">export</span> <span class="n">PYTHONPATH</span><span class="o">=</span><span class="err">$</span><span class="n">DJANGODIR</span><span class="p">:</span><span class="err">$</span><span class="n">PYTHONPATH</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19"></a>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20"></a><span class="c1"># Create the run directory if it doesn&#39;t exist</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21"></a><span class="n">RUNDIR</span><span class="o">=</span><span class="err">$</span><span class="p">(</span><span class="n">dirname</span> <span class="err">$</span><span class="n">SOCKFILE</span><span class="p">)</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22"></a><span class="n">test</span> <span class="o">-</span><span class="n">d</span> <span class="err">$</span><span class="n">RUNDIR</span> <span class="o">||</span> <span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="err">$</span><span class="n">RUNDIR</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23"></a>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24"></a><span class="c1"># Start your Django Unicorn</span>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25"></a><span class="c1"># Programs meant to be run under supervisor should not daemonize themselves (do not use --daemon)</span>
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26"></a><span class="n">exec</span> <span class="o">../</span><span class="nb">bin</span><span class="o">/</span><span class="n">gunicorn</span> <span class="err">$</span><span class="p">{</span><span class="n">DJANGO_WSGI_MODULE</span><span class="p">}:</span><span class="n">application</span> \
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27"></a>  <span class="o">--</span><span class="n">name</span> <span class="err">$</span><span class="n">NAME</span> \
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28"></a>  <span class="o">--</span><span class="n">workers</span> <span class="err">$</span><span class="n">NUM_WORKERS</span> \
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29"></a>  <span class="o">--</span><span class="n">user</span><span class="o">=</span><span class="err">$</span><span class="n">USER</span> <span class="o">--</span><span class="n">group</span><span class="o">=</span><span class="err">$</span><span class="n">GROUP</span> \
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30"></a>  <span class="o">--</span><span class="n">bind</span><span class="o">=</span><span class="n">unix</span><span class="p">:</span><span class="err">$</span><span class="n">SOCKFILE</span> \
+</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31"></a>  <span class="o">--</span><span class="n">log</span><span class="o">-</span><span class="n">level</span><span class="o">=</span><span class="n">debug</span> \
+</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32"></a>  <span class="o">--</span><span class="n">log</span><span class="o">-</span><span class="n">file</span><span class="o">=-</span>
+</span></code></pre></div></td></tr></table></div>
+<p>Set the executable bit on the <code>gunicorn_start</code> script:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo chmod u+x bin/gunicorn_start
+</code></pre></div>
+<p>You can test your <code>gunicorn_start</code> script by running it as the user <code>hello</code>.</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo su - hello
+hello@django:~$ bin/gunicorn_start
+Starting hello_app as hello
+2013-06-09 14:21:45 [10724] [INFO] Starting gunicorn 18.0
+2013-06-09 14:21:45 [10724] [DEBUG] Arbiter booted
+2013-06-09 14:21:45 [10724] [INFO] Listening at: unix:/webapps/hello_django/run/gunicorn.sock (10724)
+2013-06-09 14:21:45 [10724] [INFO] Using worker: sync
+2013-06-09 14:21:45 [10735] [INFO] Booting worker with pid: 10735
+2013-06-09 14:21:45 [10736] [INFO] Booting worker with pid: 10736
+2013-06-09 14:21:45 [10737] [INFO] Booting worker with pid: 10737
+
+^C (CONTROL-C to kill Gunicorn)
+
+2013-06-09 14:21:48 [10736] [INFO] Worker exiting (pid: 10736)
+2013-06-09 14:21:48 [10735] [INFO] Worker exiting (pid: 10735)
+2013-06-09 14:21:48 [10724] [INFO] Handling signal: int
+2013-06-09 14:21:48 [10737] [INFO] Worker exiting (pid: 10737)
+2013-06-09 14:21:48 [10724] [INFO] Shutting down: Master
+$ exit
+</code></pre></div>
+<p>Note the parameters set in <code>gunicorn_start</code>. You'll need to set the paths and filenames to match your setup.</p>
+<p>As a rule-of-thumb set the <code>--workers</code> (<code>NUM_WORKERS</code>) according to the following formula: 2&nbsp;*&nbsp;CPUs&nbsp;+&nbsp;1. The idea being, that at any given time half of your workers will be busy doing I/O. For a single CPU machine it would give you 3.</p>
+<p>The <code>--name</code> (<code>NAME</code>) argument specifies how your application will identify itself in programs such as <code>top</code> or <code>ps</code>. It defaults to <code>gunicorn</code>, which might make it harder to distinguish from other apps if you have multiple Gunicorn-powered applications running on the same server.</p>
+<p>In order for the <code>--name</code> argument to have an effect you need to install a Python module called <code>setproctitle</code>. To build this native extension <code>pip</code> needs to have access to C header files for Python. You can add them to your system with the <code>python-dev</code> package and then install <code>setproctitle</code>.</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo aptitude install python-dev
+(hello_django)hello@django:~$ pip install setproctitle
+</code></pre></div>
+<p>Now when you list processes, you should see which gunicorn belongs to which application.</p>
+<div class="language-text highlight"><pre><span></span><code>$ ps aux
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+(...)
+hello    11588  0.7  0.2  58400 11568 ?        S    14:52   0:00 gunicorn: master [hello_app]
+hello    11602  0.5  0.3  66584 16040 ?        S    14:52   0:00 gunicorn: worker [hello_app]
+hello    11603  0.5  0.3  66592 16044 ?        S    14:52   0:00 gunicorn: worker [hello_app]
+hello    11604  0.5  0.3  66604 16052 ?        S    14:52   0:00 gunicorn: worker [hello_app]
+</code></pre></div>
+<h3 id="starting-and-monitoring-with-supervisor">Starting and monitoring with Supervisor</h3>
+<p>Your <code>gunicorn_start</code> script should now be ready and working. We need to make sure that it starts automatically with the system and that it can automatically restart if for some reason it exits unexpectedly. These tasks can easily be handled by a service called <a href="http://supervisord.org/">supervisord</a>. Installation is simple:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo aptitude install supervisor
+</code></pre></div>
+<p>When Supervisor is installed you can give it programs to start and watch by creating configuration files in the <code>/etc/supervisor/conf.d</code> directory. For our <code>hello</code> application we'll create a file named <code>/etc/supervisor/conf.d/hello.conf</code> with this content:</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">hello.conf</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span>
+<span class="normal"><a href="#__codelineno-2-5">5</a></span>
+<span class="normal"><a href="#__codelineno-2-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="p">[</span><span class="n">program</span><span class="p">:</span><span class="n">hello</span><span class="p">]</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="n">command</span> <span class="o">=</span> <span class="o">/</span><span class="n">webapps</span><span class="o">/</span><span class="n">hello_django</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">gunicorn_start</span>                    <span class="p">;</span> <span class="n">Command</span> <span class="n">to</span> <span class="n">start</span> <span class="n">app</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="n">user</span> <span class="o">=</span> <span class="n">hello</span>                                                          <span class="p">;</span> <span class="n">User</span> <span class="n">to</span> <span class="n">run</span> <span class="k">as</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="n">stdout_logfile</span> <span class="o">=</span> <span class="o">/</span><span class="n">webapps</span><span class="o">/</span><span class="n">hello_django</span><span class="o">/</span><span class="n">logs</span><span class="o">/</span><span class="n">gunicorn_supervisor</span><span class="o">.</span><span class="n">log</span>   <span class="p">;</span> <span class="n">Where</span> <span class="n">to</span> <span class="n">write</span> <span class="n">log</span> <span class="n">messages</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="n">redirect_stderr</span> <span class="o">=</span> <span class="n">true</span>                                                <span class="p">;</span> <span class="n">Save</span> <span class="n">stderr</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">same</span> <span class="n">log</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="n">environment</span><span class="o">=</span><span class="n">LANG</span><span class="o">=</span><span class="n">en_US</span><span class="o">.</span><span class="n">UTF</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="n">LC_ALL</span><span class="o">=</span><span class="n">en_US</span><span class="o">.</span><span class="n">UTF</span><span class="o">-</span><span class="mi">8</span>                       <span class="p">;</span> <span class="n">Set</span> <span class="n">UTF</span><span class="o">-</span><span class="mi">8</span> <span class="k">as</span> <span class="n">default</span> <span class="n">encoding</span>
+</span></code></pre></div></td></tr></table></div>
+<p>You can set <a href="http://supervisord.org/configuration.html#program-x-section-settings">many other options</a>, but this basic configuration should suffice. </p>
+<p>Create the file to store your application's log messages:</p>
+<div class="language-text highlight"><pre><span></span><code>hello@django:~$ mkdir -p /webapps/hello_django/logs/
+hello@django:~$ touch /webapps/hello_django/logs/gunicorn_supervisor.log
+</code></pre></div>
+<p>After you save the configuration file for your program you can ask supervisor to reread configuration files and update (which will start your the newly registered app).</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo supervisorctl reread
+hello: available
+$ sudo supervisorctl update
+hello: added process group
+</code></pre></div>
+<p>You can also check the status of your app or start, stop or restart it using supervisor.</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo supervisorctl status hello                       
+hello                            RUNNING    pid 18020, uptime 0:00:50
+$ sudo supervisorctl stop hello  
+hello: stopped
+$ sudo supervisorctl start hello                        
+hello: started
+$ sudo supervisorctl restart hello 
+hello: stopped
+hello: started
+</code></pre></div>
+<p>Your application should now be automatically started after a system reboot and automatically restarted if it ever crashed for some reason.</p>
+<h3 id="nginx">Nginx</h3>
+<p>Time to set up Nginx as a server for out application and its static files. Install and start Nginx:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo aptitude install nginx
+$ sudo service nginx start
+</code></pre></div>
+<p>You can navigate to your server (http://example.com) with your browser and Nginx should greet you with the words "Welcome to nginx!".</p>
+<h4 id="create-an-nginx-virtual-server-configuration-for-django">Create an Nginx virtual server configuration for Django</h4>
+<p>Each Nginx virtual server should be described by a file in the <code>/etc/nginx/sites-available</code> directory. You select which sites you want to enable by making symbolic links to those in the  <code>/etc/nginx/sites-enabled</code> directory.</p>
+<p>Create a new nginx server configuration file for your Django application running on example.com in <code>/etc/nginx/sites-available/hello</code>. The file should contain something along the following lines. A more detailed example is available <a href="https://github.com/benoitc/gunicorn/blob/master/examples/nginx.conf">from the folks who make Gunicorn</a>.</p>
+<div class="language-py highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">hello.nginxconf</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span>
+<span class="normal"><a href="#__codelineno-3-15">15</a></span>
+<span class="normal"><a href="#__codelineno-3-16">16</a></span>
+<span class="normal"><a href="#__codelineno-3-17">17</a></span>
+<span class="normal"><a href="#__codelineno-3-18">18</a></span>
+<span class="normal"><a href="#__codelineno-3-19">19</a></span>
+<span class="normal"><a href="#__codelineno-3-20">20</a></span>
+<span class="normal"><a href="#__codelineno-3-21">21</a></span>
+<span class="normal"><a href="#__codelineno-3-22">22</a></span>
+<span class="normal"><a href="#__codelineno-3-23">23</a></span>
+<span class="normal"><a href="#__codelineno-3-24">24</a></span>
+<span class="normal"><a href="#__codelineno-3-25">25</a></span>
+<span class="normal"><a href="#__codelineno-3-26">26</a></span>
+<span class="normal"><a href="#__codelineno-3-27">27</a></span>
+<span class="normal"><a href="#__codelineno-3-28">28</a></span>
+<span class="normal"><a href="#__codelineno-3-29">29</a></span>
+<span class="normal"><a href="#__codelineno-3-30">30</a></span>
+<span class="normal"><a href="#__codelineno-3-31">31</a></span>
+<span class="normal"><a href="#__codelineno-3-32">32</a></span>
+<span class="normal"><a href="#__codelineno-3-33">33</a></span>
+<span class="normal"><a href="#__codelineno-3-34">34</a></span>
+<span class="normal"><a href="#__codelineno-3-35">35</a></span>
+<span class="normal"><a href="#__codelineno-3-36">36</a></span>
+<span class="normal"><a href="#__codelineno-3-37">37</a></span>
+<span class="normal"><a href="#__codelineno-3-38">38</a></span>
+<span class="normal"><a href="#__codelineno-3-39">39</a></span>
+<span class="normal"><a href="#__codelineno-3-40">40</a></span>
+<span class="normal"><a href="#__codelineno-3-41">41</a></span>
+<span class="normal"><a href="#__codelineno-3-42">42</a></span>
+<span class="normal"><a href="#__codelineno-3-43">43</a></span>
+<span class="normal"><a href="#__codelineno-3-44">44</a></span>
+<span class="normal"><a href="#__codelineno-3-45">45</a></span>
+<span class="normal"><a href="#__codelineno-3-46">46</a></span>
+<span class="normal"><a href="#__codelineno-3-47">47</a></span>
+<span class="normal"><a href="#__codelineno-3-48">48</a></span>
+<span class="normal"><a href="#__codelineno-3-49">49</a></span>
+<span class="normal"><a href="#__codelineno-3-50">50</a></span>
+<span class="normal"><a href="#__codelineno-3-51">51</a></span>
+<span class="normal"><a href="#__codelineno-3-52">52</a></span>
+<span class="normal"><a href="#__codelineno-3-53">53</a></span>
+<span class="normal"><a href="#__codelineno-3-54">54</a></span>
+<span class="normal"><a href="#__codelineno-3-55">55</a></span>
+<span class="normal"><a href="#__codelineno-3-56">56</a></span>
+<span class="normal"><a href="#__codelineno-3-57">57</a></span>
+<span class="normal"><a href="#__codelineno-3-58">58</a></span>
+<span class="normal"><a href="#__codelineno-3-59">59</a></span>
+<span class="normal"><a href="#__codelineno-3-60">60</a></span>
+<span class="normal"><a href="#__codelineno-3-61">61</a></span>
+<span class="normal"><a href="#__codelineno-3-62">62</a></span>
+<span class="normal"><a href="#__codelineno-3-63">63</a></span>
+<span class="normal"><a href="#__codelineno-3-64">64</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="n">upstream</span> <span class="n">hello_app_server</span> <span class="p">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a>  <span class="c1"># fail_timeout=0 means we always retry an upstream even if it failed</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a>  <span class="c1"># to return a good HTTP response (in case the Unicorn master nukes a</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a>  <span class="c1"># single worker for timing out).</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6"></a>  <span class="n">server</span> <span class="n">unix</span><span class="p">:</span><span class="o">/</span><span class="n">webapps</span><span class="o">/</span><span class="n">hello_django</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">gunicorn</span><span class="o">.</span><span class="n">sock</span> <span class="n">fail_timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="p">}</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8"></a>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="n">server</span> <span class="p">{</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10"></a>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11"></a>    <span class="n">listen</span>   <span class="mi">80</span><span class="p">;</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12"></a>    <span class="n">server_name</span> <span class="n">example</span><span class="o">.</span><span class="n">com</span><span class="p">;</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13"></a>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14"></a>    <span class="n">client_max_body_size</span> <span class="mi">4</span><span class="n">G</span><span class="p">;</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15"></a>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16"></a>    <span class="n">access_log</span> <span class="o">/</span><span class="n">webapps</span><span class="o">/</span><span class="n">hello_django</span><span class="o">/</span><span class="n">logs</span><span class="o">/</span><span class="n">nginx</span><span class="o">-</span><span class="n">access</span><span class="o">.</span><span class="n">log</span><span class="p">;</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17"></a>    <span class="n">error_log</span> <span class="o">/</span><span class="n">webapps</span><span class="o">/</span><span class="n">hello_django</span><span class="o">/</span><span class="n">logs</span><span class="o">/</span><span class="n">nginx</span><span class="o">-</span><span class="n">error</span><span class="o">.</span><span class="n">log</span><span class="p">;</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18"></a>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19"></a>    <span class="n">location</span> <span class="o">/</span><span class="n">static</span><span class="o">/</span> <span class="p">{</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20"></a>        <span class="n">alias</span>   <span class="o">/</span><span class="n">webapps</span><span class="o">/</span><span class="n">hello_django</span><span class="o">/</span><span class="n">static</span><span class="o">/</span><span class="p">;</span>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21"></a>    <span class="p">}</span>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22"></a>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23"></a>    <span class="n">location</span> <span class="o">/</span><span class="n">media</span><span class="o">/</span> <span class="p">{</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24"></a>        <span class="n">alias</span>   <span class="o">/</span><span class="n">webapps</span><span class="o">/</span><span class="n">hello_django</span><span class="o">/</span><span class="n">media</span><span class="o">/</span><span class="p">;</span>
+</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25"></a>    <span class="p">}</span>
+</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26"></a>
+</span><span id="__span-3-27"><a id="__codelineno-3-27" name="__codelineno-3-27"></a>    <span class="n">location</span> <span class="o">/</span> <span class="p">{</span>
+</span><span id="__span-3-28"><a id="__codelineno-3-28" name="__codelineno-3-28"></a>        <span class="c1"># an HTTP header important enough to have its own Wikipedia entry:</span>
+</span><span id="__span-3-29"><a id="__codelineno-3-29" name="__codelineno-3-29"></a>        <span class="c1">#   http://en.wikipedia.org/wiki/X-Forwarded-For</span>
+</span><span id="__span-3-30"><a id="__codelineno-3-30" name="__codelineno-3-30"></a>        <span class="n">proxy_set_header</span> <span class="n">X</span><span class="o">-</span><span class="n">Forwarded</span><span class="o">-</span><span class="n">For</span> <span class="err">$</span><span class="n">proxy_add_x_forwarded_for</span><span class="p">;</span>
+</span><span id="__span-3-31"><a id="__codelineno-3-31" name="__codelineno-3-31"></a>
+</span><span id="__span-3-32"><a id="__codelineno-3-32" name="__codelineno-3-32"></a>        <span class="c1"># enable this if and only if you use HTTPS, this helps Rack</span>
+</span><span id="__span-3-33"><a id="__codelineno-3-33" name="__codelineno-3-33"></a>        <span class="c1"># set the proper protocol for doing redirects:</span>
+</span><span id="__span-3-34"><a id="__codelineno-3-34" name="__codelineno-3-34"></a>        <span class="c1"># proxy_set_header X-Forwarded-Proto https;</span>
+</span><span id="__span-3-35"><a id="__codelineno-3-35" name="__codelineno-3-35"></a>
+</span><span id="__span-3-36"><a id="__codelineno-3-36" name="__codelineno-3-36"></a>        <span class="c1"># pass the Host: header from the client right along so redirects</span>
+</span><span id="__span-3-37"><a id="__codelineno-3-37" name="__codelineno-3-37"></a>        <span class="c1"># can be set properly within the Rack application</span>
+</span><span id="__span-3-38"><a id="__codelineno-3-38" name="__codelineno-3-38"></a>        <span class="n">proxy_set_header</span> <span class="n">Host</span> <span class="err">$</span><span class="n">http_host</span><span class="p">;</span>
+</span><span id="__span-3-39"><a id="__codelineno-3-39" name="__codelineno-3-39"></a>
+</span><span id="__span-3-40"><a id="__codelineno-3-40" name="__codelineno-3-40"></a>        <span class="c1"># we don&#39;t want nginx trying to do something clever with</span>
+</span><span id="__span-3-41"><a id="__codelineno-3-41" name="__codelineno-3-41"></a>        <span class="c1"># redirects, we set the Host: header above already.</span>
+</span><span id="__span-3-42"><a id="__codelineno-3-42" name="__codelineno-3-42"></a>        <span class="n">proxy_redirect</span> <span class="n">off</span><span class="p">;</span>
+</span><span id="__span-3-43"><a id="__codelineno-3-43" name="__codelineno-3-43"></a>
+</span><span id="__span-3-44"><a id="__codelineno-3-44" name="__codelineno-3-44"></a>        <span class="c1"># set &quot;proxy_buffering off&quot; *only* for Rainbows! when doing</span>
+</span><span id="__span-3-45"><a id="__codelineno-3-45" name="__codelineno-3-45"></a>        <span class="c1"># Comet/long-poll stuff.  It&#39;s also safe to set if you&#39;re</span>
+</span><span id="__span-3-46"><a id="__codelineno-3-46" name="__codelineno-3-46"></a>        <span class="c1"># using only serving fast clients with Unicorn + nginx.</span>
+</span><span id="__span-3-47"><a id="__codelineno-3-47" name="__codelineno-3-47"></a>        <span class="c1"># Otherwise you _want_ nginx to buffer responses to slow</span>
+</span><span id="__span-3-48"><a id="__codelineno-3-48" name="__codelineno-3-48"></a>        <span class="c1"># clients, really.</span>
+</span><span id="__span-3-49"><a id="__codelineno-3-49" name="__codelineno-3-49"></a>        <span class="c1"># proxy_buffering off;</span>
+</span><span id="__span-3-50"><a id="__codelineno-3-50" name="__codelineno-3-50"></a>
+</span><span id="__span-3-51"><a id="__codelineno-3-51" name="__codelineno-3-51"></a>        <span class="c1"># Try to serve static files from nginx, no point in making an</span>
+</span><span id="__span-3-52"><a id="__codelineno-3-52" name="__codelineno-3-52"></a>        <span class="c1"># *application* server like Unicorn/Rainbows! serve static files.</span>
+</span><span id="__span-3-53"><a id="__codelineno-3-53" name="__codelineno-3-53"></a>        <span class="k">if</span> <span class="p">(</span><span class="err">!</span><span class="o">-</span><span class="n">f</span> <span class="err">$</span><span class="n">request_filename</span><span class="p">)</span> <span class="p">{</span>
+</span><span id="__span-3-54"><a id="__codelineno-3-54" name="__codelineno-3-54"></a>            <span class="n">proxy_pass</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">hello_app_server</span><span class="p">;</span>
+</span><span id="__span-3-55"><a id="__codelineno-3-55" name="__codelineno-3-55"></a>            <span class="k">break</span><span class="p">;</span>
+</span><span id="__span-3-56"><a id="__codelineno-3-56" name="__codelineno-3-56"></a>        <span class="p">}</span>
+</span><span id="__span-3-57"><a id="__codelineno-3-57" name="__codelineno-3-57"></a>    <span class="p">}</span>
+</span><span id="__span-3-58"><a id="__codelineno-3-58" name="__codelineno-3-58"></a>
+</span><span id="__span-3-59"><a id="__codelineno-3-59" name="__codelineno-3-59"></a>    <span class="c1"># Error pages</span>
+</span><span id="__span-3-60"><a id="__codelineno-3-60" name="__codelineno-3-60"></a>    <span class="n">error_page</span> <span class="mi">500</span> <span class="mi">502</span> <span class="mi">503</span> <span class="mi">504</span> <span class="o">/</span><span class="mf">500.</span><span class="n">html</span><span class="p">;</span>
+</span><span id="__span-3-61"><a id="__codelineno-3-61" name="__codelineno-3-61"></a>    <span class="n">location</span> <span class="o">=</span> <span class="o">/</span><span class="mf">500.</span><span class="n">html</span> <span class="p">{</span>
+</span><span id="__span-3-62"><a id="__codelineno-3-62" name="__codelineno-3-62"></a>        <span class="n">root</span> <span class="o">/</span><span class="n">webapps</span><span class="o">/</span><span class="n">hello_django</span><span class="o">/</span><span class="n">static</span><span class="o">/</span><span class="p">;</span>
+</span><span id="__span-3-63"><a id="__codelineno-3-63" name="__codelineno-3-63"></a>    <span class="p">}</span>
+</span><span id="__span-3-64"><a id="__codelineno-3-64" name="__codelineno-3-64"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<p>Create a symbolic link in the <code>sites-enabled</code> folder:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo ln -s /etc/nginx/sites-available/hello /etc/nginx/sites-enabled/hello
+</code></pre></div>
+<p>Restart Nginx:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo service nginx restart
+</code></pre></div>
+<p>If you navigate to your site, you should now see your Django welcome-page powered by Nginx and Gunicorn. Go ahead and develop to your heart's content.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>At this stage you may find that instead of the Django welcome-page, you encounter the default "<em>Welcome to nginx!</em>" page. This may be caused by the <code>default</code> configuration file, which is installed with Nginx and masks your new site's configuration. If you don't plan to use it, delete the symbolic link to this file from <code>/etc/nginx/sites-enabled</code>.</p>
+</div>
+<p>If you run into any problems with the above setup, please drop me a line.</p>
+<h3 id="final-directory-structure">Final directory structure</h3>
+<p>If you followed this tutorial, you should have created a directory structure resembling this:</p>
+<div class="language-text highlight"><pre><span></span><code>/webapps/hello_django/
+├── bin                          &lt;= Directory created by virtualenv
+│   ├── activate                 &lt;= Environment activation script
+│   ├── django-admin.py
+│   ├── gunicorn
+│   ├── gunicorn_django
+│   ├── gunicorn_start           &lt;= Script to start application with Gunicorn
+│   └── python
+├── hello                        &lt;= Django project directory, add this to PYTHONPATH
+│   ├── manage.py
+│   ├── project_application_1
+│   ├── project_application_2
+│   └── hello                    &lt;= Project settings directory
+│       ├── __init__.py
+│       ├── settings.py          &lt;= hello.settings - settings module Gunicorn will use
+│       ├── urls.py
+│       └── wsgi.py              &lt;= hello.wsgi - WSGI module Gunicorn will use
+├── include
+│   └── python2.7 -&gt; /usr/include/python2.7
+├── lib
+│   └── python2.7
+├── lib64 -&gt; /webapps/hello_django/lib
+├── logs                         &lt;= Application logs directory
+│   ├── gunicorn_supervisor.log
+│   ├── nginx-access.log
+│   └── nginx-error.log
+├── media                        &lt;= User uploaded files folder
+├── run
+│   └── gunicorn.sock 
+└── static                       &lt;= Collect and serve static files from here
+</code></pre></div>
+<h3 id="uninstalling-the-django-application">Uninstalling the Django application</h3>
+<p>If time comes to remove the application, follow these steps.</p>
+<p>Remove the virtual server from Nginx <code>sites-enabled</code> folder:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo rm /etc/nginx/sites-enabled/hello_django
+</code></pre></div>
+<p>Restart Nginx:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo service nginx restart
+</code></pre></div>
+<p>If you never plan to use this application again, you can remove its config file also from the <code>sites-available</code> directory</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo rm /etc/nginx/sites-available/hello_django
+</code></pre></div>
+<p>Stop the application with Supervisor:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo supervisorctl stop hello
+</code></pre></div>
+<p>Remove the application from Supervisor's control scripts directory:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo rm /etc/supervisor/conf.d/hello.conf
+</code></pre></div>
+<p>If you never plan to use this application again, you can now remove its entire directory from <code>webapps</code>:</p>
+<div class="language-text highlight"><pre><span></span><code>$ sudo rm -r /webapps/hello_django
+</code></pre></div>
+<h3 id="different-settings-in-production">Different settings in production</h3>
+<p>You will probably want to use different settings on your production server and different settings during development.</p>
+<p>To achieve this I usually create a second settings file called <code>settings_local.py</code>, which contains overrides of some values, but imports every default like so:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span> <span class="nn">hello.settings</span> <span class="kn">import</span> <span class="o">*</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">DATABASES</span> <span class="o">=</span> <span class="o">...</span>
+</span></code></pre></div>
+<p>You can then tell Django to use this local settings file by specifying the environment variable <code>DJANGO_SETTINGS_MODULE=hello.settings_local</code>.</p>
+<h3 id="running-multiple-applications">Running multiple applications</h3>
+<p>If you would like some help with setting up a Nginx server to run multiple Django applications, check out <a href="/blog/2013/10/29/serving-multiple-django-applications-with-nginx-gunicorn-supervisor/" title="Serving multiple Django applications with Nginx and Gunicorn">my next article</a>.</p>
+<h3 id="translations">Translations</h3>
+<p>This article was actually translated into a number of languages. If you would like, you can read it in
+<a href="https://wildunix.es/posts/configurar-django-con-nginx-gunicorn-virtualenv-supervisor-y-postgresql/">Spanish</a> or
+<a href="http://zqpythonic.qiniucdn.com/data/20130901152951/index.html">Chinese</a>.
+If you know of other translations, let me know.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+<!-- Comments -->
+
+<div id="disqus_thread"></div>
+<script>
+    // var disqus_config = function () {
+    // this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    // this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    // };
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://postrational.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- End of comments -->
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <!-- Copyright and theme information -->
+<div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      © Michał Karzyński
+
+  
+    / Theme:
+    <a
+      href="https://squidfunk.github.io/mkdocs-material/"
+      target="_blank" rel="noopener"
+    >
+      Material
+    </a>
+  
+    </div>
+  
+
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/postrational" target="_blank" rel="noopener" title="postrational on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="http://www.linkedin.com/pub/micha%C5%82-karzy%C5%84ski/9/7a7/ba3" target="_blank" rel="noopener" title="My LinkedIn profile" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5m282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.last.fm/user/postrational" target="_blank" rel="noopener" title="postrational on lastfm" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="m225.8 367.1-18.8-51s-30.5 34-76.2 34c-40.5 0-69.2-35.2-69.2-91.5 0-72.1 36.4-97.9 72.1-97.9 66.5 0 74.8 53.3 100.9 134.9 18.8 56.9 54 102.6 155.4 102.6 72.7 0 122-22.3 122-80.9 0-72.9-62.7-80.6-115-92.1-25.8-5.9-33.4-16.4-33.4-34 0-19.9 15.8-31.7 41.6-31.7 28.2 0 43.4 10.6 45.7 35.8l58.6-7c-4.7-52.8-41.1-74.5-100.9-74.5-52.8 0-104.4 19.9-104.4 83.9 0 39.9 19.4 65.1 68 76.8 44.9 10.6 79.8 13.8 79.8 45.7 0 21.7-21.1 30.5-61 30.5-59.2 0-83.9-31.1-97.9-73.9-32-96.8-43.6-163-161.3-163C45.7 113.8 0 168.3 0 261c0 89.1 45.7 137.2 127.9 137.2 66.2 0 97.9-31.1 97.9-31.1"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="mailto:contact@karzynski.pl" target="_blank" rel="noopener" title="send me an email" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M64 112c-8.8 0-16 7.2-16 16v22.1l172.5 141.6c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16zM48 212.2V384c0 8.8 7.2 16 16 16h384c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0zM0 128c0-35.3 28.7-64 64-64h384c35.3 0 64 28.7 64 64v256c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../../../..", "features": ["navigation.sections", "navigation.indexes", "content.tooltips", "content.code.copy"], "search": "../../../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+    
+  </body>
+</html>

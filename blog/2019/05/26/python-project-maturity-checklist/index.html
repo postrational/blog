@@ -1,0 +1,1899 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://michal.karzynski.pl/blog/2019/05/26/python-project-maturity-checklist/">
+      
+      
+        <link rel="prev" href="../../../04/08/deep-learning-atlas/">
+      
+      
+        <link rel="next" href="../../../07/11/from-python-script-to-open-source-project/">
+      
+      
+      <link rel="icon" href="../../../../../images/meditate-retina.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.42">
+    
+    
+      
+        <title>Python project maturity checklist - Michał Karzyński</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.0253249f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#define-your-command-line-interface-cli" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="Michał Karzyński" class="md-header__button md-logo" aria-label="Michał Karzyński" data-md-component="logo">
+      
+  <img src="../../../../../images/meditate-retina.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Michał Karzyński
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Python project maturity checklist
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-2.69L23.31 12 20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="Michał Karzyński" class="md-nav__button md-logo" aria-label="Michał Karzyński" data-md-component="logo">
+      
+  <img src="../../../../../images/meditate-retina.png" alt="logo">
+
+    </a>
+    Michał Karzyński
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../" class="md-nav__link ">
+              
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 14.27 10.64 13A11.24 11.24 0 0 0 5 10.18v6.95c2.61.34 5 1.34 7 2.82 2-1.48 4.39-2.48 7-2.82v-6.95c-2.16.39-4.09 1.39-5.64 2.82M19 8.15c.65-.1 1.32-.15 2-.15v11c-3.5 0-6.64 1.35-9 3.54C9.64 20.35 6.5 19 3 19V8c.68 0 1.35.05 2 .15 2.69.41 5.1 1.63 7 3.39 1.9-1.76 4.31-2.98 7-3.39M12 6c.27 0 .5-.1.71-.29.19-.21.29-.44.29-.71s-.1-.5-.29-.71C12.5 4.11 12.27 4 12 4s-.5.11-.71.29c-.18.21-.29.45-.29.71s.11.5.29.71c.21.19.45.29.71.29m2.12 1.12a2.997 2.997 0 1 1-4.24-4.24 2.997 2.997 0 1 1 4.24 4.24"/></svg>
+  
+  <span class="md-ellipsis">
+    Blog
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Blog
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_2" id="__nav_1_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Archive
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            Archive
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2023/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2023
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2022/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2022
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2019
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2017/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2017
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2016/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2016
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2015/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2015
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2014/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2014
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2013/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2013
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2010/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2010
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2009/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2009
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2006/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2006
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2005/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2005
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2004/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2004
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2003/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2003
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2002/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2002
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2001/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2001
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../2000/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    2000
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Categories
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            Categories
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/personal/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    personal
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../category/tech/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    tech
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#define-your-command-line-interface-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Define your command-line interface (CLI)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#structure-your-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Structure your code
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="☑ Structure your code">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#code-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code layout
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code structure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#define-a-__main__-function" class="md-nav__link">
+    <span class="md-ellipsis">
+      Define a __main__ function
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#write-a-setuppy-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Write a setup.py file
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="☑ Write a setup.py file">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-a-setuppy-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using a setup.py file
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-entry_points-for-your-script-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Add entry_points for your script command
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-requirementstxt-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Create a requirements.txt file
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#set-up-a-git-repo" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Set up a Git repo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-black-to-format-your-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Use Black to format your code
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#set-up-pre-commit-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Set up pre-commit hooks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#code-linters" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Code linters
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-toxini-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Create a tox.ini config
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#refactor-your-code-to-be-unit-testable-and-add-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Refactor your code to be unit-testable and add tests
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-docstrings-and-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Add docstrings and documentation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-type-annotations-and-a-mypy-verification-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Add type annotations and a MyPy verification step
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upload-to-github" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Upload to GitHub
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-readme-and-license-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Add README and LICENSE files
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-a-continuous-integration-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Add a continuous integration service
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-a-requirements-updater" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Add a requirements updater
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-test-coverage-checker" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Add test coverage checker
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="☑ Add test coverage checker">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#track-test-coverage-over-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      Track test coverage over time
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automated-code-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Automated code review
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#publish-your-project-on-pypi" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Publish your project on PyPI
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advertise-your-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      &#9745; Advertise your project
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../../../../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2019-05-26 12:03:00" class="md-ellipsis">May 26, 2019</time>
+                      </div>
+                    </li>
+                    
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+                          <span class="md-ellipsis">
+                            in
+                            
+                              <a href="../../../../category/tech/">tech</a></span>
+                        </div>
+                      </li>
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              19 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+  
+
+<nav class="md-tags" >
+  
+    
+    
+    
+      <span class="md-tag">python</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">tooling</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">validation</span>
+    
+  
+    
+    
+    
+      <span class="md-tag">testing</span>
+    
+  
+</nav>
+
+
+
+  <h1>Python project maturity checklist</h1>
+
+<p>Did you write a cool and useful Python script? Would you like to share it with the community, but you're not sure how to go about that? If so, then this is the article for you. We'll go over a list of simple steps which can turn your script into a fully fledged open-source project.</p>
+<!-- more -->
+
+<p>The Python community has created a rich ecosystem of tools, which can help you during the development and upkeep of your project. Complete the steps in this checklist, and your project will be easier to maintain and you'll be ready to take contributions from the community.</p>
+<p>This is an opinionated article. I will run though a long list of tools and practices, I've had good experience with. Some of your favorite tools may be left out, some of my choices you may find unnecessary. Feel free to adapt the list to your liking and leave a comment below.</p>
+<p>I tried to complete the entire checklist in my small open-source project named <a href="https://github.com/postrational/gym-demo" title="Explore OpenAI Gym environments"><code>gym-demo</code></a>. Feel free to use it as a reference and submit PRs if you find room for improvement.</p>
+<p><a name="define-cli"></a></p>
+<h3 id="define-your-command-line-interface-cli">&#9745; Define your command-line interface (CLI)</h3>
+<p>If you're going to provide a command-line utility, then you need to define a friendly command-line user interface. Your interface will be more intuitive for users if it follows the <a href="https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html" title="CLI Conventions - POSIX with GNU extensions">GNU conventions for command line arguments</a>.</p>
+<p>There are many ways to parse command line arguments, but my favorite by far is to use the <a href="https://github.com/docopt/docopt" title="docopt on GitHub"><code>docopt</code> module</a> developed by <a href="https://www.youtube.com/watch?v=pXhcPJK5cMc" title="PyCon UK 2012: Create *beautiful* command-line interfaces with Python">Vladimir Keleshev</a>. It allows you to define your entire interface in the form of a docstring at the beginning of your script, like so:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="sd">&quot;&quot;&quot;Usage: gym_demo.py [--steps=NN --no-render --observations] ENV_NAME</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="sd">Show a random agent playing in a given OpenAI environment.</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="sd">Arguments:</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="sd">  ENV_NAME          Name of the Gym environment to run</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="sd">Options:</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="sd">  -h --help</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="sd">  --steps=&lt;STEPS&gt;   How many iteration to run for.  [default: 5000]</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="sd">  --no-render       Don&#39;t render the environment graphically.</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="sd">  --observations    Print environment observations.</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="sd">&quot;&quot;&quot;</span>
+</span></code></pre></div>
+<p>Later you can just call the <code>docopt(__doc__)</code> command and use the argument values:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span> <span class="nn">docopt</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">arguments</span> <span class="o">=</span> <span class="n">docopt</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;--steps&quot;</span><span class="p">))</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">render_env</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;--no-render&quot;</span><span class="p">)</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">print_observations</span> <span class="o">=</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;--observations&quot;</span><span class="p">)</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">env_name</span> <span class="o">=</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ENV_NAME&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>I usually start with Docopt by copying one of the <a href="https://github.com/docopt/docopt/tree/master/examples" title="docopt examples on GitHub">examples</a> and modifying it to my needs.</p>
+</div>
+<p><a name="structure-code"></a></p>
+<h3 id="structure-your-code">&#9745;  Structure your code</h3>
+<p>Python has established conventions for most things, this includes the layout of your code directory and naming of some files and directories. Follow these conventions to make your project easier to understand by other Python developers.</p>
+<h4 id="code-layout">Code layout</h4>
+<p>The basic directory structure of your project should resemble this:</p>
+<div class="language-text highlight"><pre><span></span><code>package-name
+├── LICENSE
+├── README.md
+├── main_module_name
+│   ├── __init__.py
+│   └── main.py
+├── tests
+│   └── test_main.py
+├── requirements.txt
+└── setup.py
+</code></pre></div>
+<p>The <code>package-name</code> directory contains all of the sources of your package. Usually this is the root directory of your project repository, containing all other files. Choose your package name wisely and check if it's available on PyPI, as this will be the name people will use to install your package using:</p>
+<div class="language-text highlight"><pre><span></span><code>pip install package-name
+</code></pre></div>
+<p>The <code>main_module_name</code> directory is the directory which will be copied
+into your user's <code>site-packages</code> when your package is installed. You can
+define more than one module if you need to, but it's good practice to
+nest them under a single module with an identifiable name.</p>
+<p>According to the <a href="https://www.python.org/dev/peps/pep-0008/#package-and-module-names" title="PEP8: Package and module naming">Python style guide PEP8</a>:</p>
+<blockquote>
+<p>Modules should have short, all-lowercase names. Underscores can be used in the module name if it improves readability. Python packages should also have short, all-lowercase names, although the use of underscores is discouraged.</p>
+</blockquote>
+<p>If possible, the name of your package and the name of it's main module should be the same. Since underscores are discouraged in package names, you can use <code>my-project</code> as the package name and <code>my_project</code> as the main module name.</p>
+<h4 id="code-structure">Code structure</h4>
+<p>Whether you're writing code in Python or any other language, you should follow <a href="https://isbnsearch.org/isbn/9780132350884" title="Clean Code by Robert C. Martin">Clean Code principals</a>. One of the most important ideas behind clean code it to split up your logic into short functions, each with a single responsibility.</p>
+<p>Your functions should take zero, one or at most two arguments. If your
+functions have more than 2 parameters, that's a well known code-smell.
+It indicates that your function is probably trying to do more than one
+thing and you should split it up into smaller sub-functions.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Still need more than two parameters? Perhaps your function parameters are related and should come into your function as a single data structure? Or perhaps you should refactor your code so your functions become methods of an object?</p>
+</div>
+<p>In Python, you can sometimes get away with more than two parameters, if you specify default values for the extra ones. This is better, but you should still consider if the function shouldn't be split.</p>
+<p>Small functions with a single responsibility and few parameters are easy to write unit-tests for. We'll come back to this.</p>
+<h4 id="define-a-__main__-function">Define a <code>__main__</code> function</h4>
+<p>If you're writing a command-line utility, you should create a separate function which handles the parsing of user input and initiating the logic of your utility. You can call this function <code>main()</code> or anything else you think fits.</p>
+<p>This logic should be placed in the <code>__main__</code> block of your script:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">main</span><span class="p">()</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The condition <code>__name__ == "__main__"</code> is only true if you're calling the script directly. It's not true if you include the same Python file as a library module: <code>from my_module import main</code>.</p>
+</div>
+<p>The advantage of splitting the main logic into a separate <code>main()</code> function is that you'll be able to use the <code>main</code> function as an entry point. We'll come back to this when talking about <code>entry_points</code>.</p>
+<p><a name="setup-py"></a></p>
+<h3 id="write-a-setuppy-file">&#9745; Write a <code>setup.py</code> file</h3>
+<p>Python has a mature and well maintained packaging utility called <code>setuptools</code>. A <code>setup.py</code> file is the build script for <code>setuptools</code> and every Python project should have one.</p>
+<p>Writing a basic <code>setup.py</code> file is very easy, all the file has to do is to call the <code>setup</code> method with appropriate information about your project.</p>
+<p>This example comes from my <a href="https://github.com/postrational/gym-demo" title="Explore OpenAI Gym environments"><code>gym-demo</code></a> project:</p>
+<div class="language-python highlight"><span class="filename">setup.py</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>    <span class="c1">#!/usr/bin/env python</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="kn">import</span> <span class="nn">os</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="kn">from</span> <span class="nn">setuptools</span> <span class="kn">import</span> <span class="n">setup</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">setup</span><span class="p">(</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;gym-demo&quot;</span><span class="p">,</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;0.2.1&quot;</span><span class="p">,</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Explore OpenAI Gym environments.&quot;</span><span class="p">,</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>        <span class="n">long_description</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="s2">&quot;README.md&quot;</span><span class="p">)</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>        <span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>        <span class="n">long_description_content_type</span><span class="o">=</span><span class="s2">&quot;text/markdown&quot;</span><span class="p">,</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>        <span class="n">author</span><span class="o">=</span><span class="s2">&quot;Michal Karzynski&quot;</span><span class="p">,</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>        <span class="n">author_email</span><span class="o">=</span><span class="s2">&quot;github@karzyn.com&quot;</span><span class="p">,</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>        <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;gym_demo&quot;</span><span class="p">],</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>        <span class="n">install_requires</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;setuptools&quot;</span><span class="p">,</span> <span class="s2">&quot;docopt&quot;</span><span class="p">],</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="p">)</span>
+</span></code></pre></div>
+<p>The example above assumes you have a <code>long_description</code> of your project in a markdown <code>README.md</code> file in the same directory. If you don't, you can specify <code>long_description</code> as a string.</p>
+<p>More information can be found in the <a href="https://packaging.python.org/tutorials/packaging-projects/" title="Packaging Python Projects">Python packaging tutorial</a>.</p>
+<h4 id="using-a-setuppy-file">Using a <code>setup.py</code> file</h4>
+<p>Once you have a <code>setup.py</code> file, you can use it to build your Python project's distribution packages like so:</p>
+<div class="language-text highlight"><pre><span></span><code>$ pip install setuptools wheel
+$ python setup.py sdist
+$ python setup.py bdist_wheel
+</code></pre></div>
+<p>The <code>sdist</code> command creates a source distribution (such as a tarball or zip file with Python source code). <code>bdist_wheel</code> creates a binary Wheel distribution file which your users may download from PyPI in the future. Both distribution files will be placed in the <code>dist</code> subdirectory.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code>bdist_wheel</code> command comes from the <code>wheel</code> package.</p>
+</div>
+<p>During development another <code>setup.py</code> command is even more useful:</p>
+<div class="language-text highlight"><pre><span></span><code>$ source my_venv/bin/activate
+(my_venv)$ python setup.py develop
+</code></pre></div>
+<p>This command installs your project inside a <a href="https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments" title="Creating Virtual Environments">virtual environment</a> named <code>my_venv</code>, but it does so without copying any files. It links your source directory with your <code>site-packages</code> directory by creating a link file (such as <code>my-project.egg-link</code>). This is very useful, because you can work on your source code directly and test it in your virtual env without reinstalling the project after each change.</p>
+<p>You can find out about other <code>setup.py</code> commands by running:</p>
+<div class="language-text highlight"><pre><span></span><code>$ python setup.py --help-commands
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you're not using <a href="https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments" title="Creating Virtual Environments">virtual environments</a> you're missing out. <br>
+I would also recommend using <a href="https://virtualenvwrapper.readthedocs.io/en/latest/" title="virtualenvwrapper - a set of extensions virtualenv"><code>virtualenvwrapper</code></a> tools. <br>
+Alternatively you can switch to the new <a href="https://github.com/pypa/pipenv" title="Pipenv: Python Development Workflow for Humans"><code>pipenv</code></a> tool.</p>
+</div>
+<p><a name="entry-points"></a></p>
+<h3 id="add-entry_points-for-your-script-command">&#9745; Add <code>entry_points</code> for your script command</h3>
+<p>If you're writing a command-line utility, you should create a console script entry point for your command. This will create an executable launcher for your script, which users can easily call at the command line.</p>
+<p>To do this, just add an <code>entry_points</code> argument to the <code>setup()</code> call in your <code>setup.py</code> file.  For example, the following <code>console_scripts</code> entry will create an executable named <code>my-command</code> (or <code>my-command.exe</code> on Windows) and place it in the <code>bin</code> path of your environment. This means your users can just use <code>my-command</code> after they install your package.</p>
+<p><div class="language-python highlight"><span class="filename">setup.py</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">setup</span><span class="p">(</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="c1"># other arguments here...</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="n">entry_points</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;console_scripts&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;my-command = my_module.main:main&quot;</span><span class="p">]},</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="p">)</span>
+</span></code></pre></div>
+<code>my_module.main:main</code> specifies which function to call and where to find it. <code>my_module.main</code> specifies the path to the Python file <code>main.py</code> in <code>my_module</code>. And <code>:main</code> denotes the <code>main()</code> function inside <code>main.py</code>. This is the "Python path" syntax and if you know which PEP it's defined in, leave me a note in the comments. Thanks.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There are other cool things <code>entry_points</code> can do. You can use it to <a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#adding-commands">customize build commands</a> of <code>setup.py</code> and even to <a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#dynamic-discovery-of-services-and-plugins">distribute discoverable services</a> for other tools (such as parsers for a specific file format, etc.).</p>
+</div>
+<p>Read more about <a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#automatic-script-creation">automated script creation</a> in the <code>setuptools</code> <a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#automatic-script-creation">docs</a>.</p>
+<p><a name="requirements-txt"></a></p>
+<h3 id="create-a-requirementstxt-file">&#9745; Create a <code>requirements.txt</code> file</h3>
+<p>You should provide your users with information about which other packages your package will require to work properly. The right place to put this information is inside <code>setup.py</code> as an <code>install_requires</code> list.</p>
+<div class="language-python highlight"><span class="filename">setup.py</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">setup</span><span class="p">(</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="c1"># other arguments here...</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">install_requires</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;colorful&quot;</span><span class="p">,</span> <span class="s2">&quot;docopt&quot;</span><span class="p">],</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>It's also very useful to inform your users which versions of each dependency you tested your package with. A good way to do this is to put a <a href="https://pip.pypa.io/en/stable/user_guide/#requirements-files">requirements file</a> in your repository. The file is usually named <code>requirements.txt</code> and should contain the list of your dependencies along with version numbers, for example:</p>
+<div class="language-text highlight"><span class="filename">requirements.txt</span><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>colorful==0.5.0
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>docopt==0.6.2
+</span></code></pre></div>
+<p>Users can then install these precise versions of your dependencies by running:</p>
+<div class="language-text highlight"><pre><span></span><code>$ pip install -r requirements.txt
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It may be useful to create a separate <code>requirements_test.txt</code> file for dependencies used only during testing and development.</p>
+</div>
+<p>The easiest way to generate a <code>requirements.txt</code> file is to run the <code>pip freeze</code> command. Be careful with this though, as it will list all installed packages, whether they are dependencies of your package, the dependencies of these dependencies, or simply unrelated packages you installed in your environment.</p>
+<p><a name="git-repo"></a></p>
+<h3 id="set-up-a-git-repo">&#9745; Set up a Git repo</h3>
+<p>It's time to put your code under source-control. Everyone is using Git these days, so let's roll with it.</p>
+<p>Let's start by adding a Python-specific <code>.gitignore</code> file to the root of your project.</p>
+<div class="language-text highlight"><pre><span></span><code>$ curl https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore &gt; .gitignore
+</code></pre></div>
+<p>You can now create your repo and add all files:</p>
+<div class="language-text highlight"><pre><span></span><code>$ git init
+$ git add --all
+</code></pre></div>
+<p>Verify that only files you want are being added to the repo with <code>git status</code> and create your initial commit.</p>
+<div class="language-text highlight"><pre><span></span><code>$ git commit -m &#39;Initial commit&#39;
+</code></pre></div>
+<p>More sample <code>.gitignore</code> files may be found in the <a href="https://github.com/github/gitignore" title="A collection of .gitignore templates">GitHub gitignore repo</a>.</p>
+<p><a name="use-black"></a></p>
+<h3 id="use-black-to-format-your-code">&#9745; Use Black to format your code</h3>
+<p>The Python community is very lucky for many reasons and one of them is the early adoption of a common code-style guide <a href="https://www.python.org/dev/peps/pep-0008/" title="PEP8: Python style guide">the PEP8</a>. This is a great blessing, because we don't have to argue which coding style is better, we don't have to define a different style for each project, in each company, etc. We have PEP8 and we should all just stick to PEP8.</p>
+<p>To that end, Łukasz Langa crated <a href="https://github.com/python/black" title="Black - The Uncompromising Code Formatter">Black</a> - the uncompromising code formatter. You should install it, run it over your code and then re-run before every commit. Using Black is as easy as:</p>
+<div class="language-text highlight"><pre><span></span><code>(my_venv) $ pip install black
+(my_venv) $ black my_module
+All done! ✨ 🍰 ✨
+1 file reformatted, 7 files left unchanged.
+</code></pre></div>
+<p>You may disagree with some of the formatting decisions <a href="https://github.com/python/black" title="Black - The Uncompromising Code Formatter">Black</a> makes. I would say, that it's better to have a consistent style, rather then a prettier, but inconsistent one. Let's just all use Black and get along. ☺</p>
+<p><a name="pre-commit"></a></p>
+<h3 id="set-up-pre-commit-hooks">&#9745; Set up pre-commit hooks</h3>
+<p>The best way to run Black and any other code formatters is to use <a href="https://pre-commit.com/"><code>pre-commit</code></a>. This is a tool which is triggered every time you <code>git commit</code> and runs code-linters and formatters on any modified files.</p>
+<p>Install <code>pre-commit</code> as usual:</p>
+<div class="language-text highlight"><pre><span></span><code>(my_venv) $ pip install pre-commit
+</code></pre></div>
+<p>You configure <code>pre-commit</code> by creating a file named <code>.pre-commit-config.yaml</code> in the root directory of your project. A simple configuration, which only runs black would look like this:</p>
+<div class="language-yaml highlight"><span class="filename">.pre-commit-config.yaml</span><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">repos</span><span class="p">:</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">repo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/ambv/black</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">rev</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stable</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="nt">hooks</span><span class="p">:</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">black</span>
+</span></code></pre></div>
+<p>You can generate a sample config by calling <code>pre-commit sample-config</code>.</p>
+<p>Set up a Git pre-commit hook by calling <code>pre-commit install</code>.</p>
+<p>From now on, each time you run <code>git commit</code> Black will be called to check your style. If your style is off, <code>pre-commit</code> will prevent you form committing your code and <code>black</code> will reformat it.</p>
+<div class="language-text highlight"><pre><span></span><code>(my_venv) $ git commit
+black....................................................................Failed
+hookid: black
+
+Files were modified by this hook. Additional output:
+
+reformatted gym_demo/demo.py
+All done! ✨ 🍰 ✨
+1 file reformatted.
+</code></pre></div>
+<p>Now simply re-add the reformatted file with <code>git add</code> and commit again.</p>
+<p><a name="code-linters"></a></p>
+<h3 id="code-linters">&#9745; Code linters</h3>
+<p>Python has a great set of code linters, which can help you avoid making common mistakes and keep your style in line with PEP8 and other standard conventions. Many of these tools are maintained by the <a href="https://github.com/PyCQA" title="Python Code Quality Authority">Python Code Quality Authority</a>.</p>
+<p>My favorite Python linting tool is <a href="http://flake8.pycqa.org/en/latest/" title="Flake8: Your Tool For Style Guide Enforcement">Flake8</a>, which checks for compliance with PEP8. It's base functionality can be extended by installing some of its <a href="https://pypi.org/search/?q=flake8" title="Search for Flake8 plugins on PyPI">many plugins</a>. My favorite Flake8 plugins are listed below.</p>
+<div class="language-text highlight"><span class="filename">requirements_test.txt</span><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>flake8
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>flake8-blind-except
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>flake8-bugbear
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>flake8-builtins
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>flake8-comprehensions
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>flake8-debugger
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>flake8-docstrings
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>flake8-isort
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>flake8-quotes
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>flake8-string-format
+</span></code></pre></div>
+<p>Once you install all those packages, you can simply run <code>flake8</code> to check your code.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="gp gp-VirtualEnv">(my_venv)</span> <span class="gp">$ </span>flake8
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="go">./my_package/my_module.py:1:1: D100 Missing docstring in public module</span>
+</span></code></pre></div>
+<p>You can <a href="https://flake8.pycqa.org/en/latest/user/configuration.html" title="Configuring Flake8">configure Flake8</a> by adding a <code>[flake8]</code> configuration section to <code>setup.cfg</code>, <code>tox.ini</code>, or <code>.flake8</code> files in your project's root directory.</p>
+<div class="language-ini highlight"><span class="filename">tox.ini</span><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">[flake8]</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="na">max-line-length</span><span class="o">=</span><span class="s">88</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="na">max-complexity</span><span class="o">=</span><span class="s">6</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="na">inline-quotes</span><span class="o">=</span><span class="s">double</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="c1">; ignore:</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="c1">; C812 - Missing trailing comma</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="c1">; C813 - Missing trailing comma in Python 3</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="c1">; D104 - Missing docstring in public package</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="na">ignore</span><span class="o">=</span><span class="s">C812,C813,D104</span>
+</span></code></pre></div>
+<p>There are other code linters you may find interesting. For example <a href="https://pypi.org/project/flake8-bugbear/">Bugbear</a> finds common sources of bugs, while <a href="https://github.com/PyCQA/bandit" title="Bandit - find common security issues in Python">Bandit</a> finds common security issues in Python code. You can use them both as a <a href="https://pypi.org/project/flake8-bandit/">Flake8 plugins</a> of course.</p>
+<p><a name="tox-ini"></a></p>
+<h3 id="create-a-toxini-config">&#9745; Create a <code>tox.ini</code> config</h3>
+<p><a href="https://tox.readthedocs.io/" title="tox automation project"><code>tox</code></a> is a great tool, which aims to standardize testing in Python. You can use it to setup a virtual environment for testing your project, create a package, install the package along with its dependencies and then run tests and linters. All of this is automated, so you just need to type one <code>tox</code> command.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="gp">$ </span>tox
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="go">GLOB sdist-make: my-project/setup.py</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="go">py3 create: my-project/.tox/py3</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="go">py3 installdeps: -Urrequirements.txt, -Urrequirements_test.txt</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="go">py3 inst: my-project/.tox/.tmp/package/1/my-project-0.0.1.zip</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="go">py3 installed: flake8==3.7.7,flake8-comprehensions==2.1.0,flake8-debugger==3.1.0,flake8-docstrings==1.3.0,my-project==0.0.1</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="go">py3 run-test-pre: PYTHONHASHSEED=&#39;1354964057&#39;</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="go">py3 run-test: commands[0] | flake8 my_project</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="go">__________________________________________________________________________________________________________________________________________________________ summary ___________________________________________________________________________________________________________________________________________________________</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="go">  py3: commands succeeded</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="go">  congratulations :)</span>
+</span></code></pre></div>
+<p><code>tox</code> is quite configurable, so you can decide which commands are executed or use your <code>requirements.txt</code> by creating a <code>tox.ini</code> configuration file. The following simple example runs <code>flake8</code> and <code>pytest</code> in a Python3 venv.</p>
+<div class="language-ini highlight"><span class="filename">tox.ini</span><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">[tox]</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="na">envlist</span><span class="o">=</span><span class="s">py3</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="k">[testenv]</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="na">deps</span><span class="o">=</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">  </span><span class="na">-Urrequirements.txt</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">  </span><span class="na">-Urrequirements_test.txt</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="na">commands</span><span class="o">=</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">  </span><span class="na">flake8</span>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="w">  </span><span class="na">pytest tests/</span>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>
+</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="k">[pytest]</span>
+</span><span id="__span-12-13"><a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="na">timeout</span><span class="o">=</span><span class="s">300</span>
+</span><span id="__span-12-14"><a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>
+</span><span id="__span-12-15"><a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="k">[flake8]</span>
+</span><span id="__span-12-16"><a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="na">max-line-length</span><span class="o">=</span><span class="s">88</span>
+</span><span id="__span-12-17"><a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a><span class="na">max-complexity</span><span class="o">=</span><span class="s">6</span>
+</span><span id="__span-12-18"><a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a><span class="na">inline-quotes</span><span class="o">=</span><span class="s">double</span>
+</span><span id="__span-12-19"><a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a><span class="c1">; ignore:</span>
+</span><span id="__span-12-20"><a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a><span class="c1">; C812 - Missing trailing comma</span>
+</span><span id="__span-12-21"><a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a><span class="c1">; C813 - Missing trailing comma in Python 3</span>
+</span><span id="__span-12-22"><a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a><span class="c1">; D104 - Missing docstring in public package</span>
+</span><span id="__span-12-23"><a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a><span class="na">ignore</span><span class="o">=</span><span class="s">C812,C813,D104,D400,E203</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can use <code>tox</code> to easily run tests on multiple Python versions if they are installed in your system. Just extend the <code>envlist</code>, e.g. <code>envlist=py35,py36,py37</code>.</p>
+</div>
+<p>If you automate testing using <code>tox</code>, you will be able to just run that one command in your continuous integration environment. Make sure you run <code>tox</code> on every commit you want to merge.</p>
+<p><a name="unit-tests"></a></p>
+<h3 id="refactor-your-code-to-be-unit-testable-and-add-tests">&#9745; Refactor your code to be unit-testable and add tests</h3>
+<p>Using unit tests is one of the best practices you can adopt. Writing unit tests for your function gives you a chance to take one more look your code. Perhaps the function is too complex and should be simplified? Perhaps there's a bug you didn't notice before or an edge-case you didn't consider?</p>
+<p>Writing good unit tests is an art and it takes time, but it's an investment which pays off many times over, especially on a large project which you maintain over a long period. For one, unit-tests make refactoring much easier and less scary. Also, you can learn to write your tests before you write your program (test-driven development), which is a very satisfying way to code.</p>
+<p>I would recommend using the <a href="https://docs.pytest.org/" title="pytest testing framework">PyTest</a> framework for writing your unit tests. It's easy to get started with and it's very powerful and configurable. Writing a simple unit-test is as simple as creating a <code>test</code> directory with <code>test_*.py</code> files. A simple test looks like this:</p>
+<div class="language-python highlight"><span class="filename">tests/test_main.py</span><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="sd">&quot;&quot;&quot;Test suite for my-project.&quot;&quot;&quot;</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="kn">import</span> <span class="nn">pytest</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="kn">from</span> <span class="nn">my_project</span> <span class="kn">import</span> <span class="n">my_function</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="k">def</span> <span class="nf">test_my_function</span><span class="p">():</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">my_function</span><span class="p">()</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>    <span class="k">assert</span> <span class="n">result</span> <span class="o">==</span> <span class="s2">&quot;Hello World!&quot;</span>
+</span></code></pre></div>
+<p>Running the tests is as simple as typing <code>pytest</code>:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="gp gp-VirtualEnv">(my_venv)</span> <span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>pytest
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="gp gp-VirtualEnv">(my_venv)</span> <span class="gp">$ </span>pytest
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="go">=========================== test session starts ===========================</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="go">platform darwin -- Python 3.7.2, pytest-4.5.0, py-1.7.0, pluggy-0.11.0</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="go">rootdir: my-project, inifile: tox.ini</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="go">plugins: timeout-1.3.3, cov-2.7.1</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="go">timeout: 300.0s</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="go">timeout method: signal</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="go">timeout func_only: False</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="go">collected 255 items</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="go">tests/test_main.py .......                                          [100%]</span>
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="go">======================= 7 passed in 0.35 seconds ========================</span>
+</span></code></pre></div>
+<p>Make sure to add the <code>pytest</code> command to your <code>tox.ini</code> file.</p>
+<p><a name="docstrings"></a></p>
+<h3 id="add-docstrings-and-documentation">&#9745; Add <code>docstrings</code> and documentation</h3>
+<p>Writing good documentation is very important for your users. You should start by making sure each function and module are described by a docstring. The docstring should describe what the function should do in an imperative mood sentence. For example:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">def</span> <span class="nf">hello_world</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Text</span><span class="p">:</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a greeting.&quot;&quot;&quot;</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>    <span class="k">return</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>The parameters and return values of your functions should also be included in docstrings:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">def</span> <span class="nf">get_columns_count_and_width</span><span class="p">(</span><span class="n">strings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Text</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate how to break a list of strings into multiple columns.</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="sd">    Calculate the optimal column width and number of columns</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="sd">    to display a list of strings on screen.</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="sd">    :param strings: list of strings</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="sd">    :return: a tuple with the number of columns and column width</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>    <span class="o">...</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Notice, that I'm also using Python3 type annotations to specify parameter and return types.</p>
+</div>
+<p>Use the <code>flake8-docstrings</code> plugin to verify all your functions have a docstring.</p>
+<p>If your project grows larger, you will probably want to create a full-fledged documentation site. You can use <a href="http://www.sphinx-doc.org/" title="Sphinx - documenation tool">Sphinx</a> or the simpler <a href="https://www.mkdocs.org/" title="MkDocs - Project documentation with Markdown">MkDocs</a> to generate the documentation and host the site on <a href="https://readthedocs.org/" title="Read The Docs - Python free for open-source docs hosting.">Read the docs</a> or <a href="https://pages.github.com/" title="GitHub Pages - static sites served from GitHub repos">GitHub Pages</a>.</p>
+<p><a name="type-annotations"></a></p>
+<h3 id="add-type-annotations-and-a-mypy-verification-step">&#9745; Add type annotations and a MyPy verification step</h3>
+<p>Python 3.5 added the option to annotate your code with type information. This is a very useful and clean type of documentation and you should use.</p>
+<p>For example, <code>my_function</code> below takes a unicode string as an argument and returns a <code>dict</code> of strings mapping to numeric or textual values.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">def</span> <span class="nf">my_function</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="n">Text</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">Text</span><span class="p">]]:</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>    <span class="o">...</span>
+</span></code></pre></div>
+<p><a href="https://mypy.readthedocs.io/" title="Mypy - static type checker for Python">Mypy</a> is the static type checker for Python. If you type-annotate your code, <code>mypy</code> will run through it and make sure that you're using the right parameter types when calling functions.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="gp gp-VirtualEnv">(my_venv)</span> <span class="gp">$ </span>mypy<span class="w"> </span>--config-file<span class="o">=</span>tox.ini<span class="w"> </span>my_module
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="go">my_module/main.py:43:27: error: Argument 1 to &quot;my_function&quot; has incompatible type &quot;int&quot;; expected &quot;List[str]&quot;</span>
+</span></code></pre></div>
+<p>You can add a call to <code>mypy</code> to your <code>tox</code> configuration to verify that you're not introducing any type-related mistakes in your commits.</p>
+<p><a name="upload-to-github"></a></p>
+<h3 id="upload-to-github">&#9745; Upload to GitHub</h3>
+<p>Alright. If you completed all the previous steps and checked all the boxes, your code is ready to be shared with the world!</p>
+<p>Most open-source projects are hosted on GitHub, so your project should probably join them. Follow <a href="https://help.github.com/en/articles/create-a-repo">these instructions</a> to setup a repo on GitHub and push your project there.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Microsoft recently acquired GitHub, which makes some people sceptical, if this should still remain the canonical place for open-source projects online. You can consider <a href="http://gitlab.com">GitLab</a> as an alternative. So far however, Microsoft have been good stewards of GitHub.</p>
+</div>
+<p><a name="readme-and-license"></a></p>
+<h3 id="add-readme-and-license-files">&#9745; Add README and LICENSE files</h3>
+<p>The first thing people see when they visit your project's repository is the contents of the <code>README.md</code> file. GitHub and GitLab do a good job of rendering <a href="https://daringfireball.net/projects/markdown/syntax" title="Markdown syntax">Markdown</a>-formatted text, so you can include links, tables, pictures, etc.</p>
+<p>Make sure you have a README file and that it contains information about:</p>
+<ul>
+<li>what does your project do?</li>
+<li>how to use it (with examples)?</li>
+<li>how can people contribute code to your project?</li>
+<li>what's the license of the code?</li>
+<li>links to other relevant documentation</li>
+</ul>
+<p>More tips on writing a README <a href="https://www.makeareadme.com/">here</a>.</p>
+<p>The other critically important file you should include is <code>LICENSE</code>. Without this file, no one will be able to legally use your code.</p>
+<p>If you're not sure what license to choose, use the <a href="https://opensource.org/licenses/MIT">MIT license</a>. It's just 160 words, read it. It's simple and permissive and lets everyone use your code however they want.</p>
+<p>More info about choosing a license <a href="https://choosealicense.com/">here</a>.</p>
+<p><a name="continuous-integration"></a></p>
+<h3 id="add-a-continuous-integration-service">&#9745; Add a continuous integration service</h3>
+<p>OK, now that your project is online and you prepared a <code>tox</code> configuration, it's time to set up a continuous integration service. This will run your style-checking, static code analysis and unit-tests on every pull request (PR) made to your repository.</p>
+<p>There are many CI services available for free for open-source projects. I'm partial to <a href="https://travis-ci.org/">Travis</a> myself, but <a href="https://circleci.com/">Circle CI</a> or <a href="https://www.appveyor.com/">AppVeyor</a> are commonly used alternatives.</p>
+<p>Setting up Travis CI for your repository is as simple as adding a hidden YAML configuration file named <code>.travis.yaml</code>. For example, the following installs and runs <code>tox</code> on your project in a Linux virtual machine:</p>
+<div class="language-yaml highlight"><span class="filename">.travis.yaml</span><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nt">language</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linux</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="nt">install</span><span class="p">:</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pip install tox</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="nt">script</span><span class="p">:</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tox</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="nt">git</span><span class="p">:</span>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="w">  </span><span class="nt">depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="nt">branches</span><span class="p">:</span>
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="w">  </span><span class="nt">only</span><span class="p">:</span>
+</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;master&quot;</span>
+</span><span id="__span-19-12"><a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="nt">cache</span><span class="p">:</span>
+</span><span id="__span-19-13"><a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="w">  </span><span class="nt">directories</span><span class="p">:</span>
+</span><span id="__span-19-14"><a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$HOME/.cache/pip</span>
+</span></code></pre></div>
+<p>All you need to do after commiting <code>.travis.yaml</code> to your repo, is to log into <a href="https://travis-ci.org/">Travis</a> and activate the CI service for your project.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can <a href="https://help.github.com/en/articles/configuring-protected-branches" title="GitHub - Configuring protected branches">set up branch protection</a> on <code>master</code> to require status checks to pass before a PR can be merged.</p>
+</div>
+<p>If you'd like to run your CI on multiple versions of Python or multiple operating systems, you can set up a test matrix like so:</p>
+<div class="language-yaml highlight"><span class="filename">.travis.yaml</span><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nt">matrix</span><span class="p">:</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nt">include</span><span class="p">:</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linux</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">    </span><span class="nt">sudo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">    </span><span class="nt">python</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.6&#39;</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">    </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tox -e py36</span>
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">linux</span>
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="w">    </span><span class="nt">dist</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xenial</span>
+</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="w">    </span><span class="nt">python</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.7&#39;</span>
+</span><span id="__span-20-10"><a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="w">    </span><span class="nt">sudo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-20-11"><a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a><span class="w">    </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tox -e py37</span>
+</span></code></pre></div>
+<p>Travis has fairly good <a href="https://docs.travis-ci.com/">documentation</a>, which explains its many settings with configuration examples. You can test your configuration on a PR, where you modify the <code>.travis.yaml</code> file. Travis will rerun its CI job on every change, so you can tweak settings to your liking.</p>
+<p>A completed Travis run will look like <a href="https://travis-ci.org/postrational/gym-demo/builds/496207768">this example</a>.</p>
+<p><a name="requirements-updater"></a></p>
+<h3 id="add-a-requirements-updater">&#9745; Add a requirements updater</h3>
+<p>Breaking changes in dependencies are a common problem in all software development. Your code was working just fine a while ago, but if you try to build it today, it fails, because some package it uses changed in an unforeseen way.</p>
+<p>One way of working around this is to freeze all the dependency versions in your <code>requirements.txt</code> files, but this just puts the problem off into the future.</p>
+<p>The best way to deal with changing dependencies it to use a service, which periodically bumps versions in your <code>requirements.txt</code> files and creates a pull request with each version change. Your automated CI can test your code against the new dependencies and let you know if you're running into problems.</p>
+<p>Single package version changes are usually relatively easy to deal with, so you can fix your code, if needed before updating the dependency version. This allows you to painlessly keep track of the changes in all the projects you depend on.</p>
+<p>I use the <a href="https://pyup.io/" title="PyUp - Python dependency checker">PyUp</a> service for this. The service requires no configuration, you just need to sign up using your GitHub credentials and activate it for your repository. PyUp will detect you <code>requirements.txt</code> files and start issuing PRs to keep dependencies up to date with PyPI.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There are alternative services, which also do a good job of updating dependencies. GitHub recently acquired <a href="https://dependabot.com/">Dependabot</a>, which works with Python and other languages and is free for all projects (not only open-source).</p>
+</div>
+<p><a name="coverage-checker"></a></p>
+<h3 id="add-test-coverage-checker">&#9745; Add test coverage checker</h3>
+<p>Python unit-testing frameworks have the ability to determine which lines and branches of code were hit when running unit tests. This coverage report is very useful, as it lets you know how much of your code is being exercised by tests and which parts are not.</p>
+<p>If you install the <code>pytest-cov</code> module, you can use the <code>--cov</code> argument to <code>pytest</code> to generate a coverage report.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="gp gp-VirtualEnv">(my_venv)</span> <span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>pytest<span class="w"> </span>pytest-cov
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="gp gp-VirtualEnv">(my_venv)</span> <span class="gp">$ </span>pytest<span class="w"> </span>--cov<span class="o">=</span>my_module<span class="w"> </span>tests/
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="go">========================== test session starts ==========================</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="go">tests/test_main.py ...................................             [100%]</span>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>
+</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="go">------------ coverage: platform darwin, python 3.7.2-final-0 ------------</span>
+</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="go">Name                     Stmts   Miss  Cover</span>
+</span><span id="__span-21-9"><a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="go">--------------------------------------------</span>
+</span><span id="__span-21-10"><a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="go">my_module/__init__.py        0      0   100%</span>
+</span><span id="__span-21-11"><a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a><span class="go">my_module/main.py           77     17    78%</span>
+</span><span id="__span-21-12"><a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="go">my_module/utils.py          41      0   100%</span>
+</span><span id="__span-21-13"><a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a><span class="go">--------------------------------------------</span>
+</span><span id="__span-21-14"><a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a><span class="go">TOTAL                      118     17    86%</span>
+</span><span id="__span-21-15"><a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a>
+</span><span id="__span-21-16"><a id="__codelineno-21-16" name="__codelineno-21-16" href="#__codelineno-21-16"></a><span class="go">====================== 255 passed in 1.25 seconds =======================</span>
+</span></code></pre></div>
+<p>If you add the <code>--cov-report=html</code> argument, you can generate an HTML version of the coverage report, which you can find in the <code>htmlcov/index.html</code> file after running tests.</p>
+<div class="language-text highlight"><pre><span></span><code>(my_venv) $ pytest --cov=my_module --cov-report=html tests/
+</code></pre></div>
+<h4 id="track-test-coverage-over-time">Track test coverage over time</h4>
+<p>Online services, such as <a href="https://coveralls.io">Coveralls</a> or <a href="https://codecov.io/gh/codecov">Codecov</a> can track your code coverage with every commit and on every pull request. You can decide not to accept PRs which decrease your code coverage. See an <a href="https://coveralls.io/builds/23741751/source?filename=gym_demo/demo.py">example report here</a>.</p>
+<p>In order to start using <a href="https://coveralls.io">Coveralls</a>, sign up using your GitHub credentials and set up tracking for your repository.</p>
+<p>You can report your coverage using the <a href="https://github.com/coveralls-clients/coveralls-python"><code>coveralls-python</code></a> package, which provides the <code>coveralls</code> command. You can test it manually by specifying the <code>COVERALLS_REPO_TOKEN</code> environment variable. You can find your token by going to your repository's settings on the Coveralls site.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="gp gp-VirtualEnv">(my_venv)</span> <span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>coveralls
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="gp gp-VirtualEnv">(my_venv)</span> <span class="gp">$ </span>pytest<span class="w"> </span>--cov<span class="o">=</span>my_module<span class="w"> </span>--cov-report<span class="o">=</span>html<span class="w"> </span>tests/
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="gp gp-VirtualEnv">(my_venv)</span> <span class="gp">$ </span><span class="nv">COVERALLS_REPO_TOKEN</span><span class="o">=</span>__my_repo_token__<span class="w"> </span>coveralls
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="go">Submitting coverage to coveralls.io...</span>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="go">Coverage submitted!</span>
+</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="go">Job #167.2</span>
+</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="go">https://coveralls.io/jobs/49180746</span>
+</span></code></pre></div>
+<p>When running on Travis, <code>coveralls</code> will be able to detect which repository is being tested, so you don't have to (and shouldn't) put <code>COVERALLS_REPO_TOKEN</code> into your <code>tox.ini</code> file. Instead use the <code>-</code> prefix for the command to allow it fail if you are running <code>tox</code> locally.</p>
+<div class="language-ini highlight"><span class="filename">tox.ini</span><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="na">commands</span><span class="o">=</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span><span class="na">...</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">  </span><span class="na">pytest --cov</span><span class="o">=</span><span class="s">my_module --cov-report=html tests/</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">  </span><span class="na">- coveralls</span>
+</span></code></pre></div>
+<p><a name="code-review"></a></p>
+<h3 id="automated-code-review">&#9745; Automated code review</h3>
+<p>The best thing you can do when working as a team is to thoroughly review each other's code. You should point out any mistakes, parts of code which are difficult to understand or badly documented, or anything else which doesn't quite smell right.</p>
+<p>If you're working alone, or would like another pair of eyes, you can set up one of the services providing automated code review. These services are still evolving and are not providing a huge value yet, but sometimes they catch something your code linters missed.</p>
+<p>Setting up a service like <a href="https://codeclimate.com/">Code Climate Quality</a> or <a href="https://www.codacy.com/">Codacy</a> is very simple. Just set up an account using your GitHub credentials, add your repository and configure your preferences.</p>
+<p>A report can look like <a href="https://app.codacy.com/app/postrational/ngraph-onnx/issues?&amp;filters=W3siaWQiOiJMYW5ndWFnZSIsInZhbHVlcyI6WyJQeXRob24iXX0seyJpZCI6IkNhdGVnb3J5IiwidmFsdWVzIjpbbnVsbF19LHsiaWQiOiJMZXZlbCIsInZhbHVlcyI6W251bGxdfSx7ImlkIjoiUGF0dGVybiIsInZhbHVlcyI6W251bGxdfSx7ImlkIjoiQXV0aG9yIiwidmFsdWVzIjpbbnVsbF19XQ==">this example</a>.</p>
+<p><a name="publish-on-pypi"></a></p>
+<h3 id="publish-your-project-on-pypi">&#9745; Publish your project on PyPI</h3>
+<p>So, now you're ready to publish your project on PyPI. This is quite a simple operation, unless your package is larger than 60MB or you selected a name, which is already taken.</p>
+<p>Before you publish a package, create a release version. Start by bumping your version number to a higher value. Make sure you follow the <a href="https://semver.org/" title="Semantic Versioning">semantic versioning</a> rules and add the version number to <code>setup.py</code>.</p>
+<p>The next step is to <a href="https://help.github.com/en/articles/creating-releases">create a release on GitHub</a>. This will create a tag you can use to look up the code associated with a specific version of your package.</p>
+<p>Now you'll need to set up an account on the <a href="https://test.pypi.org/">Test version of PyPI</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You should always start by uploading your package to the test version of PyPI. You should then test your package from test PyPI on multiple environments to make sure it works, before posting it on the official PyPI.</p>
+</div>
+<p>Use the following instructions to create your packages and upload them to test PyPI:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="gp gp-VirtualEnv">(my_venv)</span> <span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>twine
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="gp gp-VirtualEnv">(my_venv)</span> <span class="gp">$ </span>rm<span class="w"> </span>-rf<span class="w"> </span>dist<span class="w">       </span><span class="c1"># remove previously built packages, if any exist</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="gp gp-VirtualEnv">(my_venv)</span> <span class="gp">$ </span>python<span class="w"> </span>setup.py<span class="w"> </span>bdist_wheel
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="gp gp-VirtualEnv">(my_venv)</span> <span class="gp">$ </span>python<span class="w"> </span>setup.py<span class="w"> </span>sdist
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="gp gp-VirtualEnv">(my_venv)</span> <span class="gp">$ </span>twine<span class="w"> </span>check<span class="w"> </span>dist/*
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="go">Checking distribution dist/my-package-0.2.2-py3-none-any.whl: Passed</span>
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="go">Checking distribution dist/my-package-0.2.2.tar.gz: Passed</span>
+</span><span id="__span-24-8"><a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>
+</span><span id="__span-24-9"><a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="gp gp-VirtualEnv">(my_venv)</span> <span class="gp">$ </span>twine<span class="w"> </span>upload<span class="w"> </span>--repository-url<span class="w"> </span>https://test.pypi.org/legacy/<span class="w"> </span>dist/*
+</span><span id="__span-24-10"><a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="go">Enter your username: my_username</span>
+</span><span id="__span-24-11"><a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a><span class="go">Enter your password:</span>
+</span><span id="__span-24-12"><a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a><span class="go">Uploading distributions to https://test.pypi.org/legacy/</span>
+</span><span id="__span-24-13"><a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a><span class="go">Uploading my_package-0.2.2-py3-none-any.whl</span>
+</span><span id="__span-24-14"><a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a><span class="go">Uploading my-package-0.2.2.tar.gz</span>
+</span></code></pre></div>
+<p>You can now visit your project page on test PyPI under the URL:
+https://test.pypi.org/project/my-package/</p>
+<p>Once you test your package thoroughly, you can repeat the same steps for the official version of PyPI. Just change the upload command to:</p>
+<div class="language-text highlight"><pre><span></span><code>(my_venv) $ twine upload dist/*
+</code></pre></div>
+<p>Congratulations, your project is now online and fully ready to be used by the community!</p>
+<p><a name="advertise"></a></p>
+<h3 id="advertise-your-project">&#9745; Advertise your project</h3>
+<p>OK, you're done. Take to Twitter, Facebook, LinkedIn or wherever else your potential users and contributors may be and let them know about your project.</p>
+<p>Congratulations and good luck!</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+<!-- Comments -->
+
+<div id="disqus_thread"></div>
+<script>
+    // var disqus_config = function () {
+    // this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    // this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    // };
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://postrational.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- End of comments -->
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <!-- Copyright and theme information -->
+<div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      © Michał Karzyński
+
+  
+    / Theme:
+    <a
+      href="https://squidfunk.github.io/mkdocs-material/"
+      target="_blank" rel="noopener"
+    >
+      Material
+    </a>
+  
+    </div>
+  
+
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/postrational" target="_blank" rel="noopener" title="postrational on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="http://www.linkedin.com/pub/micha%C5%82-karzy%C5%84ski/9/7a7/ba3" target="_blank" rel="noopener" title="My LinkedIn profile" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5m282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://www.last.fm/user/postrational" target="_blank" rel="noopener" title="postrational on lastfm" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="m225.8 367.1-18.8-51s-30.5 34-76.2 34c-40.5 0-69.2-35.2-69.2-91.5 0-72.1 36.4-97.9 72.1-97.9 66.5 0 74.8 53.3 100.9 134.9 18.8 56.9 54 102.6 155.4 102.6 72.7 0 122-22.3 122-80.9 0-72.9-62.7-80.6-115-92.1-25.8-5.9-33.4-16.4-33.4-34 0-19.9 15.8-31.7 41.6-31.7 28.2 0 43.4 10.6 45.7 35.8l58.6-7c-4.7-52.8-41.1-74.5-100.9-74.5-52.8 0-104.4 19.9-104.4 83.9 0 39.9 19.4 65.1 68 76.8 44.9 10.6 79.8 13.8 79.8 45.7 0 21.7-21.1 30.5-61 30.5-59.2 0-83.9-31.1-97.9-73.9-32-96.8-43.6-163-161.3-163C45.7 113.8 0 168.3 0 261c0 89.1 45.7 137.2 127.9 137.2 66.2 0 97.9-31.1 97.9-31.1"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="mailto:contact@karzynski.pl" target="_blank" rel="noopener" title="send me an email" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M64 112c-8.8 0-16 7.2-16 16v22.1l172.5 141.6c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16zM48 212.2V384c0 8.8 7.2 16 16 16h384c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0zM0 128c0-35.3 28.7-64 64-64h384c35.3 0 64 28.7 64 64v256c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../../../..", "features": ["navigation.sections", "navigation.indexes", "content.tooltips", "content.code.copy"], "search": "../../../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+    
+  </body>
+</html>
