@@ -81,10 +81,10 @@ OK, everything should be ready. In your browser, open the URL http://localhost:8
 
 You should be greeted with a page similar to the following.
 
-<div class="figure">
-    <img src="/images/illustrations/2016-06-11/restplus-api-listing-methods.png">
-    <div class="legend">Swagger&nbsp;UI showing a list of API methods</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2016-06-11/restplus-api-listing-methods.png">
+  <figcaption>Swagger&nbsp;UI showing a list of API methods</figcaption>
+</figure>
 
 
 
@@ -226,10 +226,10 @@ You can use the `@api.response()` decorator to list what HTTP status codes each 
 
 Once all this code is in place, your method will be nicely documented in the Swagger&nbsp;UI.
 
-<div class="figure">
-    <img src="/images/illustrations/2016-06-11/restplus-api-method-details.png">
-    <div class="legend">Swagger&nbsp;UI showing details of an API method</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2016-06-11/restplus-api-method-details.png">
+  <figcaption>Swagger&nbsp;UI showing details of an API method</figcaption>
+</figure>
 
 Swagger&nbsp;UI documentation also includes a form in which parameters can be set. If a request body is expected, its format will be specified on the right.
 
@@ -483,10 +483,10 @@ def database_not_found_error_handler(e):
 
 The `default_error_handler` function as written above will not return any response if the Flask application is running in `DEBUG` mode. Instead of returning an error message, this will activate the [Werkzeug interactive debugger][werkzeug_interactive_debugger].
 
-<div class="figure">
-    <img src="/images/illustrations/2016-06-11/werkzeug-interactive-debugger.png">
-    <div class="legend">Werkzeug interactive debugger</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2016-06-11/werkzeug-interactive-debugger.png">
+  <figcaption>Werkzeug interactive debugger</figcaption>
+</figure>
 
 ### Resetting the database
 

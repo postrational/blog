@@ -19,19 +19,19 @@ Black hat hackers, scammers and spammers had a field day with this, exploiting l
 #### Past
 There are two charts, I would like to share with you. The first one is just an illustration, which demonstrates two things. Firstly point is the enormous influence of Microsoft on the world over the last decade and a half. And the second is the lack of savvy of users, who once presented with a browser are content to use it without question.
 
-<div class="figure">
-<img src="/images/illustrations/2010-10-10/browser-usage-statistics-past-present-and-future-1.png">
-<div class="legend">Figure 1. Browser usage timeline 1994-2010</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2010-10-10/browser-usage-statistics-past-present-and-future-1.png">
+  <figcaption>Figure 1. Browser usage timeline 1994-2010</figcaption>
+</figure>
 
 This chart shows the history of the Internet broken down by browser usage. It illustrates, how the early internet was once dominated by the first popular graphical browser [Mosaic](http://en.wikipedia.org/wiki/Mosaic_web_browser), the rise and fall of [Netscape Navigator](http://en.wikipedia.org/wiki/Netscape_Navigator), and finally the rise and steady decline of Internet Explorer. The bottom right corner of the chart is where all the action is today, with Firefox, Chrome, Safari and the eternal Opera each vying for users' attention.
 
 #### Future
 The biggest causes of headache for web developers are the oldest versions of Internet Explorer, which are still inexplicably popular, namely IE 6 and 7. Let's be honest, by today's standards, these browsers suck. They have limited support for CSS, very inefficient JavaScript engines, need I go on? The poor web developer may make an excellent site in HTML5/CSS3 which will work in all browsers, but it will of course not work in IE. Are we stuck with this situation forever?
 
-<div class="figure">
-<img src="/images/illustrations/2010-10-10/browser-usage-statistics-past-present-and-future-2.png">
-<div class="legend">Figure 2. Usage of Internet Explorer by version 2009-2010</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2010-10-10/browser-usage-statistics-past-present-and-future-2.png">
+  <figcaption>Figure 2. Usage of Internet Explorer by version 2009-2010</figcaption>
+</figure>
 
 Hopefully no. This second chart illustrates the trends among users of IE over the past 2 years. As this chart shows, users are finally switching over to IE 8. If this trend continues (dashed lines in the chart are trend lines) older versions of IE should become marginalized by the end of 2011. Just one more year people, and we'll be free!

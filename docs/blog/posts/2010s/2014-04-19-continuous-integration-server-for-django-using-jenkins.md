@@ -81,10 +81,10 @@ On your SVN server create a user named `jenkins` with access to the source code 
 3. Set **Credentials** to the username and password of the `jenkins` SVN user.
 4. Set **Local module directory** to a single dot `.` to indicate that we will be checking out code directly into the workspace directory.
 
-<div class="figure">
-<img src="/images/illustrations/2014-04-19/jenkins-source-code-management-configuration.png">
-<div class="legend">Subversion configuration for Jenkins</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2014-04-19/jenkins-source-code-management-configuration.png">
+  <figcaption>Subversion configuration for Jenkins</figcaption>
+</figure>
 
 !!! note
 
@@ -104,10 +104,10 @@ Alternatively, to enable builds to be actively triggered by your source code rep
 1. Check the **Trigger builds remotely (e.g., from scripts)** box.
 2. Enter a long random string as the **Authentication Token**.
 
-<div class="figure">
-<img src="/images/illustrations/2014-04-19/jenkins-build-triggers-configuration.png">
-<div class="legend">Build triggers (choose one or the other)</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2014-04-19/jenkins-build-triggers-configuration.png">
+  <figcaption>Build triggers (choose one or the other)</figcaption>
+</figure>
 
 If you want builds to be triggered actively by your source code repository, you will need to create a script called `post-commit` (in the `hooks` directory of your SVN repo directory or the `.git/hooks` directory when using Git). Your hook script should execute a command such as `curl` to send an HTTP request to Jenkins which will trigger the build. The token is used here for security.
 

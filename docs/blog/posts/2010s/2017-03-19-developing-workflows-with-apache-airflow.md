@@ -19,10 +19,10 @@ comments: true
 
 An Airflow workflow is designed as a directed acyclic graph (DAG). That means, that when authoring a workflow, you should think how it could be divided into tasks which can be executed independently. You can then merge these tasks into a logical whole by combining them into a graph. 
 
-<div class="figure">
-    <img src="/images/illustrations/2017-03-19/airflow-example-dag.png">
-    <div class="legend">An example Airflow pipeline DAG</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2017-03-19/airflow-example-dag.png">
+  <figcaption>An example Airflow pipeline DAG</figcaption>
+</figure>
 
 The shape of the graph decides the overall logic of your workflow. An Airflow DAG can include multiple branches and you can decide which of them to follow and which to skip at the time of workflow execution.
 
@@ -184,17 +184,17 @@ In order to run your DAG, open a second terminal and start the Airflow scheduler
 
 When you reload the Airflow UI in your browser, you should see your `hello_world` DAG listed in Airflow UI.
 
-<div class="figure">
-    <img src="/images/illustrations/2017-03-19/hello-world-start.png">
-    <div class="legend">Hello World DAG in Airflow UI</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2017-03-19/hello-world-start.png">
+  <figcaption>Hello World DAG in Airflow UI</figcaption>
+</figure>
 
 In order to start a DAG Run, first turn the workflow on (arrow **1**), then click the **Trigger Dag** button (arrow **2**) and finally, click on the **Graph View** (arrow **3**) to see the progress of the run.
 
-<div class="figure">
-    <img src="/images/illustrations/2017-03-19/hello-world-graph.png">
-    <div class="legend">Hello World DAG Run - Graph View</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2017-03-19/hello-world-graph.png">
+  <figcaption>Hello World DAG Run - Graph View</figcaption>
+</figure>
 
 You can reload the graph view until both tasks reach the status **Success**. When they are done, you can click on the `hello_task` and then click **View Log**. If everything worked as expected, the log should show a number of lines and among them something like this:
 
@@ -372,10 +372,10 @@ Out[2]: 'This is a test.'
 
 You could of course also drop into [Python's interactive debugger][pdb] `pdb` (`import pdb; pdb.set_trace()`) or the [IPython enhanced version][ipdb] `ipdb` (`import ipdb; ipdb.set_trace()`). Alternatively, you can also use an `airflow test` based [run configuration][pycharm-debug-config] to set breakpoints in IDEs such as PyCharm.
 
-<div class="figure">
-    <img src="/images/illustrations/2017-03-19/pycharm-debug-config.png">
-    <div class="legend">A PyCharm debug configuration</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2017-03-19/pycharm-debug-config.png">
+  <figcaption>A PyCharm debug configuration</figcaption>
+</figure>
 
 Code is in [this commit](https://github.com/postrational/airflow_tutorial/tree/45fe1a53d1306ad4e385dc7e85d8e606f860f750/airflow_home) on GitHub.
 

@@ -22,8 +22,8 @@ and versatile utility called [Webmin][webmin]. The book covers a wide variety of
 from setting up and securing a new server to running and monitoring databases (MySQL, Postgres), 
 a web server (Apache) and a mail server (Postfix).
 
-<figure markdown="span">
-  ![Webmin Administrator's Cookbook](/images/illustrations/2014-04-13/webmin-administrators-cookbook-cover.jpg)
+<figure>
+  <img src="/images/illustrations/2014-04-13/webmin-administrators-cookbook-cover.jpg">
   <figcaption>Webmin Administrator's Cookbook</figcaption>
 </figure>
 

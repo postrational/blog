@@ -12,6 +12,7 @@ tags:
   - apache
   - mod_wsgi
 comments: true
+draft: true
 ---
 
 If you want to run a Django application on [WebFaction](http://www.webfaction.com?affiliate=postrational), you may simply use their automatic application creation scripts. Unfortunately, if you want to place your application in a Virtualenv, the automatic installer will not help you. I'm sure that WebFaction will eventually add an  installer to set this up, but for now, you can use the following tutorial. In this text we set up a Django project in a Virtualenv running on WebFaction's Apache with mod_wsgi.
@@ -239,10 +240,10 @@ We can now serve our static files. In the WebFaction control panel, add two [new
 
 The final step is to add these Nginx-powered folders to our website definition. On the website settings screen for your domain, in the Contents section, choose to add an application. Choose the option to reuse an existing application and set the `test_app_media` to serve everything under `http://example.com/media` and `test_app_static` for `http://example.com/static`.
 
-<div class="figure">
-<img src="/images/illustrations/2013-09-14/webfaction-website-content.png">
-<div class="legend">Contents section of website settings</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2013-09-14/webfaction-website-content.png">
+  <figcaption>Contents section of website settings</figcaption>
+</figure>
 
 
 ## Separating development and production settings

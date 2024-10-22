@@ -42,10 +42,10 @@ Chrome's DevTools allow you to save a history of your browsing including every H
 
 6. Navigate around your site.
 
-    <div class="figure">
-    <img src="/images/illustrations/2013-09-28/recording_session.png">
-    <div class="legend">Copy your recorded browser session in HAR format</div>
-    </div>
+    <figure>
+  <img src="/images/illustrations/2013-09-28/recording_session.png">
+  <figcaption>Copy your recorded browser session in HAR format</figcaption>
+</figure>
 
 7. After you navigate to the pages you want to test, right-click on the network history panel and choose **Copy All as HAR**. Save the clipboard to a `.har` file.
 

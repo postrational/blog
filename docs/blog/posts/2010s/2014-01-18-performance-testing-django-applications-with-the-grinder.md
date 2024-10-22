@@ -135,10 +135,10 @@ class StressTestingMiddleware(object):
 
 When your tests are prepared and properly vetted you can leverage the power of The Grinder to run them from as many parallel agent machines (and/or threads) as you require. Your test output will include execution time statistics for every test step.
 
-<div class="figure">
-<img src="/images/illustrations/2014-01-18/sample_grinder_output.png">
-<div class="legend">Partial output of a sample test run</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2014-01-18/sample_grinder_output.png">
+  <figcaption>Partial output of a sample test run</figcaption>
+</figure>
 
 [grinder]: http://grinder.sourceforge.net  "The Grinder, a Java Load Testing Framework"
 [django_csrf]: https://docs.djangoproject.com/en/dev/ref/contrib/csrf/ "Django's Cross Site Request Forgery protection"

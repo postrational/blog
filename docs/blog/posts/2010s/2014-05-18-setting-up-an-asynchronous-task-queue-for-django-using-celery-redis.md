@@ -303,10 +303,10 @@ You can also inspect the queue using a friendly curses monitor:
     $ /webapps/hello_django/bin/celery --app=hello.celery:app events
 
 
-<div class="figure">
-<img src="/images/illustrations/2014-05-18/celery-curses-monitor.png">
-<div class="legend">Celery Worker monitor</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2014-05-18/celery-curses-monitor.png">
+  <figcaption>Celery Worker monitor</figcaption>
+</figure>
 
 I hope that's enough to get you started. You should probably read the [Celery User Guide][celery_user_guide] now. Happy coding!
 

@@ -12,28 +12,22 @@ I downloaded the newest Beta versions of three popular OS X browsers: Opera, Saf
 
 <!-- more -->
 
-<div class="figure">
-<img src="/images/illustrations/2009-03-11/browsers-2009-we-have-winner-1-Acid3.png">
-<div class="legend">
-<a href="http://acid3.acidtests.org/">Acid 3</a> Rendering Test (<strong>longer</strong> is better, 100 is max.)
-</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2009-03-11/browsers-2009-we-have-winner-1-Acid3.png">
+  <figcaption><a href="http://acid3.acidtests.org/">Acid 3</a> Rendering Test (<strong>longer</strong> is better, 100 is max.)</figcaption>
+</figure>
 
 
-<div class="figure">
-<img src="/images/illustrations/2009-03-11/browsers-2009-we-have-winner-2-V8.png">
-<div class="legend">
-<a href="http://v8.googlecode.com/svn/data/benchmarks/v3/run.html">Google V8</a> Performance Benchmark (<strong>longer</strong> is better)
-</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2009-03-11/browsers-2009-we-have-winner-2-V8.png">
+  <figcaption><a href="http://v8.googlecode.com/svn/data/benchmarks/v3/run.html">Google V8</a> Performance Benchmark (<strong>longer</strong> is better)</figcaption>
+</figure>
 
 
-<div class="figure">
-<img src="/images/illustrations/2009-03-11/browsers-2009-we-have-winner-3-SunSpider.png">
-<div class="legend">
-<a href="http://www2.webkit.org/perf/sunspider-0.9/sunspider.html">SunSpider</a> JavaScript Benchmark (<strong>shorter</strong> is better)
-</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2009-03-11/browsers-2009-we-have-winner-3-SunSpider.png">
+  <figcaption><a href="http://www2.webkit.org/perf/sunspider-0.9/sunspider.html">SunSpider</a> JavaScript Benchmark (<strong>shorter</strong> is better)</figcaption>
+</figure>
 
 
 ***All tests performed 3 times and averaged, in a clean user-space on Mac OS X using a "typical" MacBook (2.4GHz 2 Duo, 2GB RAM).***

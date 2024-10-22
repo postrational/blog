@@ -16,10 +16,10 @@ You may want to check your Google Analytics data programmatically. This allows y
 
 For a simple example, I use a utility called [GeekTool](http://projects.tynsoe.org/en/geektool/) to display certain information, such as [incoming email](http://www.commandlinefu.com/commands/view/3380/), directly on my desktop for quick reference. I decided to also display updates of my Analytics profiles in this way, displaying a daily summary of unique visitors for each site I monitor. The end result looks like this:
 
-<div class="figure">
-<img src="/images/illustrations/2010-10-28/check-google-analytics-unique-visitors-python-geektool.png">
-<div class="legend">Google Analytics unique visitor counters displayed by GeekTool</div>
-</div>
+<figure>
+  <img src="/images/illustrations/2010-10-28/check-google-analytics-unique-visitors-python-geektool.png">
+  <figcaption>Google Analytics unique visitor counters displayed by GeekTool</figcaption>
+</figure>
 
 <!-- more -->
 
