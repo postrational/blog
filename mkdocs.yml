@@ -40,6 +40,7 @@ theme:
   features:
     - navigation.sections
     - navigation.indexes
+    - content.tooltips
     - content.code.copy
   custom_dir: overrides
 

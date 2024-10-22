@@ -45,7 +45,7 @@ Here is a brief overview of some terms used when designing Airflow workflows:
 
 When?               | DAG     | Task          | Info about other tasks 
 --------------------|---------|---------------|------------------------
-*During definition* | DAG     | Task          | [`get_flat_relatives`][airflow_code_get_flat_relatives]
+*During definition* | DAG     | Task          | [`get_direct_relatives`][airflow_api_get_direct_relatives]
 *During a run*      | DAG Run | Task Instance | [`xcom_pull`][airflow_xcom]
 *Base class*        | `DAG`   | `BaseOperator`|
 
@@ -511,13 +511,13 @@ I hope you found this brief introduction to Airflow useful. Have fun developing 
 
 
 
-[airflow_docs]: https://airflow.apache.org/ "Apache Airflow - Documentation"
-[airflow_concepts]: https://airflow.apache.org/concepts.html "Apache Airflow - Concepts"
-[airflow_config]: https://airflow.apache.org/configuration.html "Apache Airflow - Configuration"
-[airflow_plugins]: https://airflow.apache.org/plugins.html "Apache Airflow - Plugins"
-[airflow_sensors]: https://github.com/apache/incubator-airflow/blob/master/airflow/operators/sensors.py "Airflow Sensors on Github"
-[airflow_xcom]: https://airflow.incubator.apache.org/concepts.html#xcoms "Apache Airflow - Xcoms"
-[airflow_code_get_flat_relatives]: https://airflow.apache.org/_modules/airflow/models.html#BaseOperator.get_flat_relatives
+[airflow_docs]: https://airflow.apache.org/docs/ "Apache Airflow - Documentation"
+[airflow_concepts]: https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/ "Apache Airflow - Concepts"
+[airflow_config]: https://airflow.apache.org/docs/apache-airflow/stable/howto/set-config.html "Apache Airflow - Configuration"
+[airflow_plugins]: https://airflow.apache.org/docs/apache-airflow/stable/authoring-and-scheduling/plugins.html "Apache Airflow - Plugins"
+[airflow_sensors]: https://github.com/apache/airflow/tree/2.10.2/airflow/sensors "Airflow Sensors on Github"
+[airflow_xcom]: https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/xcoms.html "Apache Airflow - Xcoms"
+[airflow_api_get_direct_relatives]: https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/baseoperator/index.html#airflow.models.baseoperator.BaseOperator.get_direct_relatives
 [idempotence]: https://en.wikipedia.org/wiki/Idempotence "Idempotence - Wikipedia"
 [pdb]: https://docs.python.org/3/library/pdb.html "pdb — The Python Debugger"
 [ipdb]: https://pypi.python.org/pypi/ipdb "IPython-enabled pdb"
